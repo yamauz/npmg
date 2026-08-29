@@ -1,17 +1,17 @@
-// 軌道ダイアグラムシェーダーをヘッドレスレンダリングして PNG 出力する確認用スクリプト
+// ヒーロー背面ネットワークをヘッドレスレンダリングして PNG 出力する確認用スクリプト
 // 使い方: node scripts/preview-hero.mjs [time]
 import { writeFileSync } from 'node:fs'
 import { PNG } from 'pngjs'
 import { init, effect, target } from 'vgpu/node'
-import { ORBIT_WGSL } from '../docs/.vitepress/theme/hero-shader.js'
+import { NETWORK_WGSL } from '../docs/.vitepress/theme/hero-shader.js'
 
-const width = 1120
-const height = 1040
-const time = Number(process.argv[2] ?? 8)
+const width = 1440
+const height = 640
+const time = Number(process.argv[2] ?? 5)
 
 const gpu = await init()
 const colorTarget = target(gpu, { size: [width, height] })
-const fx = effect(gpu, ORBIT_WGSL, {
+const fx = effect(gpu, NETWORK_WGSL, {
   set: { params: { time, aspect: width / height, pointer: [0, 0] } },
 })
 fx.draw(colorTarget)

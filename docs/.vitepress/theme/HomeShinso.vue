@@ -4,7 +4,7 @@
 // 現段階ではトップページのみ。章ページへの展開はこの方向の確定後。
 import { withBase } from 'vitepress'
 import { onBeforeUnmount, onMounted } from 'vue'
-import OrbitDiagram from './OrbitDiagram.vue'
+import HeroNetwork from './HeroNetwork.vue'
 
 // トップ表示中だけナビを新トーンに切り替えるためのフック
 onMounted(() => document.documentElement.classList.add('home-v2'))
@@ -34,8 +34,9 @@ const appendices = [
 
 <template>
   <div class="home">
-    <!-- ヒーロー -->
+    <!-- ヒーロー(背面に依存グラフ星座) -->
     <section class="hero">
+      <HeroNetwork />
       <div class="hero__inner">
         <div class="hero__copy">
           <h1 class="hero__title">見えない階層を、<br />正確にたどる。</h1>
@@ -44,9 +45,6 @@ const appendices = [
             <a class="btn btn--primary" :href="withBase('/introduction')">読む</a>
             <a class="btn btn--ghost" href="#toc">目次を見る</a>
           </div>
-        </div>
-        <div class="hero__visual">
-          <OrbitDiagram />
         </div>
       </div>
     </section>
@@ -162,17 +160,20 @@ const appendices = [
 
 /* --- ヒーロー --- */
 .hero {
+  position: relative;
   border-bottom: 1px solid var(--v2-rule);
 }
 
 .hero__inner {
+  position: relative;
+  z-index: 1;
   max-width: var(--container);
   margin: 0 auto;
-  padding: clamp(56px, 9vw, 120px) 24px clamp(48px, 7vw, 96px);
-  display: grid;
-  grid-template-columns: minmax(0, 11fr) minmax(0, 10fr);
-  gap: clamp(24px, 5vw, 72px);
-  align-items: center;
+  padding: clamp(72px, 11vw, 150px) 24px clamp(72px, 10vw, 140px);
+}
+
+.hero__copy {
+  max-width: 640px;
 }
 
 .hero__title {
@@ -197,14 +198,8 @@ const appendices = [
   flex-wrap: wrap;
 }
 
-.hero__visual {
-  display: flex;
-  justify-content: center;
-}
-
 @media (prefers-reduced-motion: no-preference) {
-  .hero__copy > *,
-  .hero__visual {
+  .hero__copy > * {
     animation: v2-rise 0.7s var(--ease-out) both;
   }
 
@@ -214,10 +209,6 @@ const appendices = [
 
   .hero__actions {
     animation-delay: 0.14s;
-  }
-
-  .hero__visual {
-    animation-delay: 0.1s;
   }
 
   @keyframes v2-rise {
@@ -371,18 +362,6 @@ const appendices = [
 
 /* --- レスポンシブ --- */
 @media (max-width: 860px) {
-  .hero__inner {
-    grid-template-columns: 1fr;
-  }
-
-  .hero__visual {
-    order: -1;
-  }
-
-  .hero__visual :deep(.orbit) {
-    max-width: 400px;
-  }
-
   .toc__grid {
     grid-template-columns: 1fr;
     grid-auto-flow: row;

@@ -1,25 +1,21 @@
-// トップページヒーローの軌道ダイアグラム(vgpu / WebGPU 用 WGSL)。
-// すべての点は 中心 + 半径 × (cosθ(t), sinθ(t)) で解析的に配置するため、
-// 軌道からのズレは構造的に発生しない。座標系は「px / 520」(SVG 版と同一)。
-// ラベル(node_modules / npm / yarn / pnpm)は DOM 側で重ねる。
-export const ORBIT_WGSL = /* wgsl */ `
+// トップページヒーロー背面の「依存グラフ星座」(vgpu / WebGPU 用 WGSL)。
+// 画面右上から淡く広がるネットワーク。ノードはゆっくり漂い、
+// エッジは同じノード座標から毎フレーム導出するため、線と点は決して離れない。
+// 座標系: 右端を x=0 とし左へ負(q = uv.x*aspect - aspect)。y は 0(上)〜1(下)。
+export const NETWORK_WGSL = /* wgsl */ `
 struct Params { time: f32, aspect: f32, pointer: vec2f }
 @group(0) @binding(0) var<uniform> params: Params;
 
-const PI: f32 = 3.14159265;
-
-// パレット(v2: 白×墨×ブルー)
+// パレット(v2: 白×墨×ブルー、すべて淡く)
 const BG: vec3f     = vec3f(0.980, 0.980, 0.982); // #FAFAFA
-const INK: vec3f    = vec3f(0.110, 0.118, 0.129); // #1C1E21
-const GRAY: vec3f   = vec3f(0.604, 0.631, 0.675); // #9AA1AC
-const RULE: vec3f   = vec3f(0.851, 0.863, 0.886); // #D9DCE2
+const INK: vec3f    = vec3f(0.360, 0.385, 0.420); // 点用の薄墨
+const GRAY: vec3f   = vec3f(0.700, 0.725, 0.760); // 大きめノード
+const EDGE: vec3f   = vec3f(0.836, 0.848, 0.870); // エッジ #D5D8DE
+const ARC: vec3f    = vec3f(0.885, 0.895, 0.912); // 大円弧
 const ACCENT: vec3f = vec3f(0.145, 0.388, 0.922); // #2563EB
 
-// 中心とリング半径(px/520)
-const C: vec2f = vec2f(0.4808, 0.5);
-const R1: f32 = 0.2231; // 実線
-const R2: f32 = 0.3308; // 点線
-const R3: f32 = 0.4385; // 破線
+const N_NODES: u32 = 26u;
+const N_EDGES: u32 = 31u;
 
 fn sdSegment(p: vec2f, a: vec2f, b: vec2f) -> f32 {
   let pa = p - a;
@@ -28,128 +24,108 @@ fn sdSegment(p: vec2f, a: vec2f, b: vec2f) -> f32 {
   return length(pa - ba * h);
 }
 
-// 塗り点(半径 r)
-fn disc(p: vec2f, center: vec2f, r: f32, aa: f32) -> f32 {
-  return 1.0 - smoothstep(r, r + aa, length(p - center));
-}
-
 @fragment fn fs_main(@location(0) uv: vec2f) -> @location(0) vec4f {
-  // マウス視差(全体をわずかに平行移動)
-  var p = vec2f(uv.x * params.aspect, uv.y) - params.pointer * 0.014;
+  var q = vec2f(uv.x * params.aspect - params.aspect, uv.y) - params.pointer * 0.012;
   let t = params.time;
   var col = BG;
 
-  let dd = length(p - C);
-  let aa = fwidth(dd) * 1.5 + 0.0002;
-  let hair = 0.0011; // ヘアライン半幅
+  // ピクセル基準の線半幅(デバイス解像度に依らず約 1px)
+  let px = fwidth(q.x);
+  let hair = px * 0.55;
+  let aa = px * 1.2;
 
-  // --- リング 1: 実線 ---
-  let ring1 = 1.0 - smoothstep(hair, hair + aa, abs(dd - R1));
-  col = mix(col, GRAY, ring1 * 0.75);
+  // 下端・左端に向けて淡くフェード
+  let fade = (1.0 - smoothstep(0.80, 1.02, uv.y)) * smoothstep(-2.6, -1.7, q.x) * 0.95;
 
-  // --- リング 2: 点線(ごく低速で回転) ---
-  let ang = atan2(p.y - C.y, p.x - C.x);
+  // --- 背景の大円弧(ごく淡い) ---
   {
-    let n = 88.0;
-    let ph = fract(ang / (2.0 * PI) * n + t * 0.006);
-    let tangential = (ph - 0.5) * (2.0 * PI / n) * dd;
-    let q = length(vec2f(dd - R2, tangential));
-    let dot2 = 1.0 - smoothstep(0.0015, 0.0015 + aa, q);
-    col = mix(col, GRAY, dot2 * 0.8);
+    let d1 = abs(length(q - vec2f(-0.34, 0.10)) - 0.66);
+    col = mix(col, ARC, (1.0 - smoothstep(hair, hair + aa, d1)) * 0.7 * fade);
+    let d2 = abs(length(q - vec2f(-0.02, 0.58)) - 0.92);
+    col = mix(col, ARC, (1.0 - smoothstep(hair, hair + aa, d2)) * 0.55 * fade);
+    // 破線の弧(低速回転)
+    let cc = vec2f(-0.70, 0.34);
+    let dd = length(q - cc);
+    let ang = atan2(q.y - cc.y, q.x - cc.x);
+    let ph = fract(ang / 6.28318 * 60.0 + t * 0.004);
+    let dash = smoothstep(0.10, 0.22, ph) * (1.0 - smoothstep(0.48, 0.60, ph));
+    let d3 = abs(dd - 0.55);
+    col = mix(col, ARC, (1.0 - smoothstep(hair, hair + aa, d3)) * dash * 0.6 * fade);
   }
 
-  // --- リング 3: 破線(逆方向にごく低速で回転) ---
-  {
-    let n = 56.0;
-    let ph = fract(ang / (2.0 * PI) * n - t * 0.004);
-    let dash = smoothstep(0.08, 0.16, ph) * (1.0 - smoothstep(0.44, 0.52, ph));
-    let radial = 1.0 - smoothstep(hair, hair + aa, abs(dd - R3));
-    col = mix(col, GRAY, radial * dash * 0.75);
-  }
-
-  // --- 軌道上を周回する点(半径はリングと厳密に一致) ---
-  // (ring radius, angular speed, phase, kind) kind: 0=塗り 1=中抜き
-  var orbits = array<vec4f, 8>(
-    vec4f(R3,  0.040, 1.15, 0.0),
-    vec4f(R3,  0.040, 3.60, 1.0),
-    vec4f(R3,  0.040, 5.30, 0.0),
-    vec4f(R2, -0.030, 0.55, 1.0),
-    vec4f(R2, -0.030, 2.75, 0.0),
-    vec4f(R2, -0.030, 4.90, 1.0),
-    vec4f(R1,  0.022, 2.20, 0.0),
-    vec4f(R1,  0.022, 5.05, 1.0),
+  // --- ノード定義: (x, y, 半径px, 種別) 種別 0=薄墨 1=グレー大 2=中抜き 3=アクセント ---
+  var nodes = array<vec4f, 26>(
+    vec4f(-0.06, 0.10, 2.6, 0.0),
+    vec4f(-0.16, 0.22, 4.6, 1.0),
+    vec4f(-0.30, 0.14, 3.2, 2.0),
+    vec4f(-0.44, 0.28, 2.6, 0.0),
+    vec4f(-0.24, 0.34, 2.4, 0.0),
+    vec4f(-0.10, 0.40, 3.0, 2.0),
+    vec4f(-0.36, 0.46, 4.2, 1.0),
+    vec4f(-0.54, 0.40, 3.2, 2.0),
+    vec4f(-0.62, 0.24, 2.4, 0.0),
+    vec4f(-0.50, 0.12, 3.6, 1.0),
+    vec4f(-0.70, 0.52, 2.8, 2.0),
+    vec4f(-0.44, 0.58, 2.6, 0.0),
+    vec4f(-0.28, 0.62, 3.0, 2.0),
+    vec4f(-0.14, 0.56, 2.4, 0.0),
+    vec4f(-0.02, 0.62, 3.4, 1.0),
+    vec4f(-0.58, 0.68, 2.8, 3.0),
+    vec4f(-0.36, 0.76, 2.4, 0.0),
+    vec4f(-0.20, 0.80, 3.0, 2.0),
+    vec4f(-0.06, 0.78, 2.4, 0.0),
+    vec4f(-0.78, 0.36, 2.4, 0.0),
+    vec4f(-0.86, 0.60, 2.8, 2.0),
+    vec4f(-0.66, 0.82, 3.4, 1.0),
+    vec4f(-0.48, 0.88, 2.8, 2.0),
+    vec4f(-0.90, 0.16, 2.4, 0.0),
+    vec4f(-0.12, 0.94, 2.4, 0.0),
+    vec4f(-0.32, 0.96, 2.6, 2.0),
   );
-  for (var i = 0; i < 8; i++) {
-    let o = orbits[i];
-    let a = o.z + t * o.y;
-    let pos = C + o.x * vec2f(cos(a), sin(a));
-    if (o.w < 0.5) {
-      col = mix(col, INK, disc(p, pos, 0.0055, aa));
+
+  // 漂い(エッジも同じ座標から導出するのでズレない)
+  var pos: array<vec2f, 26>;
+  for (var i = 0u; i < N_NODES; i++) {
+    let fi = f32(i);
+    let drift = 0.007 * vec2f(sin(t * 0.24 + fi * 2.13), cos(t * 0.19 + fi * 1.37));
+    pos[i] = nodes[i].xy + drift;
+  }
+
+  // --- エッジ ---
+  var edges = array<u32, 62>(
+    0u,1u, 1u,2u, 2u,3u, 1u,4u, 4u,5u, 4u,6u, 6u,7u, 7u,8u, 8u,9u, 2u,9u,
+    7u,10u, 6u,11u, 11u,12u, 12u,13u, 13u,14u, 11u,15u, 15u,16u, 16u,17u,
+    17u,18u, 13u,5u, 19u,8u, 19u,20u, 20u,21u, 21u,22u, 16u,22u, 10u,20u,
+    3u,4u, 9u,23u, 17u,24u, 22u,25u, 12u,16u,
+  );
+  for (var e = 0u; e < N_EDGES; e++) {
+    let a = pos[edges[e * 2u]];
+    let b = pos[edges[e * 2u + 1u]];
+    let d = sdSegment(q, a, b);
+    col = mix(col, EDGE, (1.0 - smoothstep(hair, hair + aa, d)) * 0.85 * fade);
+  }
+
+  // --- ノード ---
+  for (var i = 0u; i < N_NODES; i++) {
+    let r = nodes[i].z * px;
+    let kind = nodes[i].w;
+    let d = length(q - pos[i]);
+    if (kind < 0.5) {
+      col = mix(col, INK, (1.0 - smoothstep(r, r + aa, d)) * 0.9 * fade);
+    } else if (kind < 1.5) {
+      col = mix(col, GRAY, (1.0 - smoothstep(r, r + aa, d)) * fade);
+    } else if (kind < 2.5) {
+      col = mix(col, BG, (1.0 - smoothstep(r, r + aa, d)) * fade);
+      let ring = 1.0 - smoothstep(hair, hair + aa, abs(d - r));
+      col = mix(col, GRAY, ring * fade);
     } else {
-      // 中抜き点: 下のリング線を消してから輪郭を描く
-      col = mix(col, BG, disc(p, pos, 0.0052, aa));
-      let ring = 1.0 - smoothstep(hair, hair + aa, abs(length(p - pos) - 0.0044));
-      col = mix(col, GRAY, ring);
+      // アクセント: 静かな鼓動+ごく淡いハロー
+      let pulse = 0.5 + 0.5 * sin(t * 1.4);
+      let halo = exp(-d / (px * 16.0)) * (0.10 + 0.10 * pulse);
+      col = mix(col, ACCENT, halo * fade);
+      col = mix(col, ACCENT, (1.0 - smoothstep(r + px * pulse, r + px * pulse + aa, d)) * fade);
     }
   }
-
-  // --- 中心の依存ツリー ---
-  let root  = vec2f(0.4808, 0.4769);
-  let mid   = vec2f(0.4808, 0.5500);
-  let c1    = vec2f(0.4154, 0.5942);
-  let c2    = vec2f(0.4808, 0.6096);
-  let c3    = vec2f(0.5462, 0.5942);
-  var segsA = array<vec2f, 8>(root, mid, mid, c1, mid, c2, mid, c3);
-  for (var i = 0; i < 4; i++) {
-    let d = sdSegment(p, segsA[i * 2], segsA[i * 2 + 1]);
-    col = mix(col, GRAY, 1.0 - smoothstep(hair, hair + aa, d));
-  }
-  let l1 = vec2f(0.3962, 0.6442);
-  let l2 = vec2f(0.4269, 0.6481);
-  let l3 = vec2f(0.4692, 0.6635);
-  let l4 = vec2f(0.4962, 0.6596);
-  let l5 = vec2f(0.5346, 0.6481);
-  let l6 = vec2f(0.5654, 0.6442);
-  var segsB = array<vec2f, 12>(c1, l1, c1, l2, c2, l3, c2, l4, c3, l5, c3, l6);
-  for (var i = 0; i < 6; i++) {
-    let d = sdSegment(p, segsB[i * 2], segsB[i * 2 + 1]);
-    col = mix(col, GRAY, 1.0 - smoothstep(hair, hair + aa, d));
-  }
-  // ノード: 根と子は塗り、葉は中抜き
-  col = mix(col, INK, disc(p, root, 0.0092, aa));
-  col = mix(col, INK, disc(p, c1, 0.0062, aa));
-  col = mix(col, INK, disc(p, c2, 0.0062, aa));
-  col = mix(col, INK, disc(p, c3, 0.0062, aa));
-  var leaves = array<vec2f, 6>(l1, l2, l3, l4, l5, l6);
-  for (var i = 0; i < 6; i++) {
-    col = mix(col, BG, disc(p, leaves[i], 0.0048, aa));
-    let ring = 1.0 - smoothstep(hair, hair + aa, abs(length(p - leaves[i]) - 0.004));
-    col = mix(col, GRAY, ring);
-  }
-
-  // --- 引き出し線とアンカー(ラベルは DOM 側) ---
-  let leaderEndX = 0.8192;
-  let a1 = vec2f(0.6346, 0.3346);
-  let a2 = vec2f(0.7038, 0.4192);
-  let a3 = vec2f(0.5962, 0.5038);
-  let a4 = vec2f(0.6769, 0.5885);
-  var anchors = array<vec2f, 4>(a1, a2, a3, a4);
-  for (var i = 0; i < 4; i++) {
-    let d = sdSegment(p, anchors[i], vec2f(leaderEndX, anchors[i].y));
-    col = mix(col, RULE, 1.0 - smoothstep(hair, hair + aa, d));
-  }
-  // node_modules: 中抜き / npm・yarn: 塗り
-  col = mix(col, BG, disc(p, a1, 0.0052, aa));
-  let a1ring = 1.0 - smoothstep(hair, hair + aa, abs(length(p - a1) - 0.0044));
-  col = mix(col, GRAY, a1ring);
-  col = mix(col, INK, disc(p, a2, 0.0055, aa));
-  col = mix(col, INK, disc(p, a3, 0.0055, aa));
-
-  // pnpm: アクセント。静かな鼓動+淡いハロー
-  let pulse = 0.5 + 0.5 * sin(t * 1.6);
-  let halo = exp(-length(p - a4) * 90.0) * (0.22 + 0.20 * pulse);
-  col = mix(col, ACCENT, halo);
-  col = mix(col, ACCENT, disc(p, a4, 0.0068 + 0.0014 * pulse, aa));
 
   return vec4f(col, 1.0);
 }
