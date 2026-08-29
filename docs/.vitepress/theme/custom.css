@@ -181,6 +181,25 @@ body {
   font-family: var(--font-body);
 }
 
+/* --------------------------------------------------------------------------
+   トップページ v2(白×墨×ブルー)表示中のナビ調整
+   ※ この方向で確定したらトークンごと全ページへ展開する
+   -------------------------------------------------------------------------- */
+html.home-v2:not(.dark) {
+  --vp-c-bg: #fafafa;
+  --vp-nav-bg-color: #fafafa;
+  --vp-c-divider: #e4e6ea;
+  --vp-c-text-1: #1c1e21;
+  --vp-c-text-2: #4b5563;
+  --vp-c-brand-1: #2563eb;
+}
+
+html.home-v2 .VPNavBarTitle .title {
+  font-family: var(--font-body);
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
 /* Mermaid 図 */
 .mermaid-figure {
   display: flex;

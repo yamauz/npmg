@@ -1,36 +1,34 @@
 <script setup>
+// トップページ v2: 白ベース × 墨 × ブルーアクセントの「静かな玄関」。
+// ユーザー承認済みのモックアップ(research/lp-redesign-prompt-v4.md の成果物)を実装。
+// 現段階ではトップページのみ。章ページへの展開はこの方向の確定後。
 import { withBase } from 'vitepress'
-import LayerStack from './LayerStack.vue'
+import { onBeforeUnmount, onMounted } from 'vue'
+import OrbitDiagram from './OrbitDiagram.vue'
 
-const parts = [
-  {
-    num: 'I',
-    title: '基礎を知る',
-    range: '1〜4章',
-    desc: 'パッケージマネージャーの仕事、package.json、node_modules、ロックファイル。',
-    link: '/basics/01-what-is-a-package-manager',
-  },
-  {
-    num: 'II',
-    title: '変遷を知る',
-    range: '5〜7章',
-    desc: 'npm の誕生、yarn の登場と分岐、pnpm と新世代。歴史でたどる選び方。',
-    link: '/history/05-npm',
-  },
-  {
-    num: 'III',
-    title: 'pnpm を知る',
-    range: '8〜12章',
-    desc: 'ストアとリンクの仕組み、アドバンテージ総覧、ワークスペース、実務機能。',
-    link: '/pnpm/08-getting-started',
-  },
-  {
-    num: '付',
-    title: '付録',
-    range: 'A〜C',
-    desc: 'コマンド対照表、用語集、図版を ChatGPT で生成するガイド。',
-    link: '/appendix/a-command-cheatsheet',
-  },
+// トップ表示中だけナビを新トーンに切り替えるためのフック
+onMounted(() => document.documentElement.classList.add('home-v2'))
+onBeforeUnmount(() => document.documentElement.classList.remove('home-v2'))
+
+const chapters = [
+  { num: '01', title: 'パッケージマネージャーとは何か', link: '/basics/01-what-is-a-package-manager' },
+  { num: '02', title: 'package.json とバージョン範囲', link: '/basics/02-package-json-and-semver' },
+  { num: '03', title: 'node_modules の構造', link: '/basics/03-node-modules' },
+  { num: '04', title: 'ロックファイルの役割', link: '/basics/04-lockfiles' },
+  { num: '05', title: 'npm の誕生と進化', link: '/history/05-npm' },
+  { num: '06', title: 'yarn の登場と分岐', link: '/history/06-yarn' },
+  { num: '07', title: 'pnpm と新世代ツール', link: '/history/07-pnpm-and-next-gen' },
+  { num: '08', title: 'pnpm はじめの一歩', link: '/pnpm/08-getting-started' },
+  { num: '09', title: 'pnpm の仕組み — ストアとリンク', link: '/pnpm/09-how-pnpm-works' },
+  { num: '10', title: 'pnpm のアドバンテージ総覧', link: '/pnpm/10-advantages' },
+  { num: '11', title: 'ワークスペースとモノレポ', link: '/pnpm/11-workspaces' },
+  { num: '12', title: '実務で効く機能たち', link: '/pnpm/12-practical-features' },
+]
+
+const appendices = [
+  { num: 'A', title: 'コマンド対照表', link: '/appendix/a-command-cheatsheet' },
+  { num: 'B', title: '用語集', link: '/appendix/b-glossary' },
+  { num: 'C', title: '図版を ChatGPT で生成する', link: '/appendix/c-image-generation' },
 ]
 </script>
 
@@ -40,149 +38,101 @@ const parts = [
     <section class="hero">
       <div class="hero__inner">
         <div class="hero__copy">
-          <h1 class="hero__title">そのディレクトリ、<br />見えているのは表層だけ。</h1>
-          <p class="hero__lead">
-            npm / yarn / pnpm の違いは「使い心地」だけではありません。<br class="wide-only" />
-            node_modules の奥にある本質を、図解でとことんわかりやすく。
-          </p>
+          <h1 class="hero__title">見えない階層を、<br />正確にたどる。</h1>
+          <p class="hero__lead">パッケージマネージャーの仕組みを、根本から理解する。</p>
           <div class="hero__actions">
-            <a class="btn btn--primary" :href="withBase('/basics/01-what-is-a-package-manager')">まずは仕組みから理解する</a>
-            <a class="btn btn--ghost" href="#compare">3 分でわかる構造比較</a>
+            <a class="btn btn--primary" :href="withBase('/introduction')">読む</a>
+            <a class="btn btn--ghost" href="#toc">目次を見る</a>
           </div>
         </div>
         <div class="hero__visual">
-          <LayerStack />
+          <OrbitDiagram />
         </div>
       </div>
     </section>
 
-    <!-- 番号付きヘアライン 3 項目 -->
-    <section class="strip">
-      <ol class="strip__list">
-        <li class="strip__item">
-          <span class="strip__num">01</span>
-          <h2 class="strip__head">図解で本質を理解</h2>
-          <p class="strip__desc">hoisting も phantom dependency も、図で描ければ人に説明できる。</p>
-        </li>
-        <li class="strip__item">
-          <span class="strip__num">02</span>
-          <h2 class="strip__head">変遷から選び方まで</h2>
-          <p class="strip__desc">ツールが生まれた理由を歴史でたどると、選ぶ基準が見えてくる。</p>
-        </li>
-        <li class="strip__item">
-          <span class="strip__num">03</span>
-          <h2 class="strip__head">現場で役立つ知識</h2>
-          <p class="strip__desc">phantom dependency もビルドスクリプトの罠も、正体がわかれば怖くない。</p>
-        </li>
-      </ol>
-    </section>
-
-    <!-- 構造比較(反転セクション) -->
-    <section id="compare" class="compare">
-      <div class="compare__inner">
-        <header class="compare__header">
-          <p class="compare__eyebrow">COMPARE</p>
-          <h2 class="compare__title">node_modules は思想を映す</h2>
-          <p class="compare__lead">
-            同じ package.json でも、ディレクトリを覗けば三者三様。<br class="wide-only" />
-            この構造の違いが、速度・厳格さ・ディスク効率の違いになります。
-          </p>
-        </header>
-        <div class="compare__grid">
-          <figure class="tree">
-            <figcaption class="tree__name">npm</figcaption>
-            <pre class="tree__pre">node_modules
-├─ .bin
-├─ express
-├─ body-parser
-├─ mime-types
-└─ …すべてが平らに並ぶ</pre>
-          </figure>
-          <figure class="tree">
-            <figcaption class="tree__name">yarn v1</figcaption>
-            <pre class="tree__pre">node_modules
-├─ .bin
-├─ express
-├─ body-parser
-├─ mime-types
-└─ …同じくフラット構造</pre>
-          </figure>
-          <figure class="tree">
-            <figcaption class="tree__name">pnpm</figcaption>
-            <pre class="tree__pre">node_modules
-├─ .pnpm
-│  └─ express@5.2.1
-│     └─ …実体はここに
-└─ express ⇒ symlink</pre>
-          </figure>
-        </div>
-        <p class="compare__note">
-          フラット構造が生む「幻の依存」は<a :href="withBase('/basics/03-node-modules')">3章</a>、
-          pnpm のリンク構造は<a :href="withBase('/pnpm/09-how-pnpm-works')">9章</a>で解剖します。
-        </p>
-      </div>
-    </section>
-
-    <!-- 構成 -->
-    <section class="toc">
+    <!-- 本書の構成 -->
+    <section id="toc" class="toc">
       <div class="toc__inner">
-        <h2 class="toc__title">全 12 章+付録</h2>
-        <ol class="toc__list">
-          <li v-for="part in parts" :key="part.num" class="toc__row">
-            <a class="toc__link" :href="withBase(part.link)">
-              <span class="toc__num">{{ part.num }}</span>
-              <span class="toc__body">
-                <span class="toc__head">{{ part.title }}</span>
-                <span class="toc__desc">{{ part.desc }}</span>
-              </span>
-              <span class="toc__range">{{ part.range }}</span>
-              <span class="toc__arrow" aria-hidden="true">→</span>
+        <h2 class="toc__heading">本書の構成</h2>
+        <ol class="toc__grid">
+          <li v-for="ch in chapters" :key="ch.num" class="toc__row">
+            <a class="toc__link" :href="withBase(ch.link)">
+              <span class="toc__num">{{ ch.num }}</span>
+              <span class="toc__title">{{ ch.title }}</span>
             </a>
           </li>
         </ol>
+        <ul class="toc__appendix">
+          <li v-for="ap in appendices" :key="ap.num">
+            <a class="toc__link" :href="withBase(ap.link)">
+              <span class="toc__num">付{{ ap.num }}</span>
+              <span class="toc__title">{{ ap.title }}</span>
+            </a>
+          </li>
+        </ul>
       </div>
     </section>
 
-    <!-- 締めの CTA -->
+    <!-- 締め -->
     <section class="outro">
-      <p class="outro__line">毎日打っている <code>install</code> の下へ、一段ずつ。</p>
-      <a class="btn btn--primary" :href="withBase('/introduction')">「この本について」から読む</a>
+      <span class="outro__dot" aria-hidden="true"></span>
+      <p class="outro__line">仕組みを理解すると、<br class="narrow-only" />選択が変わる。</p>
+      <p class="outro__sub">基礎から pnpm の内部構造まで、全 12 章+付録。手を動かす実験つき。</p>
+      <div class="outro__actions">
+        <a class="btn btn--primary" :href="withBase('/introduction')">読む</a>
+        <a class="btn btn--ghost" href="#toc">目次を見る</a>
+      </div>
     </section>
+
+    <footer class="foot">
+      <div class="foot__inner">
+        <span class="foot__mark">node_modulesの深層</span>
+        <nav class="foot__links">
+          <a :href="withBase('/introduction')">この本について</a>
+          <a :href="withBase('/basics/01-what-is-a-package-manager')">第 1 章</a>
+          <a :href="withBase('/appendix/a-command-cheatsheet')">付録</a>
+        </nav>
+      </div>
+    </footer>
   </div>
 </template>
 
 <style scoped>
 .home {
-  --container: 1120px;
+  /* v2 ローカルトークン(この方向で確定したら design.md / tokens.css に昇格する) */
+  --v2-bg: #fafafa;
+  --v2-ink: #1c1e21;
+  --v2-ink-2: #4b5563;
+  --v2-ink-3: #9aa1ac;
+  --v2-rule: #e4e6ea;
+  --v2-accent: #2563eb;
+  --v2-accent-strong: #1d4ed8;
+  --container: 1080px;
+
   font-family: var(--font-body);
-  color: var(--color-ink);
-  background: var(--color-paper);
+  color: var(--v2-ink);
+  background: var(--v2-bg);
   overflow-x: clip;
 }
 
-@media (min-width: 861px) {
-  .hero__title {
-    white-space: nowrap;
-  }
-}
-
-.wide-only {
+.narrow-only {
   display: none;
 }
 
-@media (min-width: 720px) {
-  .wide-only {
+@media (max-width: 560px) {
+  .narrow-only {
     display: inline;
   }
 }
 
-/* ボタン(design.md の CTA voice) */
+/* ボタン */
 .btn {
   display: inline-block;
-  padding: 14px 28px;
-  border-radius: var(--radius-card);
-  font-size: 15px;
-  font-weight: 500;
+  padding: 13px 30px;
+  border-radius: 3px;
+  font-size: 14.5px;
+  font-weight: 600;
   line-height: 1;
   text-decoration: none;
   transition: background-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out),
@@ -190,63 +140,61 @@ const parts = [
 }
 
 .btn--primary {
-  background: var(--color-accent);
-  color: var(--color-accent-ink);
-  border: 1px solid var(--color-accent);
+  background: var(--v2-accent);
+  color: #fff;
+  border: 1px solid var(--v2-accent);
 }
 
 .btn--primary:hover {
-  background: var(--color-accent-strong);
-  border-color: var(--color-accent-strong);
+  background: var(--v2-accent-strong);
+  border-color: var(--v2-accent-strong);
 }
 
 .btn--ghost {
-  border: 1px solid var(--color-ink-2);
-  color: var(--color-ink);
+  border: 1px solid var(--v2-ink-3);
+  color: var(--v2-ink);
   background: transparent;
 }
 
 .btn--ghost:hover {
-  border-color: var(--color-ink);
+  border-color: var(--v2-ink);
 }
 
 /* --- ヒーロー --- */
 .hero {
-  border-bottom: 1px solid var(--color-rule);
+  border-bottom: 1px solid var(--v2-rule);
 }
 
 .hero__inner {
   max-width: var(--container);
   margin: 0 auto;
-  padding: clamp(48px, 8vw, 96px) 24px clamp(40px, 6vw, 72px);
+  padding: clamp(56px, 9vw, 120px) 24px clamp(48px, 7vw, 96px);
   display: grid;
-  grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
-  gap: clamp(24px, 4vw, 64px);
+  grid-template-columns: minmax(0, 11fr) minmax(0, 10fr);
+  gap: clamp(24px, 5vw, 72px);
   align-items: center;
 }
 
 .hero__title {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-style: normal;
-  font-size: clamp(30px, 3.4vw, 46px);
-  line-height: 1.6;
-  letter-spacing: 0.02em;
-  color: var(--color-ink);
-  margin: 0 0 var(--space-lg);
+  font-size: clamp(34px, 4.4vw, 56px);
+  font-weight: 700;
+  line-height: 1.42;
+  letter-spacing: 0.01em;
+  margin: 0 0 var(--space-md);
 }
 
 .hero__lead {
-  font-size: 16px;
-  line-height: 2.1;
-  color: var(--color-ink-2);
+  font-size: 15.5px;
+  line-height: 2;
+  color: var(--v2-ink-2);
+  letter-spacing: 0.04em;
   margin: 0 0 var(--space-xl);
 }
 
 .hero__actions {
   display: flex;
-  flex-wrap: wrap;
   gap: var(--space-sm);
+  flex-wrap: wrap;
 }
 
 .hero__visual {
@@ -255,22 +203,27 @@ const parts = [
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .hero__copy > * {
-    animation: rise 0.7s var(--ease-out) both;
+  .hero__copy > *,
+  .hero__visual {
+    animation: v2-rise 0.7s var(--ease-out) both;
   }
 
   .hero__lead {
-    animation-delay: 0.08s;
+    animation-delay: 0.07s;
   }
 
   .hero__actions {
-    animation-delay: 0.16s;
+    animation-delay: 0.14s;
   }
 
-  @keyframes rise {
+  .hero__visual {
+    animation-delay: 0.1s;
+  }
+
+  @keyframes v2-rise {
     from {
       opacity: 0;
-      transform: translateY(12px);
+      transform: translateY(10px);
     }
 
     to {
@@ -280,240 +233,140 @@ const parts = [
   }
 }
 
-/* --- 番号ストリップ --- */
-.strip {
-  background: var(--color-paper-2);
-  border-bottom: 1px solid var(--color-rule);
-}
-
-.strip__list {
-  max-width: var(--container);
-  margin: 0 auto;
-  padding: clamp(32px, 4vw, 48px) 24px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  list-style: none;
-}
-
-.strip__item {
-  padding: 0 clamp(16px, 3vw, 40px);
-}
-
-.strip__item + .strip__item {
-  border-left: 1px solid var(--color-rule);
-}
-
-.strip__num {
-  font-family: var(--font-mono-tokens);
-  font-size: 12px;
-  letter-spacing: 0.14em;
-  color: var(--color-ink-3);
-}
-
-.strip__num::after {
-  content: ' —';
-}
-
-.strip__head {
-  font-family: var(--font-body);
-  font-size: 16px;
-  font-weight: 700;
-  margin: var(--space-2xs) 0 var(--space-2xs);
-  border: none;
-  padding: 0;
-}
-
-.strip__desc {
-  font-size: 13.5px;
-  line-height: 1.9;
-  color: var(--color-ink-2);
-  margin: 0;
-}
-
-/* --- 構造比較(反転) --- */
-.compare {
-  background: var(--color-accent);
-  color: var(--color-accent-ink);
-}
-
-.dark .compare {
-  background: oklch(20% 0.03 168);
-  color: var(--color-ink);
-}
-
-.compare__inner {
-  max-width: var(--container);
-  margin: 0 auto;
-  padding: clamp(56px, 7vw, 96px) 24px;
-}
-
-.compare__eyebrow {
-  font-family: var(--font-mono-tokens);
-  font-size: 12px;
-  letter-spacing: 0.2em;
-  opacity: 0.66;
-  margin: 0 0 var(--space-sm);
-}
-
-.compare__title {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: clamp(26px, 3.2vw, 38px);
-  letter-spacing: 0.03em;
-  margin: 0 0 var(--space-sm);
-}
-
-.compare__lead {
-  font-size: 15px;
-  line-height: 2.05;
-  opacity: 0.85;
-  margin: 0 0 var(--space-xl);
-}
-
-.compare__grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--space-md);
-}
-
-.tree {
-  margin: 0;
-  border: 1px solid color-mix(in oklab, currentColor 28%, transparent);
-}
-
-.tree__name {
-  font-family: var(--font-mono-tokens);
-  font-size: 13px;
-  letter-spacing: 0.08em;
-  padding: 10px 14px;
-  border-bottom: 1px solid color-mix(in oklab, currentColor 28%, transparent);
-}
-
-.tree__pre {
-  font-family: var(--font-mono-tokens);
-  font-size: 12.5px;
-  line-height: 1.9;
-  padding: 14px;
-  margin: 0;
-  overflow-x: auto;
-  opacity: 0.92;
-}
-
-.compare__note {
-  margin: var(--space-xl) 0 0;
-  font-size: 13.5px;
-  opacity: 0.85;
-}
-
-.compare__note a {
-  color: inherit;
-  text-underline-offset: 3px;
-}
-
-/* --- 構成 --- */
-.toc {
-  border-bottom: 1px solid var(--color-rule);
-}
-
+/* --- 本書の構成 --- */
 .toc__inner {
   max-width: var(--container);
   margin: 0 auto;
-  padding: clamp(56px, 7vw, 88px) 24px;
+  padding: clamp(48px, 7vw, 88px) 24px;
 }
 
-.toc__title {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: clamp(24px, 3vw, 34px);
-  letter-spacing: 0.03em;
+.toc__heading {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
   margin: 0 0 var(--space-lg);
 }
 
-.toc__list {
+.toc__grid {
   list-style: none;
   margin: 0;
   padding: 0;
-  border-top: 1px solid var(--color-rule);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: clamp(32px, 6vw, 80px);
+  grid-auto-flow: column;
+  grid-template-rows: repeat(6, auto);
 }
 
-.toc__row {
-  border-bottom: 1px solid var(--color-rule);
+.toc__appendix {
+  list-style: none;
+  margin: var(--space-md) 0 0;
+  padding: var(--space-2xs) 0 0;
 }
 
 .toc__link {
-  display: grid;
-  grid-template-columns: 56px minmax(0, 1fr) auto 24px;
-  gap: var(--space-sm);
+  display: flex;
   align-items: baseline;
-  padding: 20px 8px;
+  gap: 18px;
+  padding: 15px 4px;
+  border-bottom: 1px solid var(--v2-rule);
   text-decoration: none;
   color: inherit;
   transition: background-color var(--dur-base) var(--ease-out);
 }
 
 .toc__link:hover {
-  background: var(--color-paper-2);
+  background: #f1f2f4;
+}
+
+.toc__link:hover .toc__title {
+  color: var(--v2-accent);
 }
 
 .toc__num {
-  font-family: var(--font-display);
-  font-size: 20px;
-  color: var(--color-ink-3);
-}
-
-.toc__head {
-  display: block;
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 18px;
-  letter-spacing: 0.02em;
-}
-
-.toc__desc {
-  display: block;
-  font-size: 13px;
-  line-height: 1.8;
-  color: var(--color-ink-2);
-  margin-top: 4px;
-}
-
-.toc__range {
   font-family: var(--font-mono-tokens);
-  font-size: 12px;
-  color: var(--color-ink-3);
+  font-size: 12.5px;
+  color: var(--v2-accent);
+  min-width: 26px;
 }
 
-.toc__arrow {
-  color: var(--color-ink-3);
-  transition: transform var(--dur-base) var(--ease-out);
-}
-
-.toc__link:hover .toc__arrow {
-  transform: translateX(4px);
+.toc__title {
+  font-size: 14.5px;
+  transition: color var(--dur-base) var(--ease-out);
 }
 
 /* --- 締め --- */
 .outro {
-  max-width: var(--container);
-  margin: 0 auto;
-  padding: clamp(48px, 6vw, 80px) 24px clamp(64px, 8vw, 112px);
+  border-top: 1px solid var(--v2-rule);
   text-align: center;
+  padding: clamp(56px, 8vw, 104px) 24px;
+}
+
+.outro__dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--v2-accent);
+  margin-bottom: var(--space-lg);
 }
 
 .outro__line {
-  font-family: var(--font-display);
-  font-size: clamp(18px, 2.2vw, 24px);
-  letter-spacing: 0.04em;
-  margin: 0 0 var(--space-lg);
+  font-size: clamp(22px, 2.8vw, 30px);
+  font-weight: 700;
+  line-height: 1.7;
+  letter-spacing: 0.05em;
+  margin: 0 0 var(--space-sm);
 }
 
-.outro__line code {
-  font-family: var(--font-mono-tokens);
-  font-size: 0.9em;
-  background: var(--color-paper-2);
-  padding: 2px 8px;
-  border: 1px solid var(--color-rule);
-  border-radius: var(--radius-card);
+.outro__sub {
+  font-size: 13.5px;
+  color: var(--v2-ink-2);
+  letter-spacing: 0.03em;
+  margin: 0 0 var(--space-xl);
+}
+
+.outro__actions {
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* --- フッター --- */
+.foot {
+  border-top: 1px solid var(--v2-rule);
+}
+
+.foot__inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 28px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.foot__mark {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.foot__links {
+  display: flex;
+  gap: 24px;
+}
+
+.foot__links a {
+  font-size: 12.5px;
+  color: var(--v2-ink-2);
+  text-decoration: none;
+}
+
+.foot__links a:hover {
+  color: var(--v2-accent);
 }
 
 /* --- レスポンシブ --- */
@@ -526,35 +379,14 @@ const parts = [
     order: -1;
   }
 
-  .hero__visual :deep(.stack) {
-    max-width: 380px;
+  .hero__visual :deep(.orbit) {
+    max-width: 400px;
   }
 
-  .strip__list {
+  .toc__grid {
     grid-template-columns: 1fr;
-    row-gap: var(--space-md);
-  }
-
-  .strip__item {
-    padding: 0;
-  }
-
-  .strip__item + .strip__item {
-    border-left: none;
-    border-top: 1px solid var(--color-rule);
-    padding-top: var(--space-md);
-  }
-
-  .compare__grid {
-    grid-template-columns: 1fr;
-  }
-
-  .toc__link {
-    grid-template-columns: 40px minmax(0, 1fr) 24px;
-  }
-
-  .toc__range {
-    display: none;
+    grid-auto-flow: row;
+    grid-template-rows: none;
   }
 }
 </style>
