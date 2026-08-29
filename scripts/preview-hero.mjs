@@ -1,31 +1,18 @@
-// ヒーローシェーダーをヘッドレスレンダリングして PNG に書き出す確認用スクリプト
-// 使い方: node scripts/preview-hero.mjs [time] [light|dark]
+// 軌道ダイアグラムシェーダーをヘッドレスレンダリングして PNG 出力する確認用スクリプト
+// 使い方: node scripts/preview-hero.mjs [time]
 import { writeFileSync } from 'node:fs'
 import { PNG } from 'pngjs'
 import { init, effect, target } from 'vgpu/node'
-import { STACK_WGSL, PALETTES } from '../docs/.vitepress/theme/hero-shader.js'
+import { ORBIT_WGSL } from '../docs/.vitepress/theme/hero-shader.js'
 
-const width = 760
-const height = 700
-const time = Number(process.argv[2] ?? 3)
-const mode = process.argv[3] === 'dark' ? 'dark' : 'light'
-const pal = PALETTES[mode]
+const width = 1120
+const height = 1040
+const time = Number(process.argv[2] ?? 8)
 
 const gpu = await init()
 const colorTarget = target(gpu, { size: [width, height] })
-const fx = effect(gpu, STACK_WGSL, {
-  set: {
-    params: {
-      time,
-      aspect: width / height,
-      pointer: [0, 0],
-      paper: pal.paper,
-      plane: pal.plane,
-      shadow: pal.shadow,
-      edge: pal.edge,
-      glint: pal.glint,
-    },
-  },
+const fx = effect(gpu, ORBIT_WGSL, {
+  set: { params: { time, aspect: width / height, pointer: [0, 0] } },
 })
 fx.draw(colorTarget)
 const pixels = await colorTarget.read()
@@ -33,4 +20,4 @@ const png = new PNG({ width, height })
 png.data.set(pixels)
 writeFileSync('hero-preview.png', PNG.sync.write(png))
 gpu.dispose()
-console.log(`hero-preview.png (time=${time}, ${mode}) を書き出しました`)
+console.log(`hero-preview.png (time=${time}) を書き出しました`)

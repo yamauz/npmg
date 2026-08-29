@@ -1,178 +1,195 @@
 <script setup>
-// ヒーローの軌道ダイアグラム。依存グラフを「軌道と入れ子」で表す精密線画。
-// 細線の精度が命なので SVG で描き、動きは最小限(低速回転・パルス)にする。
+// ヒーローの軌道ダイアグラム(WebGPU / vgpu)。
+// すべての点はシェーダー内で 中心 + 半径 × (cosθ(t), sinθ(t)) により解析的に配置され、
+// 軌道からのズレは構造的に発生しない。ラベルは DOM、非対応環境は静的 SVG にフォールバック。
+import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { ORBIT_WGSL } from './hero-shader.js'
+
+const canvasRef = ref(null)
+const active = ref(false)
+
+// ラベル位置(コンテナに対する %。シェーダーの引き出し線終端と一致させる)
+const labels = [
+  { text: 'node_modules', y: 33.46, accent: false },
+  { text: 'npm', y: 41.92, accent: false },
+  { text: 'yarn', y: 50.38, accent: false },
+  { text: 'pnpm', y: 58.85, accent: true },
+]
+
+let gpu = null
+const pointer = { x: 0, y: 0 }
+const targetPointer = { x: 0, y: 0 }
+
+function onPointerMove(e) {
+  targetPointer.x = e.clientX / window.innerWidth - 0.5
+  targetPointer.y = e.clientY / window.innerHeight - 0.5
+}
+
+onMounted(async () => {
+  const canvas = canvasRef.value
+  if (!canvas || typeof navigator === 'undefined' || !navigator.gpu) return
+  try {
+    const { clock, effect, frameLoop, init, surface } = await import('vgpu')
+    gpu = await init()
+    const target = surface(gpu, canvas, { dpr: [1, 2] })
+    const aspect = () => canvas.clientWidth / Math.max(canvas.clientHeight, 1)
+    const fx = effect(gpu, ORBIT_WGSL, {
+      set: { params: { time: 8, aspect: aspect(), pointer: [0, 0] } },
+    })
+    target.onResize(() => fx.set({ params: { aspect: aspect() } }))
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      fx.draw(target)
+      active.value = true
+      return
+    }
+
+    window.addEventListener('mousemove', onPointerMove, { passive: true })
+    const time = clock(gpu)
+    frameLoop(gpu, (frame) => {
+      pointer.x += (targetPointer.x - pointer.x) * 0.04
+      pointer.y += (targetPointer.y - pointer.y) * 0.04
+      fx.set({ params: { time: time.time + 8, pointer: [pointer.x, pointer.y] } })
+      frame.pass(target, fx)
+    })
+    active.value = true
+  } catch {
+    gpu?.dispose?.()
+    gpu = null
+    active.value = false
+  }
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('mousemove', onPointerMove)
+  gpu?.dispose?.()
+  gpu = null
+})
 </script>
 
 <template>
   <div class="orbit" role="img"
     aria-label="node_modules を中心に npm / yarn / pnpm が同心円上に配置された依存構造のダイアグラム">
-    <svg viewBox="0 0 560 520" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <!-- 同心円(外側から) -->
-      <g class="orbit__ring orbit__ring--outer">
-        <circle cx="250" cy="260" r="228" class="line line--dashed" />
-      </g>
-      <circle cx="250" cy="260" r="172" class="line line--dotted" />
-      <circle cx="250" cy="260" r="116" class="line" />
-
-      <!-- 軌道上を漂う点(低速回転グループ) -->
-      <g class="orbit__drift orbit__drift--a">
-        <circle cx="250" cy="32" r="3" class="dot" />
-        <circle cx="466" cy="330" r="2.5" class="dot dot--hollow" />
-        <circle cx="70" cy="380" r="2.5" class="dot dot--hollow" />
-      </g>
-      <g class="orbit__drift orbit__drift--b">
-        <circle cx="250" cy="88" r="2.5" class="dot dot--hollow" />
-        <circle cx="398" cy="340" r="3" class="dot" />
-        <circle cx="106" cy="340" r="2.5" class="dot" />
-      </g>
-
+    <!-- WebGPU 非対応環境向けの静的フォールバック(点はすべて軌道半径上に配置) -->
+    <svg v-if="!active" class="orbit__fallback" viewBox="0 0 560 520" fill="none"
+      xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="250" cy="260" r="228" class="fl" stroke-dasharray="5 7" />
+      <circle cx="250" cy="260" r="172" class="fl" stroke-dasharray="1.5 7" stroke-linecap="round" />
+      <circle cx="250" cy="260" r="116" class="fl" />
+      <!-- 軌道上の点(半径ぴったり) -->
+      <circle cx="342" cy="51.3" r="3" class="fd" />
+      <circle cx="70.4" cy="391.6" r="2.6" class="fh" />
+      <circle cx="411.5" cy="366.8" r="3" class="fd" />
+      <circle cx="250" cy="88" r="2.6" class="fh" />
+      <circle cx="127.5" cy="380.6" r="3" class="fd" />
+      <circle cx="365.4" cy="219.4" r="2.6" class="fh" />
+      <circle cx="152" cy="192" r="3" class="fd" />
       <!-- 中心の依存ツリー -->
-      <g class="line">
+      <g class="fl">
         <path d="M250 252v34" />
         <path d="M250 286l-34 22M250 286v30M250 286l34 22" />
-        <path d="M216 310l-10 24M216 310l6 26" />
-        <path d="M250 318l-6 26M250 318l8 24" />
-        <path d="M284 310l-6 26M284 310l10 24" />
+        <path d="M216 310l-10 24M216 310l6 26M250 318l-6 26M250 318l8 24M284 310l-6 26M284 310l10 24" />
       </g>
-      <circle cx="250" cy="248" r="5" class="dot dot--core" />
-      <circle cx="216" cy="309" r="3.5" class="dot" />
-      <circle cx="250" cy="317" r="3.5" class="dot" />
-      <circle cx="284" cy="309" r="3.5" class="dot" />
-      <circle cx="206" cy="335" r="2.5" class="dot dot--hollow" />
-      <circle cx="222" cy="337" r="2.5" class="dot dot--hollow" />
-      <circle cx="244" cy="345" r="2.5" class="dot dot--hollow" />
-      <circle cx="258" cy="343" r="2.5" class="dot dot--hollow" />
-      <circle cx="278" cy="337" r="2.5" class="dot dot--hollow" />
-      <circle cx="294" cy="335" r="2.5" class="dot dot--hollow" />
-
-      <!-- 引き出し線とラベル -->
-      <g class="line line--leader">
-        <path d="M330 174h96" />
-        <path d="M366 218h60" />
-        <path d="M310 262h116" />
-        <path d="M352 306h74" />
+      <circle cx="250" cy="248" r="5" class="fd" />
+      <circle cx="216" cy="309" r="3.5" class="fd" />
+      <circle cx="250" cy="317" r="3.5" class="fd" />
+      <circle cx="284" cy="309" r="3.5" class="fd" />
+      <g>
+        <circle cx="206" cy="335" r="2.5" class="fh" />
+        <circle cx="222" cy="337" r="2.5" class="fh" />
+        <circle cx="244" cy="345" r="2.5" class="fh" />
+        <circle cx="258" cy="343" r="2.5" class="fh" />
+        <circle cx="278" cy="337" r="2.5" class="fh" />
+        <circle cx="294" cy="335" r="2.5" class="fh" />
       </g>
-      <circle cx="330" cy="174" r="3" class="dot dot--hollow" />
-      <circle cx="366" cy="218" r="3" class="dot" />
-      <circle cx="310" cy="262" r="3" class="dot" />
-      <circle cx="352" cy="306" r="4" class="dot dot--accent orbit__pulse" />
-
-      <g class="orbit__labels">
-        <text x="434" y="178">node_modules</text>
-        <text x="434" y="222">npm</text>
-        <text x="434" y="266">yarn</text>
-        <text x="434" y="310" class="label--accent">pnpm</text>
+      <!-- 引き出し線とアンカー -->
+      <g class="fl fl--rule">
+        <path d="M330 174h96M366 218h60M310 262h116M352 306h74" />
       </g>
+      <circle cx="330" cy="174" r="3" class="fh" />
+      <circle cx="366" cy="218" r="3" class="fd" />
+      <circle cx="310" cy="262" r="3" class="fd" />
+      <circle cx="352" cy="306" r="4" class="fa" />
     </svg>
+    <canvas ref="canvasRef" class="orbit__canvas" :class="{ 'is-active': active }"></canvas>
+    <div class="orbit__labels" aria-hidden="true">
+      <span v-for="l in labels" :key="l.text" class="orbit__label" :class="{ 'is-accent': l.accent }"
+        :style="{ top: `${l.y}%` }">{{ l.text }}</span>
+    </div>
   </div>
 </template>
 
 <style scoped>
 .orbit {
+  position: relative;
   width: 100%;
   max-width: 560px;
+  aspect-ratio: 560 / 520;
 }
 
-.orbit svg {
+.orbit__canvas {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  height: auto;
-  display: block;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 500ms var(--ease-out);
 }
 
-.line {
+.orbit__canvas.is-active {
+  opacity: 1;
+}
+
+.orbit__fallback {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.fl {
   stroke: var(--v2-ink-3, #9aa1ac);
   stroke-width: 1;
   fill: none;
 }
 
-.line--dashed {
-  stroke-dasharray: 5 7;
-}
-
-.line--dotted {
-  stroke-dasharray: 1.5 7;
-  stroke-linecap: round;
-}
-
-.line--leader {
+.fl--rule {
   stroke: var(--v2-rule, #d9dce2);
 }
 
-.dot {
+.fd {
   fill: var(--v2-ink, #1c1e21);
 }
 
-.dot--hollow {
+.fh {
   fill: var(--v2-bg, #fafafa);
   stroke: var(--v2-ink-3, #9aa1ac);
   stroke-width: 1;
 }
 
-.dot--core {
-  fill: var(--v2-ink, #1c1e21);
-}
-
-.dot--accent {
+.fa {
   fill: var(--v2-accent, #2563eb);
 }
 
-.orbit__labels text {
+.orbit__labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.orbit__label {
+  position: absolute;
+  left: 77.5%;
+  transform: translateY(-50%);
   font-family: var(--font-mono-tokens);
   font-size: 12.5px;
   letter-spacing: 0.04em;
-  fill: var(--v2-ink-2, #4b5563);
+  color: var(--v2-ink-2, #4b5563);
+  white-space: nowrap;
 }
 
-.orbit__labels .label--accent {
-  fill: var(--v2-accent, #2563eb);
+.orbit__label.is-accent {
+  color: var(--v2-accent, #2563eb);
   font-weight: 600;
-}
-
-/* 動き: 破線リングの低速回転・点群の周回・pnpm のパルス */
-@media (prefers-reduced-motion: no-preference) {
-  .orbit__ring--outer {
-    animation: orbit-spin 140s linear infinite;
-    transform-origin: 250px 260px;
-  }
-
-  .orbit__drift--a {
-    animation: orbit-spin 90s linear infinite;
-    transform-origin: 250px 260px;
-  }
-
-  .orbit__drift--b {
-    animation: orbit-spin-rev 130s linear infinite;
-    transform-origin: 250px 260px;
-  }
-
-  .orbit__pulse {
-    animation: orbit-pulse 3.2s ease-in-out infinite;
-    transform-origin: 352px 306px;
-  }
-
-  @keyframes orbit-spin {
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
-  @keyframes orbit-spin-rev {
-    to {
-      transform: rotate(-360deg);
-    }
-  }
-
-  @keyframes orbit-pulse {
-    0%,
-    100% {
-      opacity: 1;
-      transform: scale(1);
-    }
-
-    50% {
-      opacity: 0.55;
-      transform: scale(1.5);
-    }
-  }
 }
 </style>

@@ -1,93 +1,156 @@
-// トップページヒーローの WGSL シェーダー(vgpu 用)
-// コンセプト: node_modules の積層。等角投影の 5 枚のレイヤーが静かに呼吸し、
-// 数秒おきに光沢(グリント)が斜めに走り、マウスに視差追従する。
-// ラベル文字は DOM 側で重ねる(シェーダーには文字を描かない)。
-export const STACK_WGSL = /* wgsl */ `
-struct Params {
-  time: f32,
-  aspect: f32,
-  pointer: vec2f,
-  paper: vec4f,
-  plane: vec4f,
-  shadow: vec4f,
-  edge: vec4f,
-  glint: vec4f,
-}
+// トップページヒーローの軌道ダイアグラム(vgpu / WebGPU 用 WGSL)。
+// すべての点は 中心 + 半径 × (cosθ(t), sinθ(t)) で解析的に配置するため、
+// 軌道からのズレは構造的に発生しない。座標系は「px / 520」(SVG 版と同一)。
+// ラベル(node_modules / npm / yarn / pnpm)は DOM 側で重ねる。
+export const ORBIT_WGSL = /* wgsl */ `
+struct Params { time: f32, aspect: f32, pointer: vec2f }
 @group(0) @binding(0) var<uniform> params: Params;
 
-// 2:1 の等角ダイヤモンド(擬似 SDF)。負が内側。
-fn diamond(p: vec2f, c: vec2f, w: f32, h: f32) -> f32 {
-  let q = abs(p - c);
-  return q.x / w + q.y / h - 1.0;
+const PI: f32 = 3.14159265;
+
+// パレット(v2: 白×墨×ブルー)
+const BG: vec3f     = vec3f(0.980, 0.980, 0.982); // #FAFAFA
+const INK: vec3f    = vec3f(0.110, 0.118, 0.129); // #1C1E21
+const GRAY: vec3f   = vec3f(0.604, 0.631, 0.675); // #9AA1AC
+const RULE: vec3f   = vec3f(0.851, 0.863, 0.886); // #D9DCE2
+const ACCENT: vec3f = vec3f(0.145, 0.388, 0.922); // #2563EB
+
+// 中心とリング半径(px/520)
+const C: vec2f = vec2f(0.4808, 0.5);
+const R1: f32 = 0.2231; // 実線
+const R2: f32 = 0.3308; // 点線
+const R3: f32 = 0.4385; // 破線
+
+fn sdSegment(p: vec2f, a: vec2f, b: vec2f) -> f32 {
+  let pa = p - a;
+  let ba = b - a;
+  let h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
+  return length(pa - ba * h);
+}
+
+// 塗り点(半径 r)
+fn disc(p: vec2f, center: vec2f, r: f32, aa: f32) -> f32 {
+  return 1.0 - smoothstep(r, r + aa, length(p - center));
 }
 
 @fragment fn fs_main(@location(0) uv: vec2f) -> @location(0) vec4f {
-  let p = vec2f(uv.x * params.aspect, uv.y);
-  var col = params.paper.rgb;
-  let cx = params.aspect * 0.5;
-  let w = 0.36;
-  let h = 0.175;
-  let dir = normalize(vec2f(2.0, 1.0));
+  // マウス視差(全体をわずかに平行移動)
+  var p = vec2f(uv.x * params.aspect, uv.y) - params.pointer * 0.014;
+  let t = params.time;
+  var col = BG;
 
-  for (var i = 0; i < 5; i++) {
-    let fi = f32(i);
-    let depth = fi - 2.0;
-    // 呼吸: 各層が位相をずらして上下に 数px 揺れる
-    let bob = sin(params.time * 0.55 + fi * 1.15) * 0.006;
-    let c = vec2f(
-      cx + params.pointer.x * depth * 0.016,
-      0.815 - fi * 0.138 + bob + params.pointer.y * depth * 0.011
-    );
+  let dd = length(p - C);
+  let aa = fwidth(dd) * 1.5 + 0.0002;
+  let hair = 0.0011; // ヘアライン半幅
 
-    // ひとつ下の面に落ちる柔らかい影(面の直下にタイトに)
-    let ds = diamond(p, c + vec2f(0.0, 0.032), w * 0.96, h * 0.96);
-    let sh = (1.0 - smoothstep(-0.12, 0.18, ds)) * 0.13;
-    col = mix(col, params.shadow.rgb, sh);
+  // --- リング 1: 実線 ---
+  let ring1 = 1.0 - smoothstep(hair, hair + aa, abs(dd - R1));
+  col = mix(col, GRAY, ring1 * 0.75);
 
-    // 面の塗り(上の層ほどわずかに明るい紙)
-    let d = diamond(p, c, w, h);
-    let mask = 1.0 - smoothstep(-0.006, 0.006, d);
-    var fill = mix(params.plane.rgb, params.glint.rgb, fi * 0.045);
-    // 面内の淡い異方性シェーディング(奥がわずかに沈む)
-    fill -= vec3f((p.y - c.y) / h * 0.014);
-
-    // グリント: 約 7 秒周期で斜めに走る細い光沢。層ごとに少し遅れて連鎖する
-    let phase = fract(params.time / 7.0 - fi * 0.045);
-    let sp = mix(-1.4, 1.4, phase);
-    let proj = dot(p - c, dir) / (w * 0.9);
-    let g = exp(-pow((proj - sp) * 13.0, 2.0));
-    fill += params.glint.rgb * g * 0.38;
-
-    col = mix(col, fill, mask * 0.97);
-
-    // ヘアラインエッジ
-    let edgeLine = 1.0 - smoothstep(0.003, 0.011, abs(d));
-    col = mix(col, params.edge.rgb, edgeLine * 0.45);
+  // --- リング 2: 点線(ごく低速で回転) ---
+  let ang = atan2(p.y - C.y, p.x - C.x);
+  {
+    let n = 88.0;
+    let ph = fract(ang / (2.0 * PI) * n + t * 0.006);
+    let tangential = (ph - 0.5) * (2.0 * PI / n) * dd;
+    let q = length(vec2f(dd - R2, tangential));
+    let dot2 = 1.0 - smoothstep(0.0015, 0.0015 + aa, q);
+    col = mix(col, GRAY, dot2 * 0.8);
   }
+
+  // --- リング 3: 破線(逆方向にごく低速で回転) ---
+  {
+    let n = 56.0;
+    let ph = fract(ang / (2.0 * PI) * n - t * 0.004);
+    let dash = smoothstep(0.08, 0.16, ph) * (1.0 - smoothstep(0.44, 0.52, ph));
+    let radial = 1.0 - smoothstep(hair, hair + aa, abs(dd - R3));
+    col = mix(col, GRAY, radial * dash * 0.75);
+  }
+
+  // --- 軌道上を周回する点(半径はリングと厳密に一致) ---
+  // (ring radius, angular speed, phase, kind) kind: 0=塗り 1=中抜き
+  var orbits = array<vec4f, 8>(
+    vec4f(R3,  0.040, 1.15, 0.0),
+    vec4f(R3,  0.040, 3.60, 1.0),
+    vec4f(R3,  0.040, 5.30, 0.0),
+    vec4f(R2, -0.030, 0.55, 1.0),
+    vec4f(R2, -0.030, 2.75, 0.0),
+    vec4f(R2, -0.030, 4.90, 1.0),
+    vec4f(R1,  0.022, 2.20, 0.0),
+    vec4f(R1,  0.022, 5.05, 1.0),
+  );
+  for (var i = 0; i < 8; i++) {
+    let o = orbits[i];
+    let a = o.z + t * o.y;
+    let pos = C + o.x * vec2f(cos(a), sin(a));
+    if (o.w < 0.5) {
+      col = mix(col, INK, disc(p, pos, 0.0055, aa));
+    } else {
+      // 中抜き点: 下のリング線を消してから輪郭を描く
+      col = mix(col, BG, disc(p, pos, 0.0052, aa));
+      let ring = 1.0 - smoothstep(hair, hair + aa, abs(length(p - pos) - 0.0044));
+      col = mix(col, GRAY, ring);
+    }
+  }
+
+  // --- 中心の依存ツリー ---
+  let root  = vec2f(0.4808, 0.4769);
+  let mid   = vec2f(0.4808, 0.5500);
+  let c1    = vec2f(0.4154, 0.5942);
+  let c2    = vec2f(0.4808, 0.6096);
+  let c3    = vec2f(0.5462, 0.5942);
+  var segsA = array<vec2f, 8>(root, mid, mid, c1, mid, c2, mid, c3);
+  for (var i = 0; i < 4; i++) {
+    let d = sdSegment(p, segsA[i * 2], segsA[i * 2 + 1]);
+    col = mix(col, GRAY, 1.0 - smoothstep(hair, hair + aa, d));
+  }
+  let l1 = vec2f(0.3962, 0.6442);
+  let l2 = vec2f(0.4269, 0.6481);
+  let l3 = vec2f(0.4692, 0.6635);
+  let l4 = vec2f(0.4962, 0.6596);
+  let l5 = vec2f(0.5346, 0.6481);
+  let l6 = vec2f(0.5654, 0.6442);
+  var segsB = array<vec2f, 12>(c1, l1, c1, l2, c2, l3, c2, l4, c3, l5, c3, l6);
+  for (var i = 0; i < 6; i++) {
+    let d = sdSegment(p, segsB[i * 2], segsB[i * 2 + 1]);
+    col = mix(col, GRAY, 1.0 - smoothstep(hair, hair + aa, d));
+  }
+  // ノード: 根と子は塗り、葉は中抜き
+  col = mix(col, INK, disc(p, root, 0.0092, aa));
+  col = mix(col, INK, disc(p, c1, 0.0062, aa));
+  col = mix(col, INK, disc(p, c2, 0.0062, aa));
+  col = mix(col, INK, disc(p, c3, 0.0062, aa));
+  var leaves = array<vec2f, 6>(l1, l2, l3, l4, l5, l6);
+  for (var i = 0; i < 6; i++) {
+    col = mix(col, BG, disc(p, leaves[i], 0.0048, aa));
+    let ring = 1.0 - smoothstep(hair, hair + aa, abs(length(p - leaves[i]) - 0.004));
+    col = mix(col, GRAY, ring);
+  }
+
+  // --- 引き出し線とアンカー(ラベルは DOM 側) ---
+  let leaderEndX = 0.8192;
+  let a1 = vec2f(0.6346, 0.3346);
+  let a2 = vec2f(0.7038, 0.4192);
+  let a3 = vec2f(0.5962, 0.5038);
+  let a4 = vec2f(0.6769, 0.5885);
+  var anchors = array<vec2f, 4>(a1, a2, a3, a4);
+  for (var i = 0; i < 4; i++) {
+    let d = sdSegment(p, anchors[i], vec2f(leaderEndX, anchors[i].y));
+    col = mix(col, RULE, 1.0 - smoothstep(hair, hair + aa, d));
+  }
+  // node_modules: 中抜き / npm・yarn: 塗り
+  col = mix(col, BG, disc(p, a1, 0.0052, aa));
+  let a1ring = 1.0 - smoothstep(hair, hair + aa, abs(length(p - a1) - 0.0044));
+  col = mix(col, GRAY, a1ring);
+  col = mix(col, INK, disc(p, a2, 0.0055, aa));
+  col = mix(col, INK, disc(p, a3, 0.0055, aa));
+
+  // pnpm: アクセント。静かな鼓動+淡いハロー
+  let pulse = 0.5 + 0.5 * sin(t * 1.6);
+  let halo = exp(-length(p - a4) * 90.0) * (0.22 + 0.20 * pulse);
+  col = mix(col, ACCENT, halo);
+  col = mix(col, ACCENT, disc(p, a4, 0.0068 + 0.0014 * pulse, aa));
 
   return vec4f(col, 1.0);
 }
-`;
-
-// レイヤーの層数・位置は shader と LayerStack.vue(DOM ラベル)で共有する
-export const LAYER_COUNT = 5;
-export const layerCenterY = (i) => 0.815 - i * 0.138;
-export const layerBob = (t, i) => Math.sin(t * 0.55 + i * 1.15) * 0.006;
-
-// design.md のトークンに対応するシェーダーパレット(sRGB 0..1)
-export const PALETTES = {
-  light: {
-    paper: [0.957, 0.949, 0.925, 1],
-    plane: [0.988, 0.984, 0.972, 1],
-    shadow: [0.55, 0.62, 0.56, 1],
-    edge: [0.72, 0.77, 0.72, 1],
-    glint: [1.0, 1.0, 0.995, 1],
-  },
-  dark: {
-    paper: [0.083, 0.13, 0.104, 1],
-    plane: [0.135, 0.195, 0.158, 1],
-    shadow: [0.03, 0.055, 0.04, 1],
-    edge: [0.3, 0.4, 0.34, 1],
-    glint: [0.62, 0.8, 0.68, 1],
-  },
-};
+`
