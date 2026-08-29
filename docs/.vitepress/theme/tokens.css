@@ -1,0 +1,64 @@
+/* Hallmark · macrostructure: studied-DNA (asymmetric hero → numbered hairline strip → inverted compare)
+ * theme: studied-DNA (source: image) · genre: editorial
+ * paper: oklch(96% 0.012 95) · accent: oklch(38% 0.065 160) chromatic-green
+ * display: Shippori Mincho B1 (classical-serif, roman) · body: Noto Sans JP · mono: JetBrains Mono
+ * tokens: design.md がルール。ここが実装上の source of truth
+ */
+:root {
+  --color-paper: oklch(96% 0.012 95);
+  --color-paper-2: oklch(93% 0.014 95);
+  --color-paper-3: oklch(90% 0.016 100);
+  --color-ink: oklch(30% 0.045 165);
+  --color-ink-2: oklch(46% 0.035 165);
+  --color-ink-3: oklch(60% 0.025 165);
+  --color-rule: oklch(86% 0.018 130);
+  --color-accent: oklch(38% 0.065 160);
+  --color-accent-strong: oklch(32% 0.06 163);
+  --color-accent-ink: oklch(96% 0.012 95);
+  --color-focus: oklch(55% 0.12 160);
+
+  --font-display: 'Shippori Mincho B1', 'Hiragino Mincho ProN', 'Yu Mincho', serif;
+  --font-body: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;
+  --font-mono-tokens: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --space-3xs: 4px;
+  --space-2xs: 8px;
+  --space-xs: 12px;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 32px;
+  --space-xl: 48px;
+  --space-2xl: 64px;
+  --space-3xl: 96px;
+
+  --text-sm: 14px;
+  --text-base: 16px;
+  --text-md: 18px;
+  --text-lg: 22px;
+  --text-xl: 28px;
+  --text-2xl: 36px;
+  --text-display: clamp(40px, 5vw, 64px);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 180ms;
+  --dur-base: 240ms;
+  --dur-slow: 320ms;
+
+  --radius-card: 2px;
+  --radius-input: 4px;
+  --radius-pill: 999px;
+}
+
+.dark {
+  --color-paper: oklch(24% 0.03 168);
+  --color-paper-2: oklch(27% 0.032 168);
+  --color-paper-3: oklch(31% 0.034 168);
+  --color-ink: oklch(93% 0.015 100);
+  --color-ink-2: oklch(78% 0.02 130);
+  --color-ink-3: oklch(64% 0.022 145);
+  --color-rule: oklch(38% 0.03 168);
+  --color-accent: oklch(78% 0.08 155);
+  --color-accent-strong: oklch(84% 0.09 152);
+  --color-accent-ink: oklch(24% 0.03 168);
+  --color-focus: oklch(78% 0.1 155);
+}

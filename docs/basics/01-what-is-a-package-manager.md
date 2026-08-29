@@ -1,0 +1,275 @@
+# 1. パッケージマネージャーとは何か
+
+私たちは毎日のように `npm install` と打ちます。数秒待てば `node_modules` が現れ、`import` が通るようになる。では、その数秒の間に何が起きているのでしょうか。この章では、パッケージマネージャーという道具の役割を「それがない世界」から出発して整理し、本書全体の見取り図を手に入れます。
+
+::: tip この章でわかること
+- パッケージマネージャーがなかった時代の依存管理の苦労を説明できる
+- パッケージマネージャーの 4 つの仕事(解決・取得・配置・実行)を列挙できる
+- レジストリの役割と、メタデータ・tarball の関係を説明できる
+- `npm install` の前後で package.json と node_modules に起きる変化を観察できる
+:::
+
+## パッケージマネージャーがない世界
+
+想像してみてください。あなたは 2008 年ごろの Web 開発者で、ページに日付処理のライブラリを入れたいとします。やることはこうです。まず配布サイトを探して zip をダウンロードし、解凍した `.js` ファイルをプロジェクトの `lib/` フォルダにコピーする。そして HTML に script タグを 1 行足す。ライブラリが 3 つなら script タグも 3 行。読み込み順を間違えると `undefined` エラーで動きません。
+
+この方式のつらさは、入れるときより「入れたあと」に現れます。
+
+- **更新が手作業**。新バージョンが出たか自分で見に行き、また zip を落としてファイルを差し替える。どのプロジェクトがどのバージョンを使っているかは誰も覚えていない。
+- **依存の依存**。ライブラリ A が内部でライブラリ B を使っていると、A のドキュメントを読んで B も自分で入れる必要がある。B がさらに C を使っていたら…この連鎖を人間が追いかけるのは、数個ならまだしも数十個では破綻します。
+- **チームでの共有**。「動く lib/ フォルダ」を zip でメールしたり、リポジトリにライブラリ本体ごとコミットしたりしていました。
+
+つまり「どのライブラリの、どのバージョンを、どこから持ってきて、どこに置くか」という管理を、すべて人間の記憶とコピー&ペーストでやっていたのです。パッケージマネージャーは、この一連の作業を機械にやらせるための道具です。
+
+## 全体像 — 登場人物は 4 つ
+
+パッケージマネージャーを取り巻く登場人物は、突き詰めると 4 つしかいません。①コマンドを打つ**開発者**、②npm や pnpm などの **CLI ツール本体**、③パッケージの置き場である**レジストリ(registry)**、④手元の置き場である **node_modules** です。
+
+<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-01-1.png に保存し、下の行のコメントを外してください -->
+<!-- ![図 1-1: パッケージマネージャーを取り巻く 4 つの登場人物](/images/fig-01-1.png) -->
+
+> **🖼️ 図 1-1|パッケージマネージャーを取り巻く 4 つの登場人物**(画像プレースホルダー)
+> 生成後は `docs/public/images/fig-01-1.png` に配置してください。
+
+::: details 図 1-1 の ChatGPT 生成プロンプト(クリックで展開)
+
+```text
+STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
+Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
+Pure white background (#FFFFFF). Limited palette: dark navy #1E293B for text and outlines,
+blue #3B82F6 as the single primary accent, light gray #E2E8F0 for container boxes,
+orange #F59E0B for highlights only. Uniform medium-weight rounded strokes, simple geometric
+icons, generous white space, clear visual hierarchy.
+No gradients, no shadows, no 3D, no textures, no photorealism, no decorative background elements.
+All labels in English, short (1-3 words), bold sans-serif, high contrast, perfectly legible.
+Render every quoted label verbatim, exactly once, with no extra, invented, or duplicated text.
+No text other than the labels listed below.
+
+DIAGRAM CONTENT:
+LAYOUT: A horizontal flow. On the left a person icon, next a terminal-window box (blue),
+on the top right a cloud shape, and on the bottom right a folder icon in a light gray box.
+ELEMENTS:
+- Person icon on the left labeled "Developer"
+- Blue terminal-window box in the center labeled "Package Manager"
+- Cloud shape at top right labeled "Registry"
+- Folder icon at bottom right labeled "node_modules"
+ARROWS:
+- a labeled arrow reading "npm install" pointing from "Developer" to "Package Manager"
+- a labeled arrow reading "request" pointing from "Package Manager" to "Registry"
+- a labeled arrow reading "tarball" pointing from "Registry" to "Package Manager"
+- a labeled arrow reading "write" pointing from "Package Manager" to "node_modules"
+```
+
+:::
+
+開発者が `npm install` と打つと、CLI はレジストリに問い合わせ、必要なファイルを取り寄せ、node_modules に書き込みます。npm・yarn・pnpm という本書の主役たちは、いずれもこの図の「CLI ツール本体」の座を争ってきたプレイヤーです。矢印の中身——「何を問い合わせ、何をどう書き込むか」——の設計こそが各ツールの個性であり、本書の残り全部のテーマだと言ってもかまいません。
+
+## 4 つの仕事 — 解決・取得・配置・実行
+
+`npm install` の数秒間を分解すると、どのパッケージマネージャーも共通して次の 4 段階を実行しています。
+
+<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-01-2.png に保存し、下の行のコメントを外してください -->
+<!-- ![図 1-2: パッケージマネージャーの 4 つの仕事のパイプライン](/images/fig-01-2.png) -->
+
+> **🖼️ 図 1-2|パッケージマネージャーの 4 つの仕事のパイプライン**(画像プレースホルダー)
+> 生成後は `docs/public/images/fig-01-2.png` に配置してください。
+
+::: details 図 1-2 の ChatGPT 生成プロンプト(クリックで展開)
+
+```text
+STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
+Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
+Pure white background (#FFFFFF). Limited palette: dark navy #1E293B for text and outlines,
+blue #3B82F6 as the single primary accent, light gray #E2E8F0 for container boxes,
+orange #F59E0B for highlights only. Uniform medium-weight rounded strokes, simple geometric
+icons, generous white space, clear visual hierarchy.
+No gradients, no shadows, no 3D, no textures, no photorealism, no decorative background elements.
+All labels in English, short (1-3 words), bold sans-serif, high contrast, perfectly legible.
+Render every quoted label verbatim, exactly once, with no extra, invented, or duplicated text.
+No text other than the labels listed below.
+
+DIAGRAM CONTENT:
+LAYOUT: A horizontal pipeline of 4 rounded rectangles connected left to right by plain arrows.
+A small document icon on the far left feeds into the pipeline, and a folder icon on the far
+right receives the output.
+ELEMENTS:
+- Document icon on the far left labeled "package.json"
+- Box 1 (blue, magnifier icon) labeled "Resolve"
+- Box 2 (light gray, download icon) labeled "Fetch"
+- Box 3 (light gray, folder-tree icon) labeled "Link"
+- Box 4 (light gray, gear icon) labeled "Run Scripts"
+- Folder icon on the far right labeled "node_modules"
+ARROWS: plain arrows from "package.json" to "Resolve", "Resolve" to "Fetch", "Fetch" to "Link",
+"Link" to "Run Scripts", and "Run Scripts" to "node_modules".
+```
+
+:::
+
+1. **解決(resolution)**。package.json に書かれた「`react` の 19 系がほしい」のような**要求**を、「`react` の 19.2.8 を使う」という**具体的なバージョンの一覧**に確定させる仕事です。依存の依存も含めてすべてを洗い出し、依存関係の全体像(グラフ)を組み立てます。
+2. **取得(fetch)**。確定した各パッケージの実体(tarball という圧縮ファイル)をレジストリからダウンロードします。一度取得したものはマシン内にキャッシュされ、2 回目以降は通信せずに済みます。
+3. **配置(link)**。取得したファイルを node_modules に展開・配置します。実はここが各ツールの個性が最も出る工程で、[3章](/basics/03-node-modules)と 9 章で深掘りします。
+4. **実行(run scripts)**。パッケージが「インストール後にこれを実行してほしい」と指定したスクリプト(lifecycle スクリプト)を走らせます。ネイティブコードのビルドなどに使われますが、セキュリティ上の論点にもなります([2章](/basics/02-package-json-and-semver)で紹介します)。
+
+4 段階のつながりを図にすると次のようになります。
+
+```mermaid
+flowchart LR
+  A["package.json"] -->|解決| B["依存グラフ"]
+  B -->|取得| C["ストア / キャッシュ"]
+  C -->|配置| D["node_modules"]
+  D -->|実行| E["lifecycle スクリプト"]
+```
+
+「解決 → 取得 → 配置 → 実行」。この 4 語を覚えておくと、この先どのツールの話になっても「いまはどの工程の話か」で迷子にならずに済みます。
+
+## 「依存の依存」がすべてを複雑にする
+
+先ほどの手作業時代の苦労のうち、パッケージマネージャーの設計を最も難しくしているのが**推移的依存(transitive dependency)**、つまり「依存の依存」です。
+
+あなたが package.json に書くのは `express` の 1 行だけでも、express 自身が `body-parser` や `debug` に依存し、`debug` はさらに `ms` に依存し…と連鎖します。1 行の宣言が、実際には数十個のパッケージのインストールを意味するのです。
+
+<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-01-3.png に保存し、下の行のコメントを外してください -->
+<!-- ![図 1-3: 1 つの宣言から依存の依存がツリーに広がる](/images/fig-01-3.png) -->
+
+> **🖼️ 図 1-3|1 つの宣言から依存の依存がツリーに広がる**(画像プレースホルダー)
+> 生成後は `docs/public/images/fig-01-3.png` に配置してください。
+
+::: details 図 1-3 の ChatGPT 生成プロンプト(クリックで展開)
+
+```text
+STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
+Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
+Pure white background (#FFFFFF). Limited palette: dark navy #1E293B for text and outlines,
+blue #3B82F6 as the single primary accent, light gray #E2E8F0 for container boxes,
+orange #F59E0B for highlights only. Uniform medium-weight rounded strokes, simple geometric
+icons, generous white space, clear visual hierarchy.
+No gradients, no shadows, no 3D, no textures, no photorealism, no decorative background elements.
+All labels in English, short (1-3 words), bold sans-serif, high contrast, perfectly legible.
+Render every quoted label verbatim, exactly once, with no extra, invented, or duplicated text.
+No text other than the labels listed below.
+
+DIAGRAM CONTENT:
+LAYOUT: A tree diagram expanding from left to right across three levels.
+ELEMENTS:
+- Root node on the left, a blue rounded rectangle labeled "your-app"
+- Middle level, one light gray rounded rectangle labeled "express"
+- Right level, three light gray rounded rectangles labeled "body-parser", "debug", "send"
+- Far right, one orange-outlined rounded rectangle labeled "ms"
+- A small blue tag near the root-to-middle arrow labeled "declared"
+- A small navy tag near the right side labeled "transitive"
+ARROWS: plain arrows from "your-app" to "express"; from "express" to "body-parser", "debug",
+and "send"; from "debug" to "ms".
+```
+
+:::
+
+推移的依存があるおかげで、私たちはライブラリの内部事情を知らなくても使えます。一方でパッケージマネージャーには難題が生まれます。同じパッケージを複数の親が別々のバージョンで要求したらどうするか。この依存関係全体(グラフ)を、ディスク上のフォルダ(ツリー)にどう写し取るか。この問いが [3章](/basics/03-node-modules)の主役であり、npm → yarn → pnpm という歴史を駆動してきたエンジンです。
+
+## レジストリ — 誰でも公開できる巨大な倉庫
+
+4 つの仕事のうち「解決」と「取得」の相手が**レジストリ**です。Node.js の世界では npm レジストリ(`https://registry.npmjs.org`)が事実上の標準で、npm だけでなく yarn も pnpm も、既定ではこの同じレジストリと通信します。ツールを乗り換えてもパッケージの品揃えが変わらないのはこのためです。
+
+レジストリが各パッケージについて持っている情報は、大きく 2 種類に分かれます。
+
+- **メタデータ**: パッケージ名、公開されている全バージョンの一覧、各バージョンの依存関係などを記した JSON。「解決」の工程はこれを読んで行われます。
+- **tarball**: 各バージョンのコード本体を固めた圧縮ファイル(`.tgz`)。「取得」の工程でダウンロードされるのはこちらです。
+
+レジストリの際立った特徴は、**誰でも publish できる**ことです。アカウントを作れば、あなたも今日から `npm publish` で世界にパッケージを公開できます。この開放性のおかげで npm レジストリは数百万パッケージという他言語に類を見ない規模に成長しましたが、裏返せば「中身の品質や安全性は保証されない」ということでもあります。取得したファイルが改ざんされていないかの検証([4章](/basics/04-lockfiles)の integrity)や、インストール時スクリプトの扱いが重要になる理由は、ここにあります。
+
+::: info なぜ「パッケージ」と呼ぶのか
+npm の世界でのパッケージとは、正確には「package.json を持つフォルダ(を固めたもの)」です。コード本体に「名前・バージョン・依存関係」という荷札を付けて梱包したものだから、パッケージ(小包)。荷札の書き方は次章で詳しく見ます。
+:::
+
+## 実験: left-pad のインストールを観察する
+
+言葉の説明はここまでにして、実際に `npm install` の前後を観察してみます。まず、これから行う実験の流れを通しで見てみましょう。
+
+<TermDemo
+  title="zsh — npm install left-pad"
+  :lines="[
+    { cmd: 'npm init -y' },
+    { pause: 400 },
+    { cmd: 'npm install left-pad' },
+    { out: 'npm warn deprecated left-pad@1.3.0: use String.prototype.padStart()' },
+    { out: 'added 1 package, and audited 2 packages in 631ms' },
+    { out: 'found 0 vulnerabilities' },
+    { pause: 400 },
+    { cmd: 'ls node_modules' },
+    { out: 'left-pad' },
+  ]"
+/>
+
+同じことを手元で再現していきます。実験には、文字列の左側を埋めるだけの小さなパッケージ `left-pad` を使います。使い捨てのディレクトリを作ってください。
+
+```sh
+$ mkdir -p ~/sandbox/pm-play/hello-pm
+$ cd ~/sandbox/pm-play/hello-pm
+$ npm init -y
+```
+
+`npm init -y` は package.json の雛形を作るコマンドです。この時点では依存はゼロで、node_modules も存在しません。続いてインストールします。
+
+```sh
+$ npm install left-pad
+```
+
+```
+npm warn deprecated left-pad@1.3.0: use String.prototype.padStart()
+
+added 1 package, and audited 2 packages in 631ms
+
+found 0 vulnerabilities
+```
+
+「left-pad は非推奨(deprecated)。標準の `String.prototype.padStart()` を使って」という警告が出ました。公開者がレジストリのメタデータに残したメッセージが、インストール時にそのまま表示されているわけです。今回は実験なので気にせず進みます。変化を確認しましょう。
+
+```sh
+$ ls node_modules
+```
+
+```
+left-pad
+```
+
+```sh
+$ cat package.json
+```
+
+```json
+{
+  "name": "hello-pm",
+  "version": "1.0.0",
+  ...
+  "dependencies": {
+    "left-pad": "^1.3.0"
+  }
+}
+```
+
+node_modules に `left-pad` フォルダが現れ、package.json には `"left-pad": "^1.3.0"` という 1 行が追記されました。この `^1.3.0` という書き方(`1.3.0` ちょうどではない)の意味は次章のメインテーマです。また、よく見るとディレクトリには `package-lock.json` という見慣れないファイルも生まれています。これは [4章](/basics/04-lockfiles)の主役なので、いまは「そういうものができる」とだけ覚えておいてください。
+
+最後に、入れたパッケージが動くことを確認します。
+
+```sh
+$ node -e "const leftPad = require('left-pad'); console.log(leftPad('7', 3, '0'))"
+```
+
+```
+007
+```
+
+ダウンロードもファイル配置も読み込みパスの設定も、すべてコマンド 1 つで済みました。手作業時代と比べたとき、この「当たり前」がどれだけの仕事の上に成り立っているかが、この章の要点です。
+
+::: info なぜ left-pad が有名なのか
+left-pad は 2016 年に作者がレジストリから削除(unpublish)し、これに依存していた無数のパッケージのインストールが世界中で一斉に失敗した事件で知られています。わずか十数行のコードが巨大なエコシステムの急所だったこの事件は「依存の依存」の影響力を示す教材として、いまも語り継がれています。詳しくは Part II の歴史編で触れます。
+:::
+
+## まとめ
+
+- パッケージマネージャー以前は、ライブラリの入手・更新・依存の連鎖をすべて人間が手作業で管理していた
+- パッケージマネージャーの仕事は「解決 → 取得 → 配置 → 実行」の 4 段階に整理できる
+- 登場人物は開発者・CLI・レジストリ・node_modules の 4 つで、npm / yarn / pnpm の違いは CLI の設計の違い
+- レジストリはメタデータと tarball を保管する「誰でも publish できる」倉庫で、npm / yarn / pnpm は既定で同じ npm レジストリを使う
+- 「依存の依存(推移的依存)」こそが複雑さの源泉で、本書全体を貫くテーマになる
+
+次章では、実験で書き換わった package.json の中身——マニフェストとしての役割と、`^1.3.0` のようなバージョン範囲の読み方——を説明します。

@@ -1,0 +1,11 @@
+{
+  // node_modulesの深層 — VitePress 静的サイトを Cloudflare Workers (Static Assets) で配信
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "node-modules-shinso",
+  "compatibility_date": "2026-08-01",
+  "assets": {
+    "directory": "./docs/.vitepress/dist",
+    // VitePress が生成する 404.html をそのまま 404 ページとして使う
+    "not_found_handling": "404-page"
+  }
+}

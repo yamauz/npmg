@@ -1,0 +1,33 @@
+{
+  "name": "package-manager-guide",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev docs",
+    "build": "vitepress build docs",
+    "preview": "vitepress preview docs",
+    "deploy": "npm run build && wrangler deploy"
+  },
+  "devDependencies": {
+    "@webgpu/types": "^0.1.72",
+    "mermaid": "^11.17.2",
+    "playwright-core": "^1.62.1",
+    "pngjs": "^7.0.0",
+    "vitepress": "^1.6.4",
+    "vitepress-plugin-mermaid": "^2.0.17",
+    "wrangler": "^4.127.1"
+  },
+  "allowScripts": {
+    "esbuild@0.21.5": true,
+    "fsevents@2.3.3": true,
+    "esbuild@0.28.1": true,
+    "workerd@1.20260828.1": true,
+    "@vgpu/adapter-node@0.3.1": true,
+    "webgpu@0.4.0": true
+  },
+  "dependencies": {
+    "@vgpu/wgsl": "^0.3.1",
+    "vgpu": "^0.3.1"
+  }
+}

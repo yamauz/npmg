@@ -1,0 +1,222 @@
+/* ==========================================================================
+   node_modulesの深層 — テーマ実装
+   design.md(プロジェクトルート)がルール。生成りの紙 × 深い森緑 × 明朝。
+   ボックス・絵文字アイコン・グラデーション・グロー禁止。区切りはヘアライン。
+   ========================================================================== */
+@import './tokens.css';
+
+:root {
+  --vp-font-family-base: var(--font-body);
+  --vp-font-family-mono: var(--font-mono-tokens);
+
+  --vp-c-brand-1: var(--color-accent);
+  --vp-c-brand-2: var(--color-accent-strong);
+  --vp-c-brand-3: var(--color-accent);
+  --vp-c-brand-soft: oklch(38% 0.065 160 / 0.1);
+
+  --vp-c-bg: var(--color-paper);
+  --vp-c-bg-alt: var(--color-paper-2);
+  --vp-c-bg-soft: var(--color-paper-2);
+  --vp-c-bg-elv: var(--color-paper);
+
+  --vp-c-divider: var(--color-rule);
+  --vp-c-border: var(--color-rule);
+  --vp-c-gutter: var(--color-rule);
+
+  --vp-c-text-1: var(--color-ink);
+  --vp-c-text-2: var(--color-ink-2);
+  --vp-c-text-3: var(--color-ink-3);
+
+  --vp-code-block-bg: oklch(93% 0.014 95);
+  --vp-c-tip-1: var(--color-accent);
+  --vp-c-tip-soft: oklch(38% 0.065 160 / 0.08);
+
+  --vp-button-brand-bg: var(--color-accent);
+  --vp-button-brand-text: var(--color-accent-ink);
+  --vp-button-brand-border: var(--color-accent);
+  --vp-button-brand-hover-bg: var(--color-accent-strong);
+  --vp-button-brand-hover-text: var(--color-accent-ink);
+  --vp-button-brand-hover-border: var(--color-accent-strong);
+
+  --vp-nav-bg-color: var(--color-paper);
+  --vp-sidebar-bg-color: var(--color-paper);
+}
+
+.dark {
+  --vp-c-bg: var(--color-paper);
+  --vp-c-bg-alt: var(--color-paper-2);
+  --vp-c-bg-soft: var(--color-paper-2);
+  --vp-c-bg-elv: var(--color-paper-2);
+  --vp-code-block-bg: oklch(20% 0.028 168);
+  --vp-c-brand-soft: oklch(78% 0.08 155 / 0.14);
+  --vp-c-tip-soft: oklch(78% 0.08 155 / 0.12);
+}
+
+/* 横スクロール禁止(slop-test gate 34: clip であって hidden ではない) */
+html,
+body {
+  overflow-x: clip;
+}
+
+/* --------------------------------------------------------------------------
+   タイポグラフィ: 見出しは明朝・roman のみ
+   -------------------------------------------------------------------------- */
+.vp-doc h1,
+.vp-doc h2,
+.vp-doc h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-style: normal;
+  letter-spacing: 0.02em;
+}
+
+.vp-doc h1 {
+  font-size: var(--text-2xl);
+  line-height: 1.4;
+}
+
+.vp-doc h2 {
+  border-top: 1px solid var(--color-rule);
+  padding-top: var(--space-md);
+  margin-top: var(--space-2xl);
+}
+
+/* 英字スモールラベル(COMPARE 等)の共通声色 */
+.eyebrow {
+  font-family: var(--font-mono-tokens);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-ink-3);
+}
+
+/* --------------------------------------------------------------------------
+   ナビゲーション
+   -------------------------------------------------------------------------- */
+.VPNavBarTitle .title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 17px;
+  letter-spacing: 0.02em;
+}
+
+.VPNavBar {
+  border-bottom: 1px solid var(--color-rule);
+}
+
+/* --------------------------------------------------------------------------
+   ドキュメント本文
+   -------------------------------------------------------------------------- */
+.vp-doc a {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color var(--dur-base) var(--ease-out);
+}
+
+.vp-doc img {
+  border-radius: var(--radius-card);
+  border: 1px solid var(--color-rule);
+}
+
+.vp-doc blockquote {
+  border-left: 2px solid var(--color-accent);
+  background: var(--color-paper-2);
+  border-radius: 0;
+  padding: var(--space-xs) var(--space-sm);
+  color: var(--color-ink-2);
+}
+
+.vp-doc details.details {
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-card);
+  background: var(--color-paper-2);
+}
+
+.vp-doc details.details summary {
+  font-family: var(--font-mono-tokens);
+  font-size: 13px;
+}
+
+.vp-doc table {
+  border-radius: 0;
+}
+
+.vp-doc th {
+  background: var(--color-paper-2);
+  font-weight: 600;
+}
+
+.vp-doc .custom-block.tip {
+  border-left: 2px solid var(--color-accent);
+  border-radius: 0;
+}
+
+.vp-doc .custom-block.info {
+  border-radius: 0;
+}
+
+/* サイドバー: アクティブ項目 */
+.VPSidebarItem.is-active > .item > .link > .text {
+  color: var(--color-accent);
+}
+
+/* 前後の章リンク */
+.pager-link {
+  border-radius: var(--radius-card);
+  transition: border-color var(--dur-base) var(--ease-out);
+}
+.pager-link:hover {
+  border-color: var(--color-accent);
+}
+
+/* フォーカスリング(即時表示・アニメーション禁止) */
+:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* ボタンは矩形に */
+.VPButton {
+  border-radius: var(--radius-card) !important;
+  font-family: var(--font-body);
+}
+
+/* Mermaid 図 */
+.mermaid-figure {
+  display: flex;
+  justify-content: center;
+  margin: 28px 0;
+  padding: 20px 12px;
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-card);
+  background: #f7f5ef;
+  overflow-x: auto;
+}
+
+.dark .mermaid-figure {
+  background: #f0eee6;
+}
+
+/* エッジラベルの背景を塗り、同色ストロークで周囲に余白を作って
+   線や矢印がラベル文字に食い込まないようにする */
+.mermaid-figure .edgeLabel rect.background {
+  fill: #f7f5ef;
+  stroke: #f7f5ef;
+  stroke-width: 26px;
+  stroke-linejoin: round;
+}
+
+.dark .mermaid-figure .edgeLabel rect.background {
+  fill: #f0eee6;
+  stroke: #f0eee6;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 150ms !important;
+  }
+}
