@@ -29,27 +29,31 @@ fn sdSegment(p: vec2f, a: vec2f, b: vec2f) -> f32 {
   let t = params.time;
   var col = BG;
 
+  // ワイド画面ほど星座を拡大し、見出しの背後まで届かせる(モバイルは等倍)
+  let S = clamp(params.aspect * 0.60, 1.0, 1.9);
+  let A = vec2f(-0.02, 0.42); // 拡大の基準点(右端付近)
+
   // ピクセル基準の線半幅(デバイス解像度に依らず約 1px)
   let px = fwidth(q.x);
   let hair = px * 0.55;
   let aa = px * 1.2;
 
   // 下端・左端に向けて淡くフェード
-  let fade = (1.0 - smoothstep(0.80, 1.02, uv.y)) * smoothstep(-2.6, -1.7, q.x) * 0.95;
+  let fade = (1.0 - smoothstep(0.80, 1.02, uv.y)) * smoothstep(-2.9 * S, -1.7 * S, q.x) * 0.95;
 
   // --- 背景の大円弧(ごく淡い) ---
   {
-    let d1 = abs(length(q - vec2f(-0.34, 0.10)) - 0.66);
+    let d1 = abs(length(q - (A + (vec2f(-0.34, 0.10) - A) * S)) - 0.66 * S);
     col = mix(col, ARC, (1.0 - smoothstep(hair, hair + aa, d1)) * 0.7 * fade);
-    let d2 = abs(length(q - vec2f(-0.02, 0.58)) - 0.92);
+    let d2 = abs(length(q - (A + (vec2f(-0.02, 0.58) - A) * S)) - 0.92 * S);
     col = mix(col, ARC, (1.0 - smoothstep(hair, hair + aa, d2)) * 0.55 * fade);
     // 破線の弧(低速回転)
-    let cc = vec2f(-0.70, 0.34);
+    let cc = A + (vec2f(-0.70, 0.34) - A) * S;
     let dd = length(q - cc);
     let ang = atan2(q.y - cc.y, q.x - cc.x);
     let ph = fract(ang / 6.28318 * 60.0 + t * 0.004);
     let dash = smoothstep(0.10, 0.22, ph) * (1.0 - smoothstep(0.48, 0.60, ph));
-    let d3 = abs(dd - 0.55);
+    let d3 = abs(dd - 0.55 * S);
     col = mix(col, ARC, (1.0 - smoothstep(hair, hair + aa, d3)) * dash * 0.6 * fade);
   }
 
@@ -83,12 +87,12 @@ fn sdSegment(p: vec2f, a: vec2f, b: vec2f) -> f32 {
     vec4f(-0.32, 0.96, 2.6, 2.0),
   );
 
-  // 漂い(エッジも同じ座標から導出するのでズレない)
+  // 漂い(エッジも同じ座標から導出するのでズレない)。位置は基準点まわりに S 倍拡大
   var pos: array<vec2f, 26>;
   for (var i = 0u; i < N_NODES; i++) {
     let fi = f32(i);
     let drift = 0.007 * vec2f(sin(t * 0.24 + fi * 2.13), cos(t * 0.19 + fi * 1.37));
-    pos[i] = nodes[i].xy + drift;
+    pos[i] = A + (nodes[i].xy - A) * S + drift * S;
   }
 
   // --- エッジ ---
