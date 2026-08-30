@@ -153,16 +153,16 @@ npm エコシステムへの攻撃が現実の脅威になった 2020 年代後�
 - **`pnpm audit --fix`**: 脆弱なバージョンを回避する overrides を自動追記します(v11 から GHSA ベース)
 - **`pnpm sbom`(v11)**: SBOM(ソフトウェア部品表)を生成し、監査・コンプライアンス要求に応えます
 
-<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-10-2.png に保存し、下の行のコメントを外してください -->
-<!-- ![図 10-2: pnpm のセキュリティ多層防御](/images/fig-10-2.png) -->
-
-> **🖼️ 図 10-2|pnpm のセキュリティ多層防御**(画像プレースホルダー)
-> 生成後は `docs/public/images/fig-10-2.png` に配置してください。
+<figure>
+  <img src="/images/fig-10-2.png" alt="pnpm のセキュリティ多層防御">
+  <figcaption><span class="fig-num">図 10-2</span> pnpm のセキュリティ多層防御</figcaption>
+</figure>
 
 <!-- 図 10-2 の生成プロンプト(採用版・ページには出しない)
 
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
-Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
+Flat 2D vector infographic in a minimal technical-illustration style. Wide landscape orientation
+(2:1 aspect ratio, e.g. 2560 x 1280).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
 blue #2563EB as the single primary accent, light gray #E2E8F0 for container boxes,
 orange #F59E0B for highlights only. Uniform medium-weight rounded strokes, simple geometric
@@ -173,17 +173,24 @@ Render every quoted label verbatim, exactly once, with no extra, invented, or du
 No text other than the labels listed below.
 
 DIAGRAM CONTENT:
-LAYOUT: A horizontal pipeline from left to right: a box on the far left, four vertical
-shield-shaped gates in a row, and a box on the far right.
+LAYOUT: A single horizontal pipeline arranged as one straight row, all items vertically centered
+on the same horizontal axis and spanning the full width of the canvas with even margins on the
+left and right. From left to right: one rounded box, then four equally sized shield shapes
+evenly spaced, then one rounded box. One long arrow runs left to right beneath the whole row.
+ICON STYLE: every icon is a simple line-art outline drawing, drawn with the same uniform dark
+stroke as the boxes, with no fill, no color, no gradient, and no 3D shading. Icons must look
+like monochrome outline pictograms, not illustrations.
 ELEMENTS:
-- Far left box (light gray, cloud icon) labeled "Registry"
-- Shield gate 1 (blue) labeled "Release Age"
-- Shield gate 2 (blue) labeled "Exotic Block"
-- Shield gate 3 (blue) labeled "Build Approval"
-- Shield gate 4 (blue) labeled "Audit"
-- Far right box (light gray, folder icon) labeled "Your Project"
-ARROWS: a labeled arrow reading "package" pointing from "Registry" through the four
-shield gates to "Your Project".
+- Far left: a white box with a thin dark outline, an outline icon of a cloud, labeled "Registry"
+- Shield 1: a shield shape with a thick blue outline and white fill, labeled "Release Age"
+- Shield 2: a shield shape with a thick blue outline and white fill, labeled "Exotic Block"
+- Shield 3: a shield shape with a thick blue outline and white fill, labeled "Build Approval"
+- Shield 4: a shield shape with a thick blue outline and white fill, labeled "Audit"
+- Far right: a white box with a thin dark outline, an outline icon of a folder, labeled
+  "Your Project"
+ARROWS: exactly one long plain dark arrow running horizontally beneath the row from below the
+"Registry" box to below the "Your Project" box, pointing right, labeled "package". It passes
+under all four shields without touching them. No other lines, arrows, or connectors anywhere.
 -->
 
 ## ⑥ 非破壊的な進化の哲学
