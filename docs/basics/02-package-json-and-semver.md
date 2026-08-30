@@ -185,11 +185,10 @@ MAJOR が 0 のバージョン(`0.x.y`)は「まだ何が壊れるかわから�
 
 dependencies 系のフィールドは 4 種類あります。どれに書くかで「いつ・誰の環境にインストールされるか」が変わります。
 
-<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-02-3.png に保存し、下の行のコメントを外してください -->
-<!-- ![図 2-3: dependencies の種類マップ](/images/fig-02-3.png) -->
-
-> **🖼️ 図 2-3|dependencies の種類マップ**(画像プレースホルダー)
-> 生成後は `docs/public/images/fig-02-3.png` に配置してください。
+<figure>
+  <img src="/images/fig-02-3.png" alt="dependencies の種類マップ">
+  <figcaption><span class="fig-num">図 2-3</span> dependencies の種類マップ</figcaption>
+</figure>
 
 <!-- 図 2-3 の生成プロンプト(採用版・ページには出しない)
 
@@ -205,15 +204,19 @@ Render every quoted label verbatim, exactly once, with no extra, invented, or du
 No text other than the labels listed below.
 
 DIAGRAM CONTENT:
-LAYOUT: A 2x2 grid of four rounded rectangles of equal size, each containing a title label
-and one short descriptor label below it.
+LAYOUT: A 2x2 grid of four equally sized rounded rectangles, evenly spaced, with generous gaps
+between them. Each box contains two lines of text, centered: a title on the first line and a
+short descriptor on the second line, plus one small icon above the text.
 ELEMENTS:
-- Top left box (blue) titled "dependencies" with descriptor "runtime"
-- Top right box (light gray) titled "devDependencies" with descriptor "dev only"
-- Bottom left box (light gray) titled "peerDependencies" with descriptor "host provides"
-- Bottom right box (light gray, orange outline) titled "optionalDependencies" with
-  descriptor "may fail"
-ARROWS: none.
+- Top left box, blue fill with white text, icon of a box being shipped, first line
+  "dependencies", second line "ships to users"
+- Top right box, light gray fill, icon of a wrench, first line "devDependencies", second line
+  "your machine only"
+- Bottom left box, light gray fill, icon of a handshake, first line "peerDependencies", second
+  line "host provides"
+- Bottom right box, light gray fill with an orange outline, icon of a question mark, first line
+  "optionalDependencies", second line "may fail"
+ARROWS: none. No other lines or connectors anywhere in the diagram.
 -->
 
 - **dependencies**: アプリの実行そのものに必要なもの(react、express など)。あなたのパッケージを誰かがインストールしたとき、一緒にインストールされます。
