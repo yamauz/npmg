@@ -8,6 +8,34 @@ export default withMermaid(defineConfig({
     'npm / yarn / pnpm、その下にある構造。Node.js パッケージマネージャーの仕組みを、構造・歴史・最新世代の実装から図解で学ぶ教科書。',
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
+    ['meta', { property: 'og:type', content: 'website' }],
+    ['meta', { property: 'og:site_name', content: 'npmg' }],
+    ['meta', { property: 'og:title', content: 'npmg — Node.js Package Manager Guide' }],
+    [
+      'meta',
+      {
+        property: 'og:description',
+        content:
+          'npm / yarn / pnpm、その下にある構造。Node.js パッケージマネージャーの仕組みを、構造・歴史・最新世代の実装から図解で学ぶ教科書。',
+      },
+    ],
+    ['meta', { property: 'og:url', content: 'https://npmg.yamauz.workers.dev/' }],
+    ['meta', { property: 'og:image', content: 'https://npmg.yamauz.workers.dev/og.png' }],
+    ['meta', { property: 'og:image:width', content: '1200' }],
+    ['meta', { property: 'og:image:height', content: '630' }],
+    ['meta', { property: 'og:image:alt', content: 'npmg — Node.js Package Manager Guide' }],
+    ['meta', { property: 'og:locale', content: 'ja_JP' }],
+    ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
+    ['meta', { name: 'twitter:title', content: 'npmg — Node.js Package Manager Guide' }],
+    [
+      'meta',
+      {
+        name: 'twitter:description',
+        content:
+          'npm / yarn / pnpm、その下にある構造。Node.js パッケージマネージャーの仕組みを、構造・歴史・最新世代の実装から図解で学ぶ教科書。',
+      },
+    ],
+    ['meta', { name: 'twitter:image', content: 'https://npmg.yamauz.workers.dev/og.png' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
     [

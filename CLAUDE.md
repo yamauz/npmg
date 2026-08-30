@@ -17,6 +17,7 @@ pnpm build       # 本番ビルド。リンク切れで失敗するので検証�
 pnpm deploy      # 手動デプロイ。ビルド + wrangler deploy(要 wrangler login)
 node scripts/preview-hero.mjs 5        # ヒーローシェーダーをヘッドレス描画 → hero-preview.png
 node scripts/screenshot.mjs <URL> <出力先> [full]  # headless Chrome でページ撮影(要 Google Chrome)
+node scripts/og-image.mjs [dark:0|1] [time] [出力先]  # OGP 画像を生成 → docs/public/og.png(ダーク) / og-light.png
 ```
 
 変更は必ず `pnpm build` とスクリーンショット(ライト/ダーク両方)で確認してからデプロイする。
