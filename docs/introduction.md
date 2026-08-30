@@ -56,15 +56,14 @@ Render every quoted label verbatim, exactly once, with no extra, invented, or du
 No text other than the labels listed below.
 
 DIAGRAM CONTENT:
-LAYOUT: A horizontal roadmap of 4 rounded rectangles connected left to right by plain arrows,
-with a smaller 5th box below the 4th.
+LAYOUT: A horizontal roadmap of 3 rounded rectangles connected left to right by plain arrows,
+with a smaller 4th box below the 3rd.
 ELEMENTS:
 - Box 1 (light gray, book icon) labeled "Basics"
 - Box 2 (light gray, clock icon) labeled "History"
 - Box 3 (blue, gem icon) labeled "pnpm"
-- Box 4 (orange, truck icon) labeled "Migration"
 - Small box below labeled "Appendix"
-ARROWS: plain arrows from Box 1 to Box 2, Box 2 to Box 3, Box 3 to Box 4.
+ARROWS: plain arrows from Box 1 to Box 2, Box 2 to Box 3.
 ```
 
 :::
