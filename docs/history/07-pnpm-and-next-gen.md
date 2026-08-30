@@ -99,7 +99,7 @@ ARROWS: one labeled arrow reading "lockfile" pointing from "yarn 2016" up to the
 - **pnpm**: ダウンロード数は 2024 年比で 3 倍に伸び、2026 年 4 月時点で**週間約 7,270 万ダウンロード**。開発者調査 State of JS の継続利用意向(retention)では **2 年連続で Yarn を上回り**ました。2026 年 8 月 26 日には Rust で書き直された **pnpm 12** がリリースされています(コマンド・設定・lockfile は v11 互換。npm の `latest` タグは当面 v11 のままで、v12 は `pnpm self-update next-12` で導入する段階)
 - **Bun**: ランタイムを含むオールインワンとして、速度面の対抗馬という位置づけ
 
-伸び盛りの挑戦者だった pnpm は、モノレポ管理の定番、そして「npm 互換のまま速く厳格に」の本命として、主要な選択肢に定着したと言えます。
+伸び盛りの挑戦者だった pnpm は、「npm 互換のまま速く厳格に」という設計で、モノレポを中心に主要な選択肢のひとつとして定着したと言えます。
 
 ::: info なぜ pnpm まで Rust で書き直したのか
 pnpm 12 の Rust 化は「流行だから」ではありません。JavaScript 実装(v11)の時点で npm より数倍速かったものの、CI で毎日何百回も走るインストールの数秒は積もります。重要なのは、v12 が意図的に「マイグレーションにしない」方針を取ったことです。コマンドも設定も lockfile もそのまま——yarn 2 の Berry が互換性を捨てて痛手を負った歴史の、明確な反省が読み取れます。
@@ -201,4 +201,4 @@ $ curl -s https://api.npmjs.org/downloads/point/last-week/pnpm
 - Corepack は Node 25 以降同梱されない(2025 年 3 月 TSC 決定)。`packageManager` フィールドの宣言と、pnpm 自身の `self-update` / runtime 管理が現在の実務解
 - 新規プロジェクトなら pnpm が有力、というのが本書の立場。ただし文脈次第で npm / yarn v4 / Bun にもそれぞれ正当な適所がある
 
-これで Part II の歴史編は終わりです。Part III では pnpm を実際にインストールし、手を動かしながらその仕組みとアドバンテージを深掘りしていきます。まずは最初の一歩から。→ [8章 pnpm はじめの一歩](/pnpm/08-getting-started)
+これで Part II の歴史編は終わりです。Part III では、モダンなパッケージマネージャーの内部構造を、最新世代の題材として pnpm を実際にインストールしながら深掘りしていきます。ここで学ぶ仕組み(内容アドレスのストア、リンクによる配置、厳格な依存解決)は、ツールを問わず通用する知識です。まずは最初の一歩から。→ [8章 pnpm はじめの一歩](/pnpm/08-getting-started)

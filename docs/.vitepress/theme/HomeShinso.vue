@@ -71,7 +71,7 @@ const appendices = [
     <section class="outro">
       <span class="outro__dot" aria-hidden="true"></span>
       <p class="outro__line">仕組みを理解すると、<br class="narrow-only" />選択が変わる。</p>
-      <p class="outro__sub">基礎から pnpm の内部構造まで、全 12 章+付録。手を動かす実験つき。</p>
+      <p class="outro__sub">仕組みの基礎から最新世代の実装まで、全 12 章+付録。手を動かす実験つき。</p>
       <div class="outro__actions">
         <a class="btn btn--primary" :href="withBase('/introduction')">読む</a>
         <a class="btn btn--ghost" href="#toc">目次を見る</a>

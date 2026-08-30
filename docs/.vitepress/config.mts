@@ -5,7 +5,7 @@ export default withMermaid(defineConfig({
   lang: 'ja-JP',
   title: 'npmg',
   description:
-    'npm / yarn / pnpm、その下にある構造。パッケージマネージャーの仕組みと歴史、pnpm の内部構造までを図解で学ぶ教科書。',
+    'npm / yarn / pnpm、その下にある構造。Node.js パッケージマネージャーの仕組みを、構造・歴史・最新世代の実装から図解で学ぶ教科書。',
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
