@@ -254,11 +254,10 @@ package.json 側はバージョンを書かず、カタログを指します。
 
 関連設定として `catalogMode` があり、`manual`(既定)/ `strict` / `prefer` の 3 値で「`pnpm add` したときにカタログをどう使うか」を制御できます。`strict` にすると、カタログに載っているパッケージはカタログ経由でしか追加できなくなり、バージョンの一元管理を強制できます。
 
-<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-11-3.png に保存し、下の行のコメントを外してください -->
-<!-- ![図 11-3: catalog による一元管理](/images/fig-11-3.png) -->
-
-> **🖼️ 図 11-3|catalog による一元管理**(画像プレースホルダー)
-> 生成後は `docs/public/images/fig-11-3.png` に配置してください。
+<figure>
+  <img src="/images/fig-11-3.png" alt="catalog による一元管理">
+  <figcaption><span class="fig-num">図 11-3</span> catalog による一元管理</figcaption>
+</figure>
 
 <!-- 図 11-3 の生成プロンプト(採用版・ページには出しない)
 
@@ -274,9 +273,26 @@ Render every quoted label verbatim, exactly once, with no extra, invented, or du
 No text other than the labels listed below.
 
 DIAGRAM CONTENT:
-LAYOUT: On the left, one light gray container titled "pnpm-workspace.yaml" holding a highlighted blue rounded box. On the right, three white boxes stacked vertically.
-ELEMENTS: The blue box inside the left container is labeled "catalog" and contains a single book icon with the label "react". The three white boxes on the right are labeled "app", "ui", and "docs"; the top box "app" has a small orange tag reading "catalog:" attached to its left edge.
-ARROWS: A labeled arrow reading "resolve" pointing from "app" to the blue "catalog" box. Two unlabeled arrows pointing from "ui" and "docs" to the same blue "catalog" box.
+LAYOUT: Two columns with generous white space between them, both vertically centered on the same
+axis. The left column is one light gray rounded container with its title centered at the top
+inside it, holding one white box. The right column has three equally sized white boxes stacked
+vertically and evenly spaced. Three arrows go from the three right boxes to the single box
+inside the left container.
+ICON STYLE: every icon is a simple line-art outline drawing, drawn with the same uniform dark
+stroke as the boxes, with no fill, no color, no gradient, and no 3D shading. Icons must look
+like monochrome outline pictograms, not illustrations.
+ELEMENTS:
+- Left container titled "pnpm-workspace.yaml". Inside it, one white box with a thick blue
+  outline and two lines of text: "catalog" then "react ^19.2.0".
+- Right column top: a white box with a thin dark outline and two lines of text: "app" then
+  "catalog:".
+- Right column middle: a white box with a thin dark outline and two lines of text: "ui" then
+  "catalog:".
+- Right column bottom: a white box with a thin dark outline and two lines of text: "docs" then
+  "catalog:".
+ARROWS: exactly three plain dark arrows, one from each right box pointing left to the blue
+"catalog" box inside the left container. Only the arrow from "app" has a label, reading
+"resolve". No other lines or connectors anywhere in the diagram.
 -->
 
 ## 設定ファイルとしての pnpm-workspace.yaml
