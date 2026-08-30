@@ -8,13 +8,17 @@ Node.js のパッケージマネージャー(npm / yarn / pnpm)を仕組みか�
 
 ## 開発
 
+パッケージマネージャーは **pnpm** を使います(本書の題材でもあるため)。未導入なら `curl -fsSL https://get.pnpm.io/install.sh | sh -` で入ります。
+
 ```sh
-npm install
-npm run dev      # 開発サーバー (http://localhost:5173)
-npm run build    # 本番ビルド (docs/.vitepress/dist)
-npm run preview  # ビルド結果のプレビュー
-npm run deploy   # ビルドして Cloudflare Workers へデプロイ(要 wrangler login)
+pnpm install
+pnpm dev      # 開発サーバー (http://localhost:5173)
+pnpm build    # 本番ビルド (docs/.vitepress/dist)
+pnpm preview  # ビルド結果のプレビュー
+pnpm deploy   # ビルドして Cloudflare Workers へデプロイ(要 wrangler login)
 ```
+
+依存のビルドスクリプト(esbuild / workerd / webgpu など)は pnpm の既定でブロックされるため、`pnpm-workspace.yaml` の `allowBuilds` で明示的に許可しています。新しくビルドが必要な依存を足したときは `pnpm approve-builds` で承認してください。
 
 ## デザインシステム
 

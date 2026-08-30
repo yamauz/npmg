@@ -1,0 +1,8 @@
+# ワークスペースではないが、pnpm の設定置き場として使う(v11 以降の流儀)
+# 依存のビルドスクリプト(postinstall 等)は既定でブロックされるため、
+# 必要なものだけをここで明示的に許可する(旧 package.json の allowScripts 相当)。
+allowBuilds:
+  '@vgpu/adapter-node': true
+  esbuild: true
+  webgpu: true
+  workerd: true

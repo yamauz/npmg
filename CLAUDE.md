@@ -12,20 +12,22 @@ VitePress 製の日本語オンライン教科書。npm / yarn / pnpm を「仕�
 ## コマンド
 
 ```sh
-npm run dev      # 開発サーバー (http://localhost:5173)
-npm run build    # 本番ビルド。リンク切れで失敗するので検証を兼ねる
-npm run deploy   # 手動デプロイ。ビルド + wrangler deploy(要 wrangler login)
+pnpm dev         # 開発サーバー (http://localhost:5173)
+pnpm build       # 本番ビルド。リンク切れで失敗するので検証を兼ねる
+pnpm deploy      # 手動デプロイ。ビルド + wrangler deploy(要 wrangler login)
 node scripts/preview-hero.mjs 5        # ヒーローシェーダーをヘッドレス描画 → hero-preview.png
 node scripts/screenshot.mjs <URL> <出力先> [full]  # headless Chrome でページ撮影(要 Google Chrome)
 ```
 
-変更は必ず `npm run build` とスクリーンショット(ライト/ダーク両方)で確認してからデプロイする。
+変更は必ず `pnpm build` とスクリーンショット(ライト/ダーク両方)で確認してからデプロイする。
 
 ## デプロイ
 
 **通常は main への push で自動デプロイされる**(Cloudflare Workers Builds が GitHub リポジトリ `yamauz/npmg` と GUI 連携済み。ダッシュボード側でビルド・デプロイまで実行される)。GitHub Actions のワークフローは置いていない。
 
-`npm run deploy` は手元からの手動デプロイ用に残してある。Cloudflare 側のビルドが落ちたときの逃げ道。
+⚠️ **パッケージマネージャーは pnpm**。Cloudflare のビルド設定はダッシュボード側にあるため、リポジトリからは変更できない。ビルドコマンド/インストールコマンドが `npm` のままだと失敗するので、Cloudflare ダッシュボードの Build settings も pnpm に合わせること(`pnpm install` / `pnpm build`)。
+
+`pnpm deploy` は手元からの手動デプロイ用に残してある。Cloudflare 側のビルドが落ちたときの逃げ道。
 
 ## 執筆の絶対原則
 
@@ -73,4 +75,9 @@ research/pnpm-facts.md      # pnpm 事実集(2026-08 調査)
 research/structure-lab.md   # 実測一次データ(2026-08-30 採取)
 .claude/skills/hallmark     # 脱 AI スロップデザインスキル
 wrangler.jsonc              # Cloudflare Workers 設定(静的アセット配信)
+pnpm-workspace.yaml         # pnpm 設定。allowBuilds でビルド許可する依存を明示
 ```
+
+## パッケージマネージャー
+
+本書の題材に合わせて **pnpm**(`packageManager` フィールドで固定)。lockfile は `pnpm-lock.yaml` のみで、`package-lock.json` は置かない。依存のビルドスクリプトは既定でブロックされるため、必要なものは `pnpm-workspace.yaml` の `allowBuilds` に列挙する(現在: `@vgpu/adapter-node` / `esbuild` / `webgpu` / `workerd`)。新規依存で `ERR_PNPM_IGNORED_BUILDS` が出たら `pnpm approve-builds` で承認する。
