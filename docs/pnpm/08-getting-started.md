@@ -176,11 +176,10 @@ Done in 1.4s using pnpm v11.24.0
 
 注目してほしいのは `Progress:` の行です。`resolved 66` は依存グラフとして解決したパッケージ数、`downloaded 15` はレジストリから実際に取得した数、そして `reused 51` は**このマシンで過去に一度使ったファイルを再利用した数**です(まっさらなマシンでの初実行なら `reused 0` になります)。npm の `added 68 packages` という素っ気ない報告と違い、pnpm は「どれだけ取得せずに済んだか」を毎回教えてくれます。では、どこから再利用しているのか — `Packages are cloned from the content-addressable store` という 1 行がその答えなのですが、「内容アドレスストア」とは何なのかは次章でじっくり解き明かします。
 
-<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-08-2.png に保存し、下の行のコメントを外してください -->
-<!-- ![図 8-2: pnpm コマンド体系マップ](/images/fig-08-2.png) -->
-
-> **🖼️ 図 8-2|pnpm コマンド体系マップ**(画像プレースホルダー)
-> 生成後は `docs/public/images/fig-08-2.png` に配置してください。
+<figure>
+  <img src="/images/fig-08-2.png" alt="pnpm コマンド体系マップ">
+  <figcaption><span class="fig-num">図 8-2</span> pnpm コマンド体系マップ</figcaption>
+</figure>
 
 <!-- 図 8-2 の生成プロンプト(採用版・ページには出しない)
 
@@ -196,15 +195,23 @@ Render every quoted label verbatim, exactly once, with no extra, invented, or du
 No text other than the labels listed below.
 
 DIAGRAM CONTENT:
-LAYOUT: One circle in the center, two large rounded containers on the left and right,
-each container holding three small rounded boxes.
+LAYOUT: Three columns, all vertically centered on the same horizontal axis. The center column is
+one circle. The left and right columns are large light gray rounded containers of the same size,
+placed symmetrically on either side of the circle. Each container has its title at the top and
+holds three equally sized white boxes stacked vertically below the title. One arrow goes from
+the circle to each container.
+ICON STYLE: every icon is a simple line-art outline drawing, drawn with the same uniform dark
+stroke as the boxes, with no fill, no color, no gradient, and no 3D shading. Icons must look
+like monochrome outline pictograms, not illustrations.
 ELEMENTS:
-- Center circle (blue, gem icon) labeled "pnpm"
-- Left container (light gray, box icon) labeled "Dependencies" containing three small
-  boxes labeled "install", "add", "remove"
-- Right container (light gray, play icon) labeled "Execute" containing three small
-  boxes labeled "run", "dlx", "create"
-ARROWS: a plain arrow from "pnpm" to "Dependencies", a plain arrow from "pnpm" to "Execute".
+- Center: a circle with a thick blue outline and white fill, no icon, labeled "pnpm"
+- Left container, light gray, titled "Dependencies", holding three white boxes with thin dark
+  outlines, stacked vertically, labeled "install", "add", "remove"
+- Right container, light gray, titled "Execute", holding three white boxes with thin dark
+  outlines, stacked vertically, labeled "run", "dlx", "create"
+ARROWS: exactly two plain dark arrows, one pointing left from the circle to the left container,
+one pointing right from the circle to the right container. No arrow labels. No other lines or
+connectors anywhere in the diagram.
 -->
 
 ## npm ユーザーのための読み替え表

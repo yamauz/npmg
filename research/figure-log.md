@@ -239,3 +239,15 @@ Bun のドットを orange から dark へ。オレンジは警告色で、Bun �
 `npm -g` のアイコンは立方体からトレイへの下向き矢印に変更(pnpm CLI と同じ絵になるのを避けるため)。合流先はアイコンなし・青枠のみで十分目立つ。
 
 **未配置図に残る `gem icon`(2026-08-31 時点)**: `docs/pnpm/08-getting-started.md:202`(図 8-2)と `docs/pnpm/10-advantages.md:214`(図 10-2)に `Center circle (blue, gem icon) labeled "pnpm"` が残っている。どちらもプロンプト修正時に削除すること。
+
+### 図 8-2 pnpm コマンド体系マップ(2026-08-31 / 標準 3:2)
+
+`docs/pnpm/08-getting-started.md` — 中心の pnpm から Dependencies(install/add/remove)と Execute(run/dlx/create)へ。
+
+**残存していた `gem icon` を削除**(前回の調査で判明していた 2 箇所のうち 1 つ目)。中心の塗りも青ベタから白+太い青枠へ。青枠でも中心として十分認識できる。
+
+コンテナの `box icon` / `play icon` も削除した。1 つのコンテナに「タイトル+アイコン+3 つの箱」を詰めると密度が高すぎるうえ、`Dependencies` / `Execute` は文字で明確でアイコンの追加情報がない。
+
+要素 9 個(pnpm + 2 タイトル + 6 コマンド)とやや多いが、左右対称のコンテナ構図(3-1 で成功済み)なので箱は潰れなかった。
+
+残る `gem icon` は `docs/pnpm/10-advantages.md:214`(図 10-2)の 1 箇所。
