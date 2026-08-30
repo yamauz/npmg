@@ -55,11 +55,10 @@ flowchart TD
 つまり pnpm の既定では、**`workspace:` を明示的に書いたときにリンクされる**と考えておけば実務上は困りません。「同じワークスペースに置いたのに import できない」と悩んだら、まず依存の宣言を確認してください。暗黙の魔法に頼らない、pnpm らしい既定値です。
 :::
 
-<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-11-1.png に保存し、下の行のコメントを外してください -->
-<!-- ![図 11-1: モノレポの全体構造(apps/packages と共有 lockfile)](/images/fig-11-1.png) -->
-
-> **🖼️ 図 11-1|モノレポの全体構造(apps/packages と共有 lockfile)**(画像プレースホルダー)
-> 生成後は `docs/public/images/fig-11-1.png` に配置してください。
+<figure>
+  <img src="/images/fig-11-1.png" alt="モノレポの全体構造(apps/packages と共有 lockfile)">
+  <figcaption><span class="fig-num">図 11-1</span> モノレポの全体構造(apps/packages と共有 lockfile)</figcaption>
+</figure>
 
 <!-- 図 11-1 の生成プロンプト(採用版・ページには出しない)
 
@@ -75,9 +74,27 @@ Render every quoted label verbatim, exactly once, with no extra, invented, or du
 No text other than the labels listed below.
 
 DIAGRAM CONTENT:
-LAYOUT: One large light gray rounded container filling most of the canvas, titled "monorepo root" at its top-left corner. Inside, the top row holds two file icons side by side; the bottom row holds two white package boxes side by side.
-ELEMENTS: In the top row, a file icon with a blue accent labeled "pnpm-workspace.yaml" and a file icon with an orange highlight labeled "pnpm-lock.yaml". In the bottom row, a white rounded box labeled "apps/web" with a simple browser-window icon, and a white rounded box labeled "packages/ui" with a simple building-blocks icon.
-ARROWS: A labeled arrow reading "defines" pointing from "pnpm-workspace.yaml" down toward the two package boxes. A labeled arrow reading "locks all" pointing from "pnpm-lock.yaml" down toward the two package boxes.
+LAYOUT: One large light gray rounded container filling most of the canvas, with its title
+centered at the top inside the container. Inside it, two rows. The top row has two file icons
+side by side, each with its label below it. The bottom row, below the top row and separated by
+white space, has two equally sized white rounded boxes side by side, each with a small icon
+above its label. Two arrows go from the top row down to the bottom row.
+ICON STYLE: every icon is a simple line-art outline drawing, drawn with the same uniform dark
+stroke as the boxes, with no fill, no color, no gradient, and no 3D shading. Icons must look
+like monochrome outline pictograms, not illustrations.
+ELEMENTS:
+- The container is titled "monorepo root"
+- Top row left: an outline icon of a document with a thick blue outline, labeled
+  "pnpm-workspace.yaml"
+- Top row right: an outline icon of a document with a thick blue outline, labeled
+  "pnpm-lock.yaml"
+- Bottom row left: a white box with a thin dark outline, an outline icon of a browser window,
+  labeled "apps/web"
+- Bottom row right: a white box with a thin dark outline, an outline icon of stacked blocks,
+  labeled "packages/ui"
+ARROWS: exactly two plain dark arrows pointing down. One from the "pnpm-workspace.yaml" icon
+down to the "apps/web" box, labeled "defines". One from the "pnpm-lock.yaml" icon down to the
+"packages/ui" box, labeled "locks all". No other lines or connectors anywhere in the diagram.
 -->
 
 ## workspace: プロトコル — 「隣の部屋」への確実なリンク
