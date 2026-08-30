@@ -3,7 +3,7 @@ import { withMermaid } from 'vitepress-plugin-mermaid'
 
 export default withMermaid(defineConfig({
   lang: 'ja-JP',
-  title: 'node_modulesの深層',
+  title: 'npmg',
   description:
     'npm / yarn / pnpm、その下にある構造。パッケージマネージャーの仕組みと歴史、pnpm の内部構造までを図解で学ぶ教科書。',
   head: [

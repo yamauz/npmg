@@ -1,6 +1,6 @@
-# node_modulesの深層
+# npmg — Node.js Package Manager Guide
 
-npm / yarn / pnpm、その下にある構造。フロントエンド開発者のための教科書サイト(VitePress 製)です。
+Node.js のパッケージマネージャー(npm / yarn / pnpm)を仕組みから理解する教科書サイト(VitePress 製)です。キャッチコピーは「node_modulesの深層を、正確にたどる。」。
 
 公開 URL: https://npmg.yamauz.workers.dev
 

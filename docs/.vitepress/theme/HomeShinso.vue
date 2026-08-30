@@ -80,7 +80,7 @@ const appendices = [
 
     <footer class="foot">
       <div class="foot__inner">
-        <span class="foot__mark">node_modulesの深層</span>
+        <span class="foot__mark">npmg — Node.js Package Manager Guide</span>
         <nav class="foot__links">
           <a :href="withBase('/introduction')">この本について</a>
           <a :href="withBase('/basics/01-what-is-a-package-manager')">第 1 章</a>

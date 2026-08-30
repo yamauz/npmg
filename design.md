@@ -1,4 +1,4 @@
-# Design — node_modulesの深層
+# Design — npmg (Node.js Package Manager Guide)
 
 Locked design system. Future Hallmark runs read this file first; pages defer
 to it. Amend intentionally — the file is the rule.

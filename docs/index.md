@@ -1,7 +1,7 @@
 ---
 layout: page
-title: node_modulesの深層
-titleTemplate: npm / yarn / pnpm、その下にある構造
+title: npmg
+titleTemplate: Node.js Package Manager Guide
 sidebar: false
 ---
 

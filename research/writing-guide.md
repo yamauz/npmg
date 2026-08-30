@@ -1,6 +1,6 @@
 # 執筆ガイド(本書共通の「型」)
 
-『node_modulesの深層』全章に適用する執筆ルール。参考サイト『RustではじめるCPUとGPU』の型を模倣する。
+『npmg — Node.js Package Manager Guide』全章に適用する執筆ルール。参考サイト『RustではじめるCPUとGPU』の型を模倣する。
 
 ## 読者と文体
 
