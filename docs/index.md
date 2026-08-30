@@ -1,7 +1,7 @@
 ---
 layout: page
-title: npmg
-titleTemplate: Node.js Package Manager Guide
+title: Node.js Package Manager Guide
+titleTemplate: false
 sidebar: false
 ---
 
