@@ -155,11 +155,10 @@ node_modules
 node_modules/.pnpm/<pkg>@<version>/node_modules/<pkg>
 ```
 
-<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-09-2.png に保存し、下の行のコメントを外してください -->
-<!-- ![図 9-2: .pnpm 内のレイアウト詳細](/images/fig-09-2.png) -->
-
-> **🖼️ 図 9-2|.pnpm 内のレイアウト詳細**(画像プレースホルダー)
-> 生成後は `docs/public/images/fig-09-2.png` に配置してください。
+<figure>
+  <img src="/images/fig-09-2.png" alt=".pnpm 内のレイアウト詳細">
+  <figcaption><span class="fig-num">図 9-2</span> <code>.pnpm</code> 内のレイアウト詳細</figcaption>
+</figure>
 
 <!-- 図 9-2 の生成プロンプト(採用版・ページには出しない)
 
@@ -175,16 +174,27 @@ Render every quoted label verbatim, exactly once, with no extra, invented, or du
 No text other than the labels listed below.
 
 DIAGRAM CONTENT:
-LAYOUT: A large container at the top holding two folder groups side by side, and a wide
-cylinder at the bottom.
+LAYOUT: Two horizontal bands. The upper band is one wide light gray rounded container that holds
+two equally sized white boxes side by side, each of which contains one smaller white box inside
+it. The lower band, below the container and separated by white space, is one tall cylinder shape
+lying to the left, with its label below it. Arrows connect the cylinder up to the two boxes, and
+one arrow connects the two inner boxes horizontally.
+ICON STYLE: every icon is a simple line-art outline drawing, drawn with the same uniform dark
+stroke as the boxes, with no fill, no color, no gradient, and no 3D shading. Icons must look
+like monochrome outline pictograms, not illustrations.
 ELEMENTS:
-- Top container (light gray outline) labeled ".pnpm"
-- Left folder group: an outer box labeled "foo@1.0.0" containing a smaller blue box labeled "foo"
-- Right folder group: an outer box labeled "bar@1.0.0" containing a smaller blue box labeled "bar"
-- Bottom cylinder (blue, database icon) labeled "Global Store"
-ARROWS: a labeled arrow reading "symlink" pointing from "foo" to "bar",
-a labeled arrow reading "hard link" pointing from "Global Store" to "foo@1.0.0",
-a plain arrow from "Global Store" to "bar@1.0.0".
+- The upper light gray container is labeled ".pnpm" with exactly one period before the letters
+  "pnpm" and no other periods
+- Inside it, the left white box is labeled "foo@1.0.0" and contains one smaller white box with a
+  thick blue outline labeled "foo"
+- Inside it, the right white box is labeled "bar@1.0.0" and contains one smaller white box with
+  a thick blue outline labeled "bar"
+- Below and to the left, a cylinder with a thick blue outline and white fill, no icon, labeled
+  "Global Store"
+ARROWS: exactly three plain dark arrows. One horizontal arrow from the inner box "foo" pointing
+right to the inner box "bar", labeled "symlink". Two arrows going up from the cylinder, one to
+the "foo@1.0.0" box and one to the "bar@1.0.0" box; only the one pointing to "foo@1.0.0" has a
+label, reading "hard link or clone". No other lines or connectors anywhere in the diagram.
 -->
 
 ::: info なぜ `foo@1.0.0` の直下ではなく、さらに `node_modules/foo` と一段深いのか
