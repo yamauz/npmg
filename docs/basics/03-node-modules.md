@@ -30,11 +30,10 @@ Node.js 側のルールも確認しておきます。`require('foo')` が実行�
 - **重複によるサイズ肥大**。人気パッケージは何十回もコピーされ、node_modules は際限なく膨らみます。同じファイルが 30 か所にある、という状況が普通に起きました。
 - **深すぎるパス**。依存の依存の依存…とネストが続くと、パスはどこまでも深くなります。特に当時の Windows には約 260 文字のパス長制限があり、「深すぎてファイルを削除できない」という悲劇まで起きました。
 
-<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-03-1.png に保存し、下の行のコメントを外してください -->
-<!-- ![図 3-1: npm v2 のネスト構造と npm v3 のフラット構造の対比](/images/fig-03-1.png) -->
-
-> **🖼️ 図 3-1|npm v2 のネスト構造と npm v3 のフラット構造の対比**(画像プレースホルダー)
-> 生成後は `docs/public/images/fig-03-1.png` に配置してください。
+<figure>
+  <img src="/images/fig-03-1.png" alt="npm v2 のネスト構造と npm v3 のフラット構造の対比">
+  <figcaption><span class="fig-num">図 3-1</span> npm v2 のネスト構造と npm v3 のフラット構造の対比</figcaption>
+</figure>
 
 <!-- 図 3-1 の生成プロンプト(採用版・ページには出しない)
 
@@ -50,15 +49,17 @@ Render every quoted label verbatim, exactly once, with no extra, invented, or du
 No text other than the labels listed below.
 
 DIAGRAM CONTENT:
-LAYOUT: Two side-by-side panels, each a large light gray rounded container representing a
-folder tree drawn with indented boxes.
+LAYOUT: Two panels side by side, separated by generous white space, each the same width and
+each with its title centered above the panel, outside it. Inside each panel is a folder tree
+drawn as nested rounded rectangles with clear indentation, like a file explorer.
 ELEMENTS:
-- Left panel titled "npm v2" containing a folder tree: a root folder labeled "node_modules",
-  inside it two package boxes labeled "A" and "B", and nested inside each of them a small
-  folder holding an orange-highlighted box; the two orange boxes are labeled "C" and "C copy"
-- Right panel titled "npm v3" containing a folder tree: a root folder labeled "flat", with
-  three package boxes side by side at the same depth labeled "A2", "B2", "C2"
-ARROWS: none.
+- Left panel titled "npm v2". Inside it, a light gray container labeled "node_modules" holding
+  two white boxes side by side labeled "A" and "B". Nested inside the "A" box is one orange box
+  labeled "C". Nested inside the "B" box is another orange box, also labeled "C".
+- Right panel titled "npm v3". Inside it, a light gray container labeled "node_modules" holding
+  three white boxes side by side at the same depth, labeled "A", "B", "C", in that order from
+  left to right.
+ARROWS: none. No other lines or connectors anywhere in the diagram.
 -->
 
 ## npm v3 — フラット化と hoisting
