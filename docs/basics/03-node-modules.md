@@ -155,11 +155,10 @@ ARROWS: none. No other lines or connectors anywhere in the diagram.
 
 フラット化により、node_modules の最上位には**あなたが宣言していないパッケージ**が大量に並ぶことになりました。そして Node.js の探索ルールは「最上位にあれば見つけてしまう」——つまり、**package.json に書いていないパッケージが `import` できてしまう**のです。これを**幽霊依存(phantom dependency)**と呼びます。
 
-<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-03-3.png に保存し、下の行のコメントを外してください -->
-<!-- ![図 3-3: phantom dependency — 宣言していないのに import できてしまう](/images/fig-03-3.png) -->
-
-> **🖼️ 図 3-3|phantom dependency — 宣言していないのに import できてしまう**(画像プレースホルダー)
-> 生成後は `docs/public/images/fig-03-3.png` に配置してください。
+<figure>
+  <img src="/images/fig-03-3.png" alt="phantom dependency — 宣言していないのに import できてしまう">
+  <figcaption><span class="fig-num">図 3-3</span> phantom dependency — 宣言していないのに import できてしまう</figcaption>
+</figure>
 
 <!-- 図 3-3 の生成プロンプト(採用版・ページには出しない)
 
@@ -175,17 +174,20 @@ Render every quoted label verbatim, exactly once, with no extra, invented, or du
 No text other than the labels listed below.
 
 DIAGRAM CONTENT:
-LAYOUT: Three columns. Left column shows two stacked document icons. Middle column shows a
-large light gray container holding two package boxes. Generous space between columns.
+LAYOUT: Two columns side by side with generous white space between them, both vertically
+centered on the same axis. The left column has two document icons stacked vertically, each with
+its label directly below it. The right column is one large light gray rounded container holding
+two equally sized white boxes stacked vertically.
 ELEMENTS:
-- Top left document icon labeled "package.json" with a small blue tag below it labeled
-  "declares express"
-- Bottom left document icon labeled "app.js"
-- Middle container titled "node_modules" holding a blue box labeled "express" and a gray
-  box labeled "debug"
-- An orange warning triangle near the "debug" box with an orange tag labeled "not declared"
-ARROWS: a plain arrow from "package.json" to "express"; a labeled arrow reading
-"import debug" pointing from "app.js" to "debug".
+- Left column, upper document icon labeled "package.json"
+- Left column, lower document icon labeled "app.js"
+- Right container labeled "node_modules", holding two equally sized white boxes stacked
+  vertically: an upper box with a thin dark outline labeled "express", and a lower box with a
+  thick orange outline labeled "debug"
+- A small orange tag sits directly above the "debug" box, reading "not declared"
+ARROWS: exactly two arrows. A plain dark arrow labeled "declares" from the "package.json" icon
+to the "express" box. A blue arrow labeled "import debug" from the "app.js" icon to the "debug"
+box. No other lines or connectors anywhere in the diagram.
 -->
 
 たとえば express をインストールすると、express 自身の依存である `debug` や `body-parser` も最上位に hoist されます。すると、あなたのコードで `require('debug')` と書けば——宣言していないのに——動いてしまいます。
