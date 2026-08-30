@@ -72,7 +72,7 @@ alotta-files フィクスチャ、50ms RTT / 200Mbit/s エミュレート回線�
 
 ## 歴史メモ(7 章向け)
 
-- pnpm は 2016 年に Zoltan Kochan 氏が開発を開始(v1 は 2017 年)。動機はディスク効率と依存の厳格さ。
+- pnpm は最初のコミットが 2016-01-27、v1.0.0 が 2017-06-28。以後 Zoltan Kochan 氏を中心に開発。動機はディスク効率と依存の厳格さ。(※ Wikipedia は冒頭で Rico Sta. Cruz を originally developed と記す一方、History 節では初コミットを Kochan とし出典自体が矛盾。作者の断定は避ける)
 - yarn v1 は 2016-10 に Facebook(+Google, Exponent, Tilde)が公開。2020-01 の yarn 2(Berry)で PnP を採用し方向転換、v1 はメンテナンスモードに。
 - npm: 2010-01 に Isaac Schlueter 氏が公開。npm v3(2015)でフラット化、npm v5(2017)で package-lock.json 導入。2020-03 に GitHub が npm, Inc. を買収。left-pad 事件は 2016-03。
 
@@ -81,3 +81,17 @@ alotta-files フィクスチャ、50ms RTT / 200Mbit/s エミュレート回線�
 - https://pnpm.io/motivation / symlinked-node-modules-structure / settings / workspaces / catalogs / cli/import / cli/patch / cli/dlx / cli/audit / supply-chain-security / benchmarks / blog/releases/11.0 / blog/releases/12.0
 - https://socket.dev/blog/pnpm-10-0-0-blocks-lifecycle-scripts-by-default
 - https://socket.dev/blog/node-js-tsc-votes-to-stop-distributing-corepack
+
+## 表現上の注意(2026-08-30 外部レビューを受けて追記)
+
+事実は正しくても「断定が強すぎる」と不正確になる論点。執筆時はここを条件付きで書く。
+
+- **lockfile は「同じ結果を保証」しない**。固定できるのは解決結果まで。実際の node_modules は PM のバージョン・OS/CPU・optional/peer 依存・ビルドスクリプトにも左右される。「再現性を高める」と書く
+- **「CI は毎回最新を引く」は lockfile がない場合の話**。現在の npm は lockfile があればそれに従う。時系列(lockfile 以前 / 以後)を必ず明示する
+- **npm = フラットとは限らない**。現行 npm には `--install-strategy` の `hoisted`(既定)/ `nested` / `shallow` / `linked` がある。`linked` は未宣言依存の検出用に npm 公式が開発時利用を推奨(https://docs.npmjs.com/cli/v11/using-npm/config#install-strategy)
+- **pnpm の doppelgänger「原理的にゼロ」は言い過ぎ**。peer dependencies を持つパッケージは peer の組み合わせごとに virtual store 上の別エントリを持つ(`foo@1.0.0(react@18.3.1)` 形式)。ファイル実体はリンク共有なのでディスクは増えない(https://pnpm.io/how-peers-are-resolved)
+- **phantom dependency の遮断は設定依存**。既定の隔離レイアウトが前提で、`hoist` / `publicHoistPattern` / `shamefullyHoist` で可視性は変わる
+- **store は「マシンに 1 つ」ではなく `storeDir` で変更可能**。「プロジェクト間で共有される」が正確
+- **pnpm 12 は「完全互換」ではない**。v11 の資産を引き継ぐ方針だが破壊的変更はある(git 依存の URL 正規化、未知の設定キーがエラー等)
+- **minimumReleaseAge は「安全になる」機能ではない**。公開直後を掴まないための時間的な緩衝帯
+- **DL 数・retention は傾向をつかむ材料**。DL 数は CI 実行回数に左右され実利用者数と一致しない。「本書が参照した指標では」と限定する

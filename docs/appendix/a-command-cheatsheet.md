@@ -26,7 +26,7 @@ npm / yarn v1 / pnpm の対応コマンドを用途別にまとめます。「np
 | CI 用クリーンインストール | `npm ci` | `yarn install --frozen-lockfile` | `pnpm install --frozen-lockfile` |
 
 ::: info
-pnpm は CI 上で実行すると自動的に frozen-lockfile モードになります。また pnpm 11 以降には `npm ci` に相当する `pnpm ci` コマンドもあります(node_modules を削除してからクリーンにインストール)。
+pnpm は CI 上で実行すると自動的に frozen-lockfile モードになります。そのため CI では `pnpm install --frozen-lockfile` が一般的です。加えて pnpm 11 以降には `npm ci` に相当する `pnpm ci` もあります(`pnpm clean` で node_modules を消してから `--frozen-lockfile` でインストールする、クリーンインストール系のコマンド)。
 :::
 
 ## スクリプト実行・一時実行

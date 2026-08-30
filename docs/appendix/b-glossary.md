@@ -10,14 +10,14 @@
 - **semver(Semantic Versioning)** — `major.minor.patch` 形式のバージョン規約。破壊的変更で major、後方互換の機能追加で minor、バグ修正で patch を上げます。`^` や `~` による範囲指定の前提となる約束事です。
 - **依存グラフ(dependency graph)** — 直接依存から依存の依存へと辿ってできる、パッケージ間の有向グラフ。インストールとはこのグラフを解決し、ディスク上に再現する作業です。
 - **peer dependency** — 「自分と同じ場所に、利用者側がこのパッケージを用意してほしい」という宣言。React プラグインが React 本体を peer に指定するのが典型例です。
-- **lockfile(ロックファイル)** — 依存グラフの解決結果(確定バージョン・取得先・ハッシュ)を記録し、いつ誰がインストールしても同じ結果になることを保証するファイル。package-lock.json / yarn.lock / pnpm-lock.yaml。([4章](/basics/04-lockfiles))
+- **lockfile(ロックファイル)** — 依存グラフの解決結果(確定バージョン・取得先・ハッシュ)を記録し、インストールの再現性を高めるファイル。package-lock.json / yarn.lock / pnpm-lock.yaml。ただし固定できるのは「解決結果」までで、実際に出来上がる node_modules はパッケージマネージャーのバージョン・OS/CPU・optional/peer 依存・ビルドスクリプトなどにも左右されます。([4章](/basics/04-lockfiles))
 - **integrity** — 取得したパッケージが改ざんされていないか検証するためのハッシュ値。lockfile に `sha512-...` の形式(SRI)で記録されます。
 
 ## 構造
 
 - **hoisting(巻き上げ)** — 依存の依存を node_modules の浅い位置(ルート直下)へ引き上げて重複を減らすフラット化の手法。npm v3 以降と yarn v1 が採用。([3章](/basics/03-node-modules))
-- **幽霊依存(phantom dependency)** — package.json に宣言していないのに、hoisting の副作用で import できてしまう依存。宣言なしに動いているため、依存側の構成変更で突然壊れます。pnpm はこれを原理的に防ぎます。
-- **doppelgänger(ドッペルゲンガー)** — フラット化の制約により、同一バージョンのパッケージが node_modules 内の複数箇所に重複して実体コピーされる現象。ディスクと解決の一貫性を損ないます。
+- **幽霊依存(phantom dependency)** — package.json に宣言していないのに、hoisting の副作用で import できてしまう依存。宣言なしに動いているため、依存側の構成変更で突然壊れます。pnpm の既定の隔離レイアウトでは、アプリコードからの未宣言 import は解決に失敗します(ただし可視性は `hoist` / `publicHoistPattern` / `shamefullyHoist` などの設定で変わります)。
+- **doppelgänger(ドッペルゲンガー)** — フラット化の制約により、同一バージョンのパッケージが node_modules 内の複数箇所に重複して実体コピーされる現象。ディスクと解決の一貫性を損ないます。pnpm の virtual store では実体がコピーされることはありませんが、peer dependency の組み合わせが複数あるパッケージは、組み合わせごとに別エントリを持ちます(ファイル実体はリンクで共有)。
 - **ハードリンク(hard link)** — ディスク上の同じ実体(inode)を指す、対等な「別名」。ファイルをコピーせずに複数の場所から参照でき、pnpm がストアから各プロジェクトへファイルを配る手段です。
 - **シンボリックリンク(symbolic link)** — 別のパスを指し示す特殊ファイル。pnpm は node_modules 内の依存関係をシンボリックリンクの網で表現します。([9章](/pnpm/09-how-pnpm-works))
 

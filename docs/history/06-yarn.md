@@ -92,7 +92,7 @@ yarn の登場は npm に強烈な危機感を与えました。前章で見た 
 
 ## Berry への跳躍 — yarn 2 と Plug'n'Play
 
-2020 年 1 月、yarn 2(開発コード名 **Berry**)がリリースされます。その目玉が **Plug'n'Play(PnP)** ——なんと **node_modules の廃止**です。
+2020 年 1 月、yarn 2(開発コード名 **Berry**)がリリースされます。Berry は v2 以降の世代そのものを指す呼び名で、その代表的な機能が **Plug'n'Play(PnP)** ——なんと **node_modules の廃止**です(Berry = PnP ではなく、Berry では PnP 以外に `node_modules` リンカーも選べます)。
 
 PnP は、依存パッケージを node_modules に展開する代わりに、圧縮ファイル(zip)のまま保持し、「どのパッケージがどこにあるか」の対応表(`.pnp.cjs`)を生成して、Node.js のモジュール解決処理そのものをフックで置き換えます。3 章で見た「node_modules をディレクトリ階層で表現する」方式の非効率(大量の小ファイル、遅いコピー、phantom dependency)を、根こそぎ排除する設計です。理屈のうえでは、これは正しい急進でした。
 
