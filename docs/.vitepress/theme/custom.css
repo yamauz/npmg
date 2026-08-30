@@ -196,16 +196,24 @@ body {
   background: #151a22;
 }
 
-/* エッジラベルの背景を塗り、同色ストロークで余白を作って線の食い込みを防ぐ */
+/* エッジラベルが矢印の線と重なるのを防ぐ。
+   SVG テキストラベル(htmlLabels: false)では背景 rect の縦位置が文字とずれるため、
+   rect に頼らず文字自体を図の背景色で縁取りする(paint-order で塗りより先に描く)。 */
 .mermaid-figure .edgeLabel rect.background {
-  fill: #f7f8fa;
+  fill: none;
+  stroke: none;
+}
+
+.mermaid-figure .edgeLabel text,
+.mermaid-figure .edgeLabel tspan {
+  paint-order: stroke fill;
   stroke: #f7f8fa;
-  stroke-width: 26px;
+  stroke-width: 5px;
   stroke-linejoin: round;
 }
 
-.dark .mermaid-figure .edgeLabel rect.background {
-  fill: #151a22;
+.dark .mermaid-figure .edgeLabel text,
+.dark .mermaid-figure .edgeLabel tspan {
   stroke: #151a22;
 }
 

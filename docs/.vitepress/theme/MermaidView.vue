@@ -85,8 +85,10 @@ async function draw() {
     startOnLoad: false,
     securityLevel: 'loose',
     theme: 'base',
-    // HTML ラベルは Web フォント読込前の幅計測でラベルが切れるため SVG テキストを使う
-    flowchart: { htmlLabels: false },
+    // HTML ラベルは Web フォント読込前の幅計測でラベルが切れるため SVG テキストを使う。
+    // v11 で flowchart.htmlLabels は非推奨になりトップレベルの htmlLabels が優先される
+    htmlLabels: false,
+    flowchart: { htmlLabels: false, wrappingWidth: 320 },
     themeVariables: isDark.value ? DARK_VARIABLES : LIGHT_VARIABLES,
   })
   try {
