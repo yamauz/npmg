@@ -54,16 +54,16 @@ flowchart LR
 
 **Deno** は、Node.js の原作者 Ryan Dahl 氏が Node の設計上の後悔を踏まえて作り直したランタイムです。パーミッションによるセキュリティモデルや標準ライブラリの充実など思想面の影響力は大きいものの、npm エコシステムとの互換性という点では独自路線であり、本書の主戦場(既存 Node.js プロジェクトのパッケージ管理)とはやや別の地図にいます。
 
-<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-07-1.png に保存し、下の行のコメントを外してください -->
-<!-- ![図 7-1: npm/yarn/pnpm/Bun の系譜図(2010〜2026)](/images/fig-07-1.png) -->
-
-> **🖼️ 図 7-1|npm/yarn/pnpm/Bun の系譜図(2010〜2026)**(画像プレースホルダー)
-> 生成後は `docs/public/images/fig-07-1.png` に配置してください。
+<figure>
+  <img src="/images/fig-07-1.png" alt="npm/yarn/pnpm/Bun の系譜図(2010〜2026)">
+  <figcaption><span class="fig-num">図 7-1</span> npm/yarn/pnpm/Bun の系譜図(2010〜2026)</figcaption>
+</figure>
 
 <!-- 図 7-1 の生成プロンプト(採用版・ページには出しない)
 
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
-Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
+Flat 2D vector infographic in a minimal technical-illustration style. Wide landscape orientation
+(2:1 aspect ratio, e.g. 2560 x 1280).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
 blue #2563EB as the single primary accent, light gray #E2E8F0 for container boxes,
 orange #F59E0B for highlights only. Uniform medium-weight rounded strokes, simple geometric
@@ -74,17 +74,21 @@ Render every quoted label verbatim, exactly once, with no extra, invented, or du
 No text other than the labels listed below.
 
 DIAGRAM CONTENT:
-LAYOUT: Four horizontal lanes stacked vertically, each lane a timeline line flowing
-left to right. Lines start at different horizontal positions according to their birth year.
-The rightmost edge is labeled "2026".
+LAYOUT: Four horizontal lanes stacked vertically with even vertical spacing, all sharing the
+same time axis running left to right. Each lane is one horizontal line that starts at a dot and
+runs to the right edge of the canvas. Lanes start at different horizontal positions according to
+their year: the earliest starts furthest left, later ones start progressively further right. Each
+lane has a two-line text label placed directly above its starting dot: the name on the first
+line and the year on the second line.
 ELEMENTS:
-- Lane 1 (gray line, topmost, longest) starting with a dot labeled "npm 2010"
-- Lane 2 (gray line) starting with a dot labeled "yarn 2016",
-  with a fork dot in the middle labeled "Berry 2020"
-- Lane 3 (blue line, thicker) starting with a dot labeled "pnpm 2017",
-  ending with an orange dot labeled "v12 Rust"
-- Lane 4 (orange line, shortest) starting with a dot labeled "Bun 2023"
-ARROWS: one labeled arrow reading "lockfile" pointing from "yarn 2016" up to the npm lane.
+- Lane 1, topmost, a dark line starting furthest left, label "npm" then "2010"
+- Lane 2, a dark line starting to the right of lane 1, label "yarn" then "2016"
+- Lane 3, a blue line, starting at roughly the same horizontal position as lane 2, label "pnpm"
+  then "2016"
+- Lane 4, the shortest, a dark line starting furthest right, label "Bun" then "2023"
+- At the right end of lane 3 only, one orange dot with a two-line label above it: "v12" then
+  "Rust"
+ARROWS: none. No other lines, arrows, or connectors anywhere in the diagram.
 -->
 
 ## 2026 年の勢力図
