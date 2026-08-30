@@ -17,10 +17,14 @@ pnpm build       # 本番ビルド。リンク切れで失敗するので検証�
 pnpm deploy      # 手動デプロイ。ビルド + wrangler deploy(要 wrangler login)
 node scripts/preview-hero.mjs 5        # ヒーローシェーダーをヘッドレス描画 → hero-preview.png
 node scripts/screenshot.mjs <URL> <出力先> [full]  # headless Chrome でページ撮影(要 Google Chrome)
-node scripts/og-image.mjs [dark:0|1] [time] [出力先]  # OGP 画像を生成 → docs/public/og.png(ダーク) / og-light.png
+node scripts/og-image.mjs             # TOP の OGP → docs/public/og.png / og-light.png
+node scripts/og-image.mjs --chapters  # 章ごとの OGP → docs/public/og/<slug>.png
+node scripts/og-image.mjs --all       # 両方
 ```
 
 変更は必ず `pnpm build` とスクリーンショット(ライト/ダーク両方)で確認してからデプロイする。
+
+⚠️ **章の H1 を変更したら `node scripts/og-image.mjs --chapters` を再実行する**。OGP 画像は H1 から焼いた静的 PNG なので、自動では追従しない。
 
 ## デプロイ
 

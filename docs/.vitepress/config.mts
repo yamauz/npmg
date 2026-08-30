@@ -1,6 +1,9 @@
 import { defineConfig } from 'vitepress'
 import { withMermaid } from 'vitepress-plugin-mermaid'
 
+const SITE_URL = 'https://npmg.yamauz.workers.dev'
+const SITE_TITLE = 'Node.js Package Manager Guide'
+
 export default withMermaid(defineConfig({
   lang: 'ja-JP',
   title: 'Node.js Package Manager Guide',
@@ -123,6 +126,26 @@ export default withMermaid(defineConfig({
         },
       },
     },
+  },
+  // 章ページの OGP をページ単位で差し替える。
+  // 画像は scripts/og-image.mjs --chapters が docs/public/og/<slug>.png に生成したもの。
+  transformPageData(pageData) {
+    if (pageData.relativePath === 'index.md') return
+
+    const slug = pageData.relativePath.replace(/\.md$/, '').replace(/\//g, '-')
+    const title = pageData.title || pageData.frontmatter.title || SITE_TITLE
+    const image = `${SITE_URL}/og/${slug}.png`
+    const url = `${SITE_URL}/${pageData.relativePath.replace(/\.md$/, '.html')}`
+
+    pageData.frontmatter.head ??= []
+    pageData.frontmatter.head.push(
+      ['meta', { property: 'og:title', content: `${title} | ${SITE_TITLE}` }],
+      ['meta', { property: 'og:image', content: image }],
+      ['meta', { property: 'og:image:alt', content: title }],
+      ['meta', { property: 'og:url', content: url }],
+      ['meta', { name: 'twitter:title', content: `${title} | ${SITE_TITLE}` }],
+      ['meta', { name: 'twitter:image', content: image }],
+    )
   },
   vite: {
     optimizeDeps: {
