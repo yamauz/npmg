@@ -54,6 +54,7 @@ MDX は不要(VitePress は md に Vue コンポーネントを直接書ける)�
 - mermaid: dev で fastdom ESM エラー → `vite.optimizeDeps.include: ['mermaid', 'fastdom']` が必須。同一 id での `mermaid.render` 再実行は失敗する(再描画ごとに id 採番)。Web フォント指定はラベル切れの原因(`fontFamily: 'sans-serif'` + `htmlLabels: false`)
 - md 内の山かっこプレースホルダー(例: `<pkg>`)は必ずバッククォートで囲む(Vue 解釈エラー)
 - WebGPU を 0×0 の canvas に初期化しない(コンポジタが固まる)
+- VitePress ルーターは**キャプチャ段階**で `a` のクリックを横取りし scrollOffset=134 でスクロールする(preventDefault 無効)。ページ内スクロールを自前制御したい UI は `button` 要素にする
 - タブタイトル: LP は「Node.js Package Manager Guide」(index.md で `titleTemplate: false`)、他は「章タイトル | Node.js Package Manager Guide」(config の `title`)
 
 ## リポジトリ構成の要点
