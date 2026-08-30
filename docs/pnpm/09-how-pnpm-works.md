@@ -267,11 +267,10 @@ pnpm のルート node_modules に並ぶシンボリックリンクは、**packa
 
 正確には、pnpm のデフォルトは「semi-strict(準厳格)」です。すべての依存は `.pnpm/node_modules` という隠れた場所に hoist されており、**依存パッケージ同士**は Node.js の親ディレクトリ探索でそこに届きます。つまり「行儀の悪いライブラリが未宣言の依存を require している」ケースは動いてしまいます(壊さないための互換措置です)。一方、**アプリコードからは届かない**ため、あなたのコードに幽霊依存が混入することはありません。この hoist は `hoist` 設定で無効化でき、完全に厳格な構造にもできます。
 
-<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-09-3.png に保存し、下の行のコメントを外してください -->
-<!-- ![図 9-3: npm の flat な node_modules と pnpm の strict な node_modules の対比](/images/fig-09-3.png) -->
-
-> **🖼️ 図 9-3|npm の flat な node_modules と pnpm の strict な node_modules の対比**(画像プレースホルダー)
-> 生成後は `docs/public/images/fig-09-3.png` に配置してください。
+<figure>
+  <img src="/images/fig-09-3.png" alt="npm の flat な node_modules と pnpm の strict な node_modules の対比">
+  <figcaption><span class="fig-num">図 9-3</span> npm の flat な node_modules と pnpm の strict な node_modules の対比</figcaption>
+</figure>
 
 <!-- 図 9-3 の生成プロンプト(採用版・ページには出しない)
 
@@ -287,16 +286,21 @@ Render every quoted label verbatim, exactly once, with no extra, invented, or du
 No text other than the labels listed below.
 
 DIAGRAM CONTENT:
-LAYOUT: One box centered at the top, two panels side by side below it.
+LAYOUT: Two panels side by side, separated by generous white space, each the same width and
+height, and each with its title centered above the panel, outside it. Inside each panel, one
+small box sits at the top, and two equally sized boxes sit side by side below it. One arrow goes
+from the top box down to one of the two lower boxes.
 ELEMENTS:
-- Top box (dark navy outline, code icon) labeled "your code"
-- Left panel (light gray) labeled "npm" containing a blue box labeled "declared"
-  and a gray box labeled "phantom"
-- Right panel (light gray) labeled "pnpm" containing a blue box labeled "linked"
-  and a gray box behind a dashed border labeled "hidden"
-ARROWS: a labeled arrow reading "import" pointing from "your code" to "phantom",
-a labeled arrow reading "blocked" (orange, with a small cross mark) pointing from
-"your code" to "hidden".
+- Left panel titled "npm". Its top box is white with a thin dark outline, labeled "your code".
+  Below it, the left lower box is white with a thin dark outline labeled "declared", and the
+  right lower box is white with a thick orange outline labeled "phantom".
+- Right panel titled "pnpm". Its top box is white with a thin dark outline, labeled "your code".
+  Below it, the left lower box is white with a thin dark outline labeled "declared", and the
+  right lower box is white with a dashed dark outline labeled "hidden".
+ARROWS: exactly two arrows, one inside each panel, both starting at that panel's "your code" box
+and pointing down to the right lower box. In the left panel the arrow is dark and labeled
+"import works". In the right panel the arrow is orange, ends in a small orange cross mark
+instead of an arrowhead, and is labeled "not found". No other lines or connectors anywhere.
 -->
 
 ## 副産物: ネストの深さが一定になる

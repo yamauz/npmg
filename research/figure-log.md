@@ -13,6 +13,7 @@
 - **線の禁止は 2 箇所に書く**。生成モデルは線を勝手に補完する。LAYOUT に `no connecting line` と書き、さらに ARROWS の末尾に `No other lines or connectors anywhere in the diagram.` を足すと通る
 - **特定の要素だけを青で塗らない**。「1 つだけ青」は視覚的に「これが主役/ゴール」と読まれる。並列な要素は同じ塗りにし、青は矢印など「進行」に使う(CLAUDE.md の中立性ルールと直結する)
 - **横一列に 6 要素以上を 3:2 に入れない**。文字が小さくなる。ワイド 2:1 プリセットを使う
+- **同じ文字列を図に 2 回出してよい**。プリセットの `Render every quoted label verbatim, exactly once` と衝突しそうだが、左右のパネルに同じ `your code` を 1 つずつ置く指定は通った。**対比図では起点を共有せず各パネルに複製する**方が、パネルをまたぐ矢印の交差を避けられる(図 9-3)
 - **前後を比べる図は、変化を矢印で描かず `before` / `after` のラベルで示す**。「行き先が図の外の空間」になる矢印は位置が定まらない。左右が時間の前後だと分かれば、変化そのものは絵が語る(図 5-2)
 - **ドット始まりのファイル名・長いパスはピリオドの個数を指定する**。`node_modules/.pnpm` が `node_modules/..pnpm` になった(生成モデルが先行ドットを省略記号と誤認する)。`with exactly one period before the letters "pnpm" and no other periods` のように**数で指定**すると通る。ディレクトリ名は読者が手元で `ls` する対象なので見逃さない(図 9-1)
 - **アイコンを使う図には `ICON STYLE:` を明示する**。プリセットの `simple geometric icons` だけでは弱く、カラーの 3D イラスト(グラデ付きの立方体、塗り絵のビールジョッキ)が出ることがある。DIAGRAM CONTENT に `every icon is a simple line-art outline drawing ... no fill, no color, no gradient, and no 3D shading` を足すと線画に揃う。線の禁止を 2 箇所に書くのと同じ考え方(図 8-1)
@@ -290,3 +291,15 @@ Bun のドットを orange から dark へ。オレンジは警告色で、Bun �
 一番の懸念は symlink の矢印が**外側の箱同士**を結んでしまうことだった。本文は「`foo@1.0.0/node_modules/bar` が `bar@1.0.0/node_modules/bar` を指す」と説明しているので、内側同士でないと不正確になる。`from the inner box "foo" ... to the inner box "bar"` と内側であることを明示して通った。
 
 `.pnpm` のドットは 9-1 と同じく個数を明示。円柱も 9-1・9-4 と同じ描き方に統一(同一章で 3 回目の登場)。`hard link` → `hard link or clone`。
+
+### 図 9-3 npm の flat と pnpm の strict の対比(2026-08-31 / 標準 3:2)
+
+`docs/pnpm/09-how-pnpm-works.md` — 3 章の幽霊依存の伏線回収。同じ import が npm では通り pnpm では失敗する。
+
+**`your code` を上部に 1 つ置く構成をやめ、各パネルに 1 つずつ複製した**。初版は上に 1 つ置いて左右へ矢印を伸ばす形で、パネルをまたぐ矢印が交差する(7-1 でレーン間の矢印を落としたのと同じ問題)。左右を独立させると「同じ状況で結果だけが違う」対比が読める。
+
+`linked` / `hidden` と左右で違っていた語を、両方 `declared` に統一(3-1 の教訓。同じものが違う名前だと別物に見える)。
+
+`blocked` を **`not found`** に変更。本文は「Node.js の解決アルゴリズムの時点で失敗」と書いており、実際に出るのは `Cannot find module`。動作の説明より実際の結果を書く。
+
+`hidden` の枠を破線に。`.pnpm` の中には存在するがルートからは見えない状態を示す(5-2 で消えたブロックを破線で表したのと同じ語彙)。
