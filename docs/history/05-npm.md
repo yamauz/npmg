@@ -19,16 +19,16 @@ npm は 2010 年 1 月、Isaac Schlueter 氏によって公開されました。
 
 この「同梱による標準化」は、本章以降のすべての話の前提になります。yarn も pnpm も、パッケージの取得先は基本的に同じ npm レジストリです。競争が起きたのはあくまで「クライアント側のツール」であって、レジストリという水道網そのものは、今日まで npm が一手に担い続けています。
 
-<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-05-1.png に保存し、下の行のコメントを外してください -->
-<!-- ![図 5-1: npm の年表(2010〜現在の主要イベント)](/images/fig-05-1.png) -->
-
-> **🖼️ 図 5-1|npm の年表(2010〜現在の主要イベント)**(画像プレースホルダー)
-> 生成後は `docs/public/images/fig-05-1.png` に配置してください。
+<figure>
+  <img src="/images/fig-05-1.png" alt="npm の年表(2010〜現在の主要イベント)">
+  <figcaption><span class="fig-num">図 5-1</span> npm の年表(2010〜現在の主要イベント)</figcaption>
+</figure>
 
 <!-- 図 5-1 の生成プロンプト(採用版・ページには出しない)
 
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
-Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
+Flat 2D vector infographic in a minimal technical-illustration style. Wide landscape orientation
+(2:1 aspect ratio, e.g. 2560 x 1280).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
 blue #2563EB as the single primary accent, light gray #E2E8F0 for container boxes,
 orange #F59E0B for highlights only. Uniform medium-weight rounded strokes, simple geometric
@@ -39,16 +39,20 @@ Render every quoted label verbatim, exactly once, with no extra, invented, or du
 No text other than the labels listed below.
 
 DIAGRAM CONTENT:
-LAYOUT: A single horizontal timeline arrow running left to right across the center,
-with 5 milestone dots evenly spaced along it. Labels alternate above and below the line.
+LAYOUT: One long horizontal timeline arrow running left to right across the vertical center of
+the canvas, pointing right. Five dots sit on the line, evenly spaced. Each dot has a two-line
+text label: the year on the first line and the event on the second line. Labels alternate above
+and below the line: the first label above, the second below, the third above, the fourth below,
+the fifth above. Each label is horizontally centered on its own dot.
 ELEMENTS:
-- A long horizontal dark navy arrow pointing right, its right end labeled "now"
-- Dot 1 (blue) labeled "2010 npm born"
-- Dot 2 (blue) labeled "2015 npm v3"
-- Dot 3 (orange) labeled "2016 left-pad"
-- Dot 4 (blue) labeled "2017 npm v5"
-- Dot 5 (blue) labeled "2020 GitHub"
-ARROWS: only the main timeline arrow. No other arrows.
+- The timeline is a dark horizontal arrow. Its right end is labeled "now", placed to the right
+  of the arrowhead, on the line.
+- Dot 1, blue, label "2010" then "npm born"
+- Dot 2, blue, label "2015" then "npm v3"
+- Dot 3, orange, label "2016" then "left-pad"
+- Dot 4, blue, label "2017" then "npm v5"
+- Dot 5, blue, label "2020" then "GitHub"
+ARROWS: only the single timeline arrow. No other arrows, lines, or connectors anywhere.
 -->
 
 ## フラット化とロックファイル — v3 と v5
