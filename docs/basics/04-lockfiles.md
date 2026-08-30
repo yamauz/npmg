@@ -125,11 +125,10 @@ package.json は注文書です。「牛乳を 1 本。メーカーはどこで�
 「自動生成されるものはコミットしない」という経験則を lockfile に当てはめてはいけません。node_modules は**生成物**なのでコミットしない(lockfile から何度でも同じものを再生成できる)。lockfile はその**再生成のレシピそのもの**なのでコミットする——この向きで覚えてください。lockfile が .gitignore に入っているプロジェクトは、この章で見たズレが起きるのを待っている状態です。
 :::
 
-<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-04-2.png に保存し、下の行のコメントを外してください -->
-<!-- ![図 4-2: lockfile を介した再現可能なインストールフロー](/images/fig-04-2.png) -->
-
-> **🖼️ 図 4-2|lockfile を介した再現可能なインストールフロー**(画像プレースホルダー)
-> 生成後は `docs/public/images/fig-04-2.png` に配置してください。
+<figure>
+  <img src="/images/fig-04-2.png" alt="lockfile を介した再現可能なインストールフロー">
+  <figcaption><span class="fig-num">図 4-2</span> lockfile を介した再現可能なインストールフロー</figcaption>
+</figure>
 
 <!-- 図 4-2 の生成プロンプト(採用版・ページには出しない)
 
@@ -145,17 +144,21 @@ Render every quoted label verbatim, exactly once, with no extra, invented, or du
 No text other than the labels listed below.
 
 DIAGRAM CONTENT:
-LAYOUT: A single blue document icon on the left. Two parallel horizontal flows go to the
-right, one across the top and one across the bottom, each ending in a folder icon. A tall
-bracket on the far right joins the two folders.
+LAYOUT: One document icon on the far left, vertically centered. From it, two horizontal flows go
+to the right: an upper row and a lower row, mirroring each other and evenly spaced above and
+below the vertical center. Each row has an icon followed by a rounded box to its right, with
+both rows using the same horizontal positions so the two boxes line up vertically.
 ELEMENTS:
-- Blue document icon on the left labeled "lockfile"
-- Top flow: a laptop icon labeled "local" followed by a folder icon labeled "node_modules"
-- Bottom flow: a server icon labeled "CI" followed by a second folder icon labeled "same tree"
-- A bracket on the far right joining the two folders, with a blue tag labeled "identical"
-ARROWS: a labeled arrow reading "npm ci" pointing from "lockfile" to "local"; a second
-labeled arrow reading "npm ci" pointing from "lockfile" to "CI"; a plain arrow from "local"
-to "node_modules"; a plain arrow from "CI" to "same tree".
+- Far left: a document icon with a thick blue outline, labeled "lockfile"
+- Upper row: a laptop icon labeled "local", then to its right a white box with a thick blue
+  outline labeled "1.2.3"
+- Lower row: a server icon labeled "CI", then to its right a white box with a thick blue
+  outline labeled "1.2.3"
+- Centered between the two boxes, at the vertical center of the diagram, a blue text label
+  reading "same result"
+ARROWS: exactly four plain dark arrows. One from "lockfile" to the laptop icon, one from
+"lockfile" to the server icon, one from the laptop icon to its box, one from the server icon to
+its box. No other lines or connectors anywhere in the diagram.
 -->
 
 ここで CI 環境向けの専用コマンド **`npm ci`** が登場します。通常の `npm install` は「ロックファイルがあれば従うが、package.json と食い違っていればロックファイルの方を**書き換えて**しまう」という寛容な動きをします。対して `npm ci` は次のように動きます。
