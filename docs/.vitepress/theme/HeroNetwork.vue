@@ -11,10 +11,19 @@ const active = ref(false)
 let gpu = null
 const pointer = { x: 0, y: 0 }
 const targetPointer = { x: 0, y: 0 }
+// キャンバス座標系(右端 x=0・高さ基準)のカーソル位置。初期値は「遠く」
+const pscene = { x: 99, y: 99 }
+const targetPscene = { x: 99, y: 99 }
 
 function onPointerMove(e) {
   targetPointer.x = e.clientX / window.innerWidth - 0.5
   targetPointer.y = e.clientY / window.innerHeight - 0.5
+  const canvas = canvasRef.value
+  if (!canvas) return
+  const rect = canvas.getBoundingClientRect()
+  if (rect.height === 0) return
+  targetPscene.x = (e.clientX - rect.left) / rect.height - rect.width / rect.height
+  targetPscene.y = (e.clientY - rect.top) / rect.height
 }
 
 onMounted(async () => {
@@ -26,11 +35,13 @@ onMounted(async () => {
     const target = surface(gpu, canvas, { dpr: [1, 2] })
     const aspect = () => canvas.clientWidth / Math.max(canvas.clientHeight, 1)
     const fx = effect(gpu, NETWORK_WGSL, {
-      set: { params: { time: 5, aspect: aspect(), pointer: [0, 0] } },
+      set: { params: { time: 5, aspect: aspect(), pointer: [0, 0], pscene: [99, 99] } },
     })
     target.onResize(() => fx.set({ params: { aspect: aspect() } }))
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      // ドローイン完了後の静止フレーム
+      fx.set({ params: { time: 40 } })
       fx.draw(target)
       active.value = true
       return
@@ -41,7 +52,15 @@ onMounted(async () => {
     frameLoop(gpu, (frame) => {
       pointer.x += (targetPointer.x - pointer.x) * 0.04
       pointer.y += (targetPointer.y - pointer.y) * 0.04
-      fx.set({ params: { time: time.time + 5, pointer: [pointer.x, pointer.y] } })
+      pscene.x += (targetPscene.x - pscene.x) * 0.12
+      pscene.y += (targetPscene.y - pscene.y) * 0.12
+      fx.set({
+        params: {
+          time: time.time + 5,
+          pointer: [pointer.x, pointer.y],
+          pscene: [pscene.x, pscene.y],
+        },
+      })
       frame.pass(target, fx)
     })
     active.value = true
