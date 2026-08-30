@@ -129,7 +129,7 @@ $ node -e "require('body-parser')"
 Error: Cannot find module 'body-parser'
 ```
 
-npm は幻の依存を黙って通し、pnpm は入口で止める。npm 側でこうなる理由は[3章](/basics/03-node-modules)の hoisting、pnpm 側でこうなる理由は[9章](/pnpm/09-how-pnpm-works)のシンボリックリンク構造で説明したとおりです。
+npm は幽霊依存を黙って通し、pnpm は入口で止める。npm 側でこうなる理由は[3章](/basics/03-node-modules)の hoisting、pnpm 側でこうなる理由は[9章](/pnpm/09-how-pnpm-works)のシンボリックリンク構造で説明したとおりです。
 
 もう 1 つ、hoisting 由来の **doppelgänger(分身)問題**も解消します。npm/yarn v1 のフラット化では、hoist 位置の競合により**同じバージョンの同じパッケージがツリー内に複数コピー**されることがあり、シングルトンの二重化や `instanceof` の不一致といった不可解なバグを生みました。pnpm では 1 つのバージョンの実体は `.pnpm` 内に 1 か所だけ。分身は原理的に生まれません。
 

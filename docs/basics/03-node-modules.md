@@ -5,7 +5,7 @@
 ::: tip この章でわかること
 - 「依存はグラフ、node_modules はツリー」という不一致を説明できる
 - hoisting の配置決定を「Before → 操作 → After」の 3 コマで追える
-- hoisting の 3 つの副作用(幻の依存・非決定性・doppelgänger)を実データで説明できる
+- hoisting の 3 つの副作用(幽霊依存・非決定性・doppelgänger)を実データで説明できる
 - `npm ls` で手元の依存ツリーを読み解ける
 :::
 
@@ -150,9 +150,9 @@ reading "needs v2" pointing from "B" to "C v2".
 
 これで npm v2 の 2 大問題(重複と深いパス)はかなり緩和されました。現在の npm もこのフラット方式の延長線上にあります。しかし、この賢い妥協は 3 つの厄介な副作用を生みました。ここからが本章の核心です。
 
-## 副作用① 幻の依存(phantom dependency)
+## 副作用① 幽霊依存(phantom dependency)
 
-フラット化により、node_modules の最上位には**あなたが宣言していないパッケージ**が大量に並ぶことになりました。そして Node.js の探索ルールは「最上位にあれば見つけてしまう」——つまり、**package.json に書いていないパッケージが `import` できてしまう**のです。これを**幻の依存(phantom dependency)**と呼びます。
+フラット化により、node_modules の最上位には**あなたが宣言していないパッケージ**が大量に並ぶことになりました。そして Node.js の探索ルールは「最上位にあれば見つけてしまう」——つまり、**package.json に書いていないパッケージが `import` できてしまう**のです。これを**幽霊依存(phantom dependency)**と呼びます。
 
 <!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-03-3.png に保存し、下の行のコメントを外してください -->
 <!-- ![図 3-3: phantom dependency — 宣言していないのに import できてしまう](/images/fig-03-3.png) -->
@@ -317,7 +317,7 @@ flat-lab@1.0.0 /Users/you/sandbox/pm-play/flat-lab
 
 教科書どおりの光景です。express 本体は `content-type` の 1.0.5 を要求してこれが最上位に hoist され、2.1.0 を要求する 3 つのパッケージ(negotiator・body-parser・type-is)の分は、それぞれの中にネストされています。同じ 2.1.0 が 3 か所にコピーされている——本文で見た doppelgänger の実物です。
 
-仕上げに、幻の依存を体験してみましょう。`body-parser` は express が内部で使うパッケージで、あなたの package.json には一行も書かれていません。次の 2 行だけのファイルを作ります。
+仕上げに、幽霊依存を体験してみましょう。`body-parser` は express が内部で使うパッケージで、あなたの package.json には一行も書かれていません。次の 2 行だけのファイルを作ります。
 
 ```js
 // phantom.js — package.json に書いていないパッケージを require してみる
@@ -328,7 +328,7 @@ console.log(typeof bp)
 これを実行すると──
 
 <TermDemo
-  title="zsh — 幻の依存を require してみる(npm)"
+  title="zsh — 幽霊依存を require してみる(npm)"
   :lines="[
     { cmd: 'node phantom.js' },
     { pause: 400 },
@@ -351,7 +351,7 @@ function
 - 依存関係はグラフ、node_modules はツリー。この不一致の埋め方が各ツールの設計思想を決める
 - npm v2 はネスト方式: 衝突は起きないが、重複と深すぎるパスに苦しんだ
 - npm v3 はフラット方式: 依存を最上位に hoist し、バージョン衝突であぶれたものだけネストする。どれを hoist するかは先着順の椅子取りゲーム
-- hoisting の副作用は ①幻の依存 ②インストール経緯による非決定性 ③doppelgänger の 3 つ。express の実測でも「added 68 / ls 65」のずれや content-type@2.1.0 の 3 つの分身として観察できた
+- hoisting の副作用は ①幽霊依存 ②インストール経緯による非決定性 ③doppelgänger の 3 つ。express の実測でも「added 68 / ls 65」のずれや content-type@2.1.0 の 3 つの分身として観察できた
 - pnpm はこの妥協自体を設計し直した(9 章で詳説)
 
 次章では、副作用②の抑え込み役として登場したロックファイルを取り上げます。[2章](/basics/02-package-json-and-semver)で張った「人によって違うバージョンが入る」問題の伏線も、いよいよ回収します。

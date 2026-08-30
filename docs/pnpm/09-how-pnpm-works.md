@@ -246,11 +246,11 @@ flowchart LR
 
 ## 第 3 層: ルートの symlink — phantom dependency の防止
 
-いよいよ[3章](/basics/03-node-modules)の伏線回収です。npm のフラットな node_modules では、hoisting によって**宣言していない推移的依存までルート直下に並び**、`import` できてしまうのでした。これが幻の依存(phantom dependency)です。
+いよいよ[3章](/basics/03-node-modules)の伏線回収です。npm のフラットな node_modules では、hoisting によって**宣言していない推移的依存までルート直下に並び**、`import` できてしまうのでした。これが幽霊依存(phantom dependency)です。
 
 pnpm のルート node_modules に並ぶシンボリックリンクは、**package.json に直接宣言した依存の分だけ**です。8章の実験で `typescript` と `vite` の 2 つしか見えなかったのはこのためです。vite が内部で使っている rollup や postcss は `.pnpm` の中にはありますが、ルートにリンクがないため、アプリコードから `import 'rollup'` すると **Node.js の解決アルゴリズムの時点で失敗**します。lint ルールや心がけではなく、ディレクトリ構造そのものが未宣言の import を物理的に遮断する。これが pnpm の「厳格さ」の正体です。
 
-正確には、pnpm のデフォルトは「semi-strict(準厳格)」です。すべての依存は `.pnpm/node_modules` という隠れた場所に hoist されており、**依存パッケージ同士**は Node.js の親ディレクトリ探索でそこに届きます。つまり「行儀の悪いライブラリが未宣言の依存を require している」ケースは動いてしまいます(壊さないための互換措置です)。一方、**アプリコードからは届かない**ため、あなたのコードに幻の依存が混入することはありません。この hoist は `hoist` 設定で無効化でき、完全に厳格な構造にもできます。
+正確には、pnpm のデフォルトは「semi-strict(準厳格)」です。すべての依存は `.pnpm/node_modules` という隠れた場所に hoist されており、**依存パッケージ同士**は Node.js の親ディレクトリ探索でそこに届きます。つまり「行儀の悪いライブラリが未宣言の依存を require している」ケースは動いてしまいます(壊さないための互換措置です)。一方、**アプリコードからは届かない**ため、あなたのコードに幽霊依存が混入することはありません。この hoist は `hoist` 設定で無効化でき、完全に厳格な構造にもできます。
 
 <!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-09-3.png に保存し、下の行のコメントを外してください -->
 <!-- ![図 9-3: npm の flat な node_modules と pnpm の strict な node_modules の対比](/images/fig-09-3.png) -->

@@ -16,7 +16,7 @@
 ## 構造
 
 - **hoisting(巻き上げ)** — 依存の依存を node_modules の浅い位置(ルート直下)へ引き上げて重複を減らすフラット化の手法。npm v3 以降と yarn v1 が採用。([3章](/basics/03-node-modules))
-- **幻の依存(phantom dependency)** — package.json に宣言していないのに、hoisting の副作用で import できてしまう依存。宣言なしに動いているため、依存側の構成変更で突然壊れます。pnpm はこれを原理的に防ぎます。
+- **幽霊依存(phantom dependency)** — package.json に宣言していないのに、hoisting の副作用で import できてしまう依存。宣言なしに動いているため、依存側の構成変更で突然壊れます。pnpm はこれを原理的に防ぎます。
 - **doppelgänger(ドッペルゲンガー)** — フラット化の制約により、同一バージョンのパッケージが node_modules 内の複数箇所に重複して実体コピーされる現象。ディスクと解決の一貫性を損ないます。
 - **ハードリンク(hard link)** — ディスク上の同じ実体(inode)を指す、対等な「別名」。ファイルをコピーせずに複数の場所から参照でき、pnpm がストアから各プロジェクトへファイルを配る手段です。
 - **シンボリックリンク(symbolic link)** — 別のパスを指し示す特殊ファイル。pnpm は node_modules 内の依存関係をシンボリックリンクの網で表現します。([9章](/pnpm/09-how-pnpm-works))
