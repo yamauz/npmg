@@ -35,10 +35,10 @@ Node.js そのものの入門(JavaScript の文法、モジュールの書き方
 
 全 12 章 + 付録の 4 部構成です。前から順に読むことを想定していますが、章間の参照を細かく張ってあるので、気になるところから拾い読みしても迷わないはずです。たとえば「昨日まで動いていた CI が突然壊れた」の正体を知りたければ 3〜4 章、ツールの選び方の判断軸がほしければ 7 章、モダンなパッケージマネージャーの内部に潜りたければ Part III が入口になります。
 
-![この本の構成](/images/fig-intro-structure.png)
-
-> **図 0-1|この本の構成**
-> 配置済み: 2026-08-30 / 比率: 標準 3:2
+<figure>
+  <img src="/images/fig-intro-structure.png" alt="この本の構成">
+  <figcaption><span class="fig-num">図 0-1</span> この本の構成</figcaption>
+</figure>
 
 ::: details 図 0-1 の ChatGPT 生成プロンプト(クリックで展開)
 

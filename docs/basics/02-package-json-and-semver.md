@@ -45,11 +45,10 @@ package.json は、プロジェクトの**マニフェスト(積荷目録)**で�
 
 npm の世界のバージョン番号は、**セマンティックバージョニング(Semantic Versioning、通称 semver)**という規約に従います。`MAJOR.MINOR.PATCH` の 3 つの数字で、それぞれ上げる条件が決まっています。
 
-<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-02-1.png に保存し、下の行のコメントを外してください -->
-<!-- ![図 2-1: semver の 3 つの数字の意味](/images/fig-02-1.png) -->
-
-> **🖼️ 図 2-1|semver の 3 つの数字の意味**(画像プレースホルダー)
-> 生成後は `docs/public/images/fig-02-1.png` に配置してください。
+<figure>
+  <img src="/images/fig-02-1.png" alt="semver の 3 つの数字の意味">
+  <figcaption><span class="fig-num">図 2-1</span> semver の 3 つの数字の意味</figcaption>
+</figure>
 
 ::: details 図 2-1 の ChatGPT 生成プロンプト(クリックで展開)
 
@@ -66,16 +65,18 @@ Render every quoted label verbatim, exactly once, with no extra, invented, or du
 No text other than the labels listed below.
 
 DIAGRAM CONTENT:
-LAYOUT: A large version number displayed as three big digits separated by dots in the upper
-half. Three callout lines point down from each digit to three rounded rectangles in the
-lower half.
+LAYOUT: Two horizontal bands. The upper band shows one large version number centered as three
+big digits separated by two dots, all on the same baseline. The lower band has three equally
+sized rounded rectangles, evenly spaced, each horizontally centered directly below its
+corresponding digit. One short vertical line connects each digit straight down to the box below it.
 ELEMENTS:
-- Big orange digit labeled "1", big blue digit labeled "2", big navy digit labeled "3",
-  separated by navy dots
-- Left box (orange outline) labeled "MAJOR" with a smaller label "breaking change" inside
-- Center box (blue outline) labeled "MINOR" with a smaller label "new feature" inside
-- Right box (gray) labeled "PATCH" with a smaller label "bug fix" inside
-ARROWS: a plain callout line from "1" to "MAJOR", from "2" to "MINOR", from "3" to "PATCH".
+- Upper band: the three digits are "1" in orange, "2" in blue, "3" in near-black, separated by
+  two near-black dots, rendered large as one version number
+- Lower left box (orange outline, white fill) with two lines of text: "MAJOR" then "breaking change"
+- Lower center box (blue outline, white fill) with two lines of text: "MINOR" then "new feature"
+- Lower right box (light gray fill) with two lines of text: "PATCH" then "bug fix"
+ARROWS: exactly three short plain vertical lines, no arrowheads, each connecting one digit
+straight down to the box directly beneath it. No other lines or connectors anywhere.
 ```
 
 :::

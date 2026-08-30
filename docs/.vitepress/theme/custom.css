@@ -209,6 +209,34 @@ body {
   stroke: #151a22;
 }
 
+/* --------------------------------------------------------------------------
+   図版キャプション
+   本文中の図は <figure> + <figcaption>。画像の真下に小さく、墨の薄い色で置く。
+   NOTE ブロックのような囲みは使わない(区切りはヘアラインのみ)。
+   -------------------------------------------------------------------------- */
+.vp-doc figure {
+  margin: 32px 0;
+}
+
+.vp-doc figure img {
+  display: block;
+  margin: 0;
+}
+
+.vp-doc figcaption {
+  margin-top: 10px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--color-ink-2);
+  text-align: left;
+}
+
+.vp-doc figcaption .fig-num {
+  margin-right: 0.5em;
+  color: var(--color-ink);
+  font-weight: 700;
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *,
