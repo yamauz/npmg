@@ -35,11 +35,10 @@ flowchart TD
 
 3 つめは**オフラインへの弱さ**です。一度インストールしたパッケージでも、ネットワークが不調ならインストールは失敗します。レジストリの障害が、そのまま全世界の開発停止につながる構造は left-pad 事件でも明らかになったとおりです。
 
-<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-06-1.png に保存し、下の行のコメントを外してください -->
-<!-- ![図 6-1: yarn v1 が解決した 3 つの課題](/images/fig-06-1.png) -->
-
-> **🖼️ 図 6-1|yarn v1 が解決した 3 つの課題**(画像プレースホルダー)
-> 生成後は `docs/public/images/fig-06-1.png` に配置してください。
+<figure>
+  <img src="/images/fig-06-1.png" alt="yarn v1 が解決した 3 つの課題">
+  <figcaption><span class="fig-num">図 6-1</span> yarn v1 が解決した 3 つの課題</figcaption>
+</figure>
 
 <!-- 図 6-1 の生成プロンプト(採用版・ページには出しない)
 
@@ -55,16 +54,20 @@ Render every quoted label verbatim, exactly once, with no extra, invented, or du
 No text other than the labels listed below.
 
 DIAGRAM CONTENT:
-LAYOUT: Three vertical columns. Each column has a light gray box on top (a problem)
-and a blue box below it (the solution), connected by a plain downward arrow.
+LAYOUT: Three columns of equal width, evenly spaced with generous gaps. Each column has two
+rounded boxes of the same size stacked vertically, with one short downward arrow between them.
+All three columns use the same vertical positions, so the top boxes line up with each other and
+the bottom boxes line up with each other. Each box has one small icon above its text.
 ELEMENTS:
-- Column 1: top box with a snail icon labeled "slow installs",
-  bottom box with a lightning icon labeled "parallel downloads"
-- Column 2: top box with a dice icon labeled "non-deterministic",
-  bottom box with a lock icon labeled "yarn.lock"
-- Column 3: top box with a broken-wifi icon labeled "offline fails",
-  bottom box with a database icon labeled "offline cache"
-ARROWS: three plain downward arrows, one per column, from the problem box to the solution box.
+- Column 1 top: a box with a thick orange outline, snail icon, labeled "slow installs"
+- Column 1 bottom: a box with a thick blue outline, lightning icon, labeled "parallel downloads"
+- Column 2 top: a box with a thick orange outline, dice icon, labeled "non-deterministic"
+- Column 2 bottom: a box with a thick blue outline, lock icon, labeled "yarn.lock"
+- Column 3 top: a box with a thick orange outline, broken wifi icon, labeled "offline fails"
+- Column 3 bottom: a box with a thick blue outline, database icon, labeled "offline cache"
+- All six boxes have white fill
+ARROWS: exactly three short plain dark arrows pointing straight down, one inside each column,
+from the top box to the bottom box. No other lines or connectors anywhere in the diagram.
 -->
 
 ## yarn v1 の革新
