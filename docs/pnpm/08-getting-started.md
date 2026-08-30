@@ -85,7 +85,7 @@ Node.js 14.19.0〜24.x(24 LTS を含む)には、パッケージマネージャ�
 
 ```sh
 $ pnpm --version
-11.6.0
+11.24.0
 ```
 
 執筆時点(2026 年 8 月)では、npm の `latest` タグが指すのは **v11 系**です。一方、2026-08-26 にリリースされた **v12 は Rust による書き直し版**で、当面は `next` 扱いです。試したい場合は `pnpm self-update next-12` で導入できます。本書の解説は v11 系を前提にしますが、v12 はコマンド・フラグ・設定・lockfile が v11 互換なので、そのまま読み替えられます([10章](/pnpm/10-advantages)で詳しく触れます)。
@@ -105,7 +105,7 @@ npm のように「npm で npm を更新する」のではなく、pnpm が自�
 ```json
 {
   "name": "my-app",
-  "packageManager": "pnpm@11.6.0"
+  "packageManager": "pnpm@11.24.0"
 }
 ```
 
@@ -165,7 +165,7 @@ Packages are cloned from the content-addressable store to the virtual store.
 dependencies:
 + express 5.2.1
 
-Done in 1.4s using pnpm v11.6.0
+Done in 1.4s using pnpm v11.24.0
 ```
 
 注目してほしいのは `Progress:` の行です。`resolved 66` は依存グラフとして解決したパッケージ数、`downloaded 15` はレジストリから実際に取得した数、そして `reused 51` は**このマシンで過去に一度使ったファイルを再利用した数**です(まっさらなマシンでの初実行なら `reused 0` になります)。npm の `added 68 packages` という素っ気ない報告と違い、pnpm は「どれだけ取得せずに済んだか」を毎回教えてくれます。では、どこから再利用しているのか — `Packages are cloned from the content-addressable store` という 1 行がその答えなのですが、「内容アドレスストア」とは何なのかは次章でじっくり解き明かします。
@@ -232,7 +232,7 @@ ARROWS: a plain arrow from "pnpm" to "Dependencies", a plain arrow from "pnpm" t
     { cmd: 'pnpm install' },
     { out: 'Packages: +11' },
     { out: 'Progress: resolved 11, reused 0, downloaded 11, added 11, done' },
-    { out: 'Done in 3.4s using pnpm v11.6.0' },
+    { out: 'Done in 3.4s using pnpm v11.24.0' },
     { pause: 400 },
     { cmd: 'pnpm dev' },
     { out: 'VITE v7.1.3  ready in 320 ms' },
@@ -275,7 +275,7 @@ devDependencies:
 + typescript 5.9.2
 + vite 7.1.3
 
-Done in 3.4s using pnpm v11.6.0
+Done in 3.4s using pnpm v11.24.0
 ```
 
 ```sh

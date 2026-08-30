@@ -175,7 +175,7 @@ allowBuilds:
 ```
 
 ::: warning dangerouslyAllowAllBuilds は使わない
-全パッケージのビルドを無条件に許可する `dangerouslyAllowAllBuilds` という逃げ道もありますが、名前のとおり非推奨です。これを有効にすると pnpm 10/11 が積み上げた防御が丸ごと無効になります。面倒でも `pnpm approve-builds` で個別に承認してください。承認リストの差分はプルリクエストに現れるので、「新しく postinstall を実行するようになった依存」にレビューで気づけます。
+全パッケージのビルドを無条件に許可する `dangerouslyAllowAllBuilds`(既定 `false`)という逃げ道もありますが、名前のとおり使うべきではありません。これを有効にすると pnpm 10/11 が積み上げた防御が丸ごと無効になります。面倒でも `pnpm approve-builds` で個別に承認してください。承認リストの差分はプルリクエストに現れるので、「新しく postinstall を実行するようになった依存」にレビューで気づけます。
 :::
 
 ## minimumReleaseAge — 公開直後のパッケージを掴まない
