@@ -12,7 +12,7 @@
   - `blockExoticSubdeps: true`(推移的依存の git/tarball URL をブロック)
   - `strictDepBuilds: true`(未承認ビルドスクリプトをインストール失敗扱い)
   - `verifyDepsBeforeRun` デフォルト `install`
-  - **`allowBuilds` が `onlyBuiltDependencies` / `neverBuiltDependencies` / `ignoredBuiltDependencies` を統合・置換**。全許可は `dangerouslyAllowAllBuilds`(非推奨)。
+  - **`allowBuilds` が `onlyBuiltDependencies` / `neverBuiltDependencies` / `ignoredBuiltDependencies` を統合・置換**。全許可は `dangerouslyAllowAllBuilds`(v10.9.0 追加・既定 `false`。公式に deprecated ではないが、使用は勧められない)。
   - 設定の置き場確定: **`.npmrc` は auth/registry 専用**。pnpm 設定は `pnpm-workspace.yaml`(プロジェクト)/ `~/.config/pnpm/config.yaml`(グローバル)。環境変数は `pnpm_config_*`。
   - 新コマンド: `pnpm ci`、`pnpm clean`、`pnpm sbom`、`pnpm peers check`、`pnpm runtime set`、`pnpm with`、`pnpm pack-app`。
   - Store v11: インデックスに SQLite 採用。audit は CVE でなく **GHSA** ベースに。
@@ -67,7 +67,7 @@ alotta-files フィクスチャ、50ms RTT / 200Mbit/s エミュレート回線�
 
 ## 2026 年の状況と Corepack
 
-- pnpm はダウンロード数 2024 年比 3 倍、2026-04 時点で週間約 7,270 万 DL。State of JS の retention で 2 年連続 Yarn 超え。npm は Node 同梱で最大シェア維持。Yarn は v4(Berry, PnP)で大規模組織中心。Bun は Zig 製オールインワンランタイムとして速度面の対抗馬。
+- pnpm はダウンロード数 2024 年比 3 倍。**週間 DL は 2026-04 時点で約 5,994 万、2026-08 末時点で約 1 億 7,550 万**(2026-08-30 に `https://api.npmjs.org/downloads/point/<期間>/pnpm` で実測。以前ここに書いていた「2026-04 に約 7,270 万」は誤り)。State of JS の retention で 2 年連続 Yarn 超え。npm は Node 同梱で最大シェア維持。Yarn は v4(Berry, PnP)で大規模組織中心。Bun は Zig 製オールインワンランタイムとして速度面の対抗馬。
 - **Corepack の顛末**: 2025-03-19 に Node.js TSC が **Node v25 以降で Corepack を同梱しない**ことを可決。Node 14.19.0〜24.x(24 LTS 含む)には同梱。Node 25+ では `npm install -g corepack` で別途導入。pnpm は `pnpm self-update`、package.json の `packageManager` フィールド、v11/v12 の runtime 管理(`pnpm runtime set`)で自己完結する方向。
 
 ## 歴史メモ(7 章向け)
