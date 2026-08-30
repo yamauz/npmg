@@ -111,11 +111,10 @@ flowchart TD
 
 ポイントは 2 つあります。第一に、この配置で A も B も正しく動きます。A は上へ遡ってルートの C v1 を見つけ、B はまず自分の中を見て C v2 を見つける——冒頭の探索ルールどおりです。第二に、「どちらのバージョンを hoist するか」は**先に処理された者勝ち**で、グラフの形からは一意に決まりません。この「先着順」が、あとで副作用②として牙をむきます。
 
-<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-03-2.png に保存し、下の行のコメントを外してください -->
-<!-- ![図 3-2: hoisting とバージョン衝突時のネスト](/images/fig-03-2.png) -->
-
-> **🖼️ 図 3-2|hoisting とバージョン衝突時のネスト**(画像プレースホルダー)
-> 生成後は `docs/public/images/fig-03-2.png` に配置してください。
+<figure>
+  <img src="/images/fig-03-2.png" alt="hoisting とバージョン衝突時のネスト">
+  <figcaption><span class="fig-num">図 3-2</span> hoisting とバージョン衝突時のネスト</figcaption>
+</figure>
 
 <!-- 図 3-2 の生成プロンプト(採用版・ページには出しない)
 
@@ -131,16 +130,19 @@ Render every quoted label verbatim, exactly once, with no extra, invented, or du
 No text other than the labels listed below.
 
 DIAGRAM CONTENT:
-LAYOUT: One large light gray rounded container representing a folder tree drawn with
-indented boxes.
+LAYOUT: One large light gray rounded container representing a folder tree, drawn as nested
+rounded rectangles with clear indentation, like a file explorer. Inside it, three equally sized
+white boxes sit side by side at the same depth. The rightmost of those three has one smaller box
+nested inside it, one level deeper.
 ELEMENTS:
-- Root folder labeled "node_modules"
-- At the top level inside it, three boxes side by side: a box labeled "A", a box labeled "B",
-  and a blue box labeled "C v1" with a small blue tag above it labeled "hoisted"
-- Nested one level deeper inside the "B" box, a small folder containing an orange box
-  labeled "C v2" with a small orange tag labeled "nested"
-ARROWS: a labeled arrow reading "needs v1" pointing from "A" to "C v1"; a labeled arrow
-reading "needs v2" pointing from "B" to "C v2".
+- The light gray container is labeled "node_modules"
+- Inside it, three equally sized white boxes at the same depth from left to right: a box with a
+  thin dark outline labeled "A", a box with a thin dark outline labeled "B", and a box with a
+  thick blue outline labeled "C v1". All three have white fill.
+- A small blue tag sits directly above the "C v1" box, reading "hoisted"
+- Nested one level deeper inside the "B" box is a smaller white box with a thick orange outline,
+  labeled "C v2", with a small orange tag directly above it reading "nested"
+ARROWS: none. No other lines or connectors anywhere in the diagram.
 -->
 
 これで npm v2 の 2 大問題(重複と深いパス)はかなり緩和されました。現在の npm もこのフラット方式の延長線上にあります。しかし、この賢い妥協は 3 つの厄介な副作用を生みました。ここからが本章の核心です。
