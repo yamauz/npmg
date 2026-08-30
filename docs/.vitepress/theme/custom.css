@@ -178,7 +178,7 @@ body {
 }
 
 /* --------------------------------------------------------------------------
-   Mermaid 図(白いカードに載せ、両モード共通の描画にする)
+   Mermaid 図(ダークネイティブ: 各モードのパレットで再レンダリングされる)
    -------------------------------------------------------------------------- */
 .mermaid-figure {
   display: flex;
@@ -192,7 +192,7 @@ body {
 }
 
 .dark .mermaid-figure {
-  background: #f0f1f4;
+  background: #151a22;
 }
 
 /* エッジラベルの背景を塗り、同色ストロークで余白を作って線の食い込みを防ぐ */
@@ -204,8 +204,8 @@ body {
 }
 
 .dark .mermaid-figure .edgeLabel rect.background {
-  fill: #f0f1f4;
-  stroke: #f0f1f4;
+  fill: #151a22;
+  stroke: #151a22;
 }
 
 /* Reduced motion */

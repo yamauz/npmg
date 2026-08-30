@@ -57,12 +57,12 @@ to it. Amend intentionally — the file is the rule.
 
 ## Variants
 - dark: paper #101319 / paper-2 #151A22 / ink #E6E9EF / rule #262B34 / accent #5B8CFF(accent-ink #0D1117)。構造・書体は不変。シェーダーは dark uniform で同一図形をパレット補間
-- Mermaid 図・本文図版は両モード共通で「明るいカード」に載せる(図版は白背景で生成される前提)
+- Mermaid はダークネイティブ(isDark を watch して各モードのパレットで再レンダリング)。ラスタ図版(ChatGPT 生成)は白背景のためダークでは明るいカードとして浮かぶ — これは既知の割り切り
 
 ## Components
-- Mermaid: 自前 MermaidView.vue(プラグインの dark 強制を上書き)。パレットは白カード+墨+ブルー系
+- Mermaid: 自前 MermaidView.vue(プラグインの dark 強制を上書き)。ライト=白カード+墨、ダーク=墨カード+明色のネイティブパレット
 - TermDemo: ダーク画面(#14181F)+ブルーのプロンプト/カーソル。信号機ドット等の偽チュローム禁止
-- 図版プロンプト(全 39 点): 白背景・navy #1E293B・blue #2563EB・gray #E2E8F0・orange 控えめ(詳細は付録C)
+- 図版プロンプト(全 39 点): 白背景・ink #1C1E21・blue #2563EB・gray #E2E8F0・orange #F59E0B は図版限定の第 2 ハイライト(詳細は付録C)
 
 ## Provenance
 - source: image(ユーザー提供の参考モックアップ 2 点、2026-08-29〜30)。v1(生成り×深緑×明朝)は 2026-08-30 に本 v2 で置換
