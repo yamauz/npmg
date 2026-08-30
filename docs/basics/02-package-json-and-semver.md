@@ -93,11 +93,10 @@ straight down to the box directly beneath it. No other lines or connectors anywh
 
 では、1 章のインストールで自動追記された `^1.3.0` の `^` は、正確にはどこまでの更新を許すのでしょうか。semver の約束を前提に、package.json では「どこまでの更新を自動で受け入れるか」を記号で指定します。代表は `^`(キャレット)と `~`(チルダ)の 2 つです。
 
-<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-02-2.png に保存し、下の行のコメントを外してください -->
-<!-- ![図 2-2: ^1.2.3 と ~1.2.3 が許す範囲の数直線](/images/fig-02-2.png) -->
-
-> **🖼️ 図 2-2|`^1.2.3` と `~1.2.3` が許す範囲の数直線**(画像プレースホルダー)
-> 生成後は `docs/public/images/fig-02-2.png` に配置してください。
+<figure>
+  <img src="/images/fig-02-2.png" alt="^1.2.3 と ~1.2.3 が許す範囲の数直線">
+  <figcaption><span class="fig-num">図 2-2</span> <code>^1.2.3</code> と <code>~1.2.3</code> が許す範囲の数直線</figcaption>
+</figure>
 
 ::: details 図 2-2 の ChatGPT 生成プロンプト(クリックで展開)
 
@@ -114,16 +113,20 @@ Render every quoted label verbatim, exactly once, with no extra, invented, or du
 No text other than the labels listed below.
 
 DIAGRAM CONTENT:
-LAYOUT: Two horizontal number lines stacked vertically, each with tick marks. Above each
-line a range bracket shows the allowed span.
+LAYOUT: Two horizontal number lines stacked vertically, one above the other, sharing exactly
+the same length, the same left edge, and the same three tick positions so the two rows can be
+compared by eye. Each row has its title on the far left, outside the line. A thick blue bar sits
+directly on top of each line, spanning only the allowed range.
 ELEMENTS:
-- Top number line titled "^1.2.3" on its left, with tick labels "1.2.3", "1.3.0", "2.0.0"
-  from left to right; a blue range bar covers from "1.2.3" up to just before "2.0.0";
-  "2.0.0" is marked with an orange cross
-- Bottom number line titled "~1.2.3" on its left, with tick labels "1.2.3", "1.3.0" from
-  left to right; a blue range bar covers from "1.2.3" up to just before "1.3.0";
-  "1.3.0" is marked with an orange cross
-ARROWS: none.
+- Both number lines have three ticks at the same horizontal positions, labeled below the line:
+  "1.2.3" at the left tick, "1.3.0" at the middle tick, "2.0.0" at the right tick
+- Top row: title "^1.2.3" on the far left. Its blue bar starts at the "1.2.3" tick and ends just
+  before the "2.0.0" tick, so the bar covers the middle tick. A small orange X sits on the
+  "2.0.0" tick.
+- Bottom row: title "~1.2.3" on the far left. Its blue bar starts at the "1.2.3" tick and ends
+  just before the "1.3.0" tick, so the bar stops before the middle tick. A small orange X sits
+  on the "1.3.0" tick.
+ARROWS: none. No other lines or connectors anywhere in the diagram.
 ```
 
 :::
