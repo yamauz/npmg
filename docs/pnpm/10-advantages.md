@@ -203,11 +203,10 @@ yarn 2(Berry)が PnP への方向転換でエコシステムを分断したの�
 
 なお、ダウンロード数は CI の実行回数などにも左右される指標で、実利用者数とは一致しません。retention も回答者の偏りがあります。ここでの数字は「傾向をつかむ材料」として読んでください。
 
-<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-10-3.png に保存し、下の行のコメントを外してください -->
-<!-- ![図 10-3: 7 つのアドバンテージの俯瞰マップ](/images/fig-10-3.png) -->
-
-> **🖼️ 図 10-3|7 つのアドバンテージの俯瞰マップ**(画像プレースホルダー)
-> 生成後は `docs/public/images/fig-10-3.png` に配置してください。
+<figure>
+  <img src="/images/fig-10-3.png" alt="7 つのアドバンテージの俯瞰マップ">
+  <figcaption><span class="fig-num">図 10-3</span> 7 つのアドバンテージの俯瞰マップ</figcaption>
+</figure>
 
 <!-- 図 10-3 の生成プロンプト(採用版・ページには出しない)
 
@@ -223,18 +222,27 @@ Render every quoted label verbatim, exactly once, with no extra, invented, or du
 No text other than the labels listed below.
 
 DIAGRAM CONTENT:
-LAYOUT: One circle in the center with seven rounded boxes arranged evenly around it,
-connected to the center by plain spokes.
+LAYOUT: A hub and spokes layout. One circle sits at the center of the canvas. Seven equally
+sized rounded boxes are arranged evenly around it in a ring, all at the same distance from the
+center. One straight line connects the center circle to each box. Each box has one small icon
+above its text.
+ICON STYLE: every icon is a simple line-art outline drawing, drawn with the same uniform dark
+stroke as the boxes, with no fill, no color, no gradient, and no 3D shading. Icons must look
+like monochrome outline pictograms, not illustrations.
 ELEMENTS:
-- Center circle (blue, gem icon) labeled "pnpm"
-- Box (light gray, disk icon) labeled "Disk"
-- Box (light gray, lightning icon) labeled "Speed"
-- Box (light gray, lock icon) labeled "Strictness"
-- Box (light gray, grid icon) labeled "Monorepo"
-- Box (light gray, shield icon) labeled "Security"
-- Box (light gray, puzzle icon) labeled "Compatibility"
-- Box (orange, rocket icon) labeled "Momentum"
-ARROWS: plain lines from "pnpm" to each of the seven boxes.
+- Center: a circle with a thick blue outline and white fill, no icon, labeled "pnpm"
+- Ring box 1: white with a thin dark outline, an outline icon of a hard disk, labeled "Disk"
+- Ring box 2: white with a thin dark outline, an outline icon of a lightning bolt, labeled "Speed"
+- Ring box 3: white with a thin dark outline, an outline icon of a padlock, labeled "Strictness"
+- Ring box 4: white with a thin dark outline, an outline icon of a grid of squares, labeled
+  "Monorepo"
+- Ring box 5: white with a thin dark outline, an outline icon of a shield, labeled "Security"
+- Ring box 6: white with a thin dark outline, an outline icon of a puzzle piece, labeled
+  "Compatibility"
+- Ring box 7: white with a thin dark outline, an outline icon of an upward trending arrow,
+  labeled "Momentum"
+ARROWS: exactly seven plain dark straight lines with no arrowheads, one from the center circle
+to each of the seven boxes. No labels on the lines. No other lines or connectors anywhere.
 -->
 
 ## アドバンテージを実務の力に変える
