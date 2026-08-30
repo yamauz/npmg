@@ -133,11 +133,10 @@ flowchart TD
 
 一方、publish 時には `workspace:^` が `^1.5.0` のような**実バージョンに自動置換**されます。利用者のもとに `workspace:` という内部事情が漏れることはありません。[2章](/basics/02-package-json-and-semver)で学んだ `^` と `~` の意味の違いが、そのままここに現れます。なお、`pnpm add` でワークスペース内パッケージを追加したときにどんな記法で保存するかは `saveWorkspaceProtocol` 設定(デフォルト `rolling`)で制御できます。
 
-<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-11-2.png に保存し、下の行のコメントを外してください -->
-<!-- ![図 11-2: workspace: プロトコルのリンクと publish 時の置換](/images/fig-11-2.png) -->
-
-> **🖼️ 図 11-2|workspace: プロトコルのリンクと publish 時の置換**(画像プレースホルダー)
-> 生成後は `docs/public/images/fig-11-2.png` に配置してください。
+<figure>
+  <img src="/images/fig-11-2.png" alt="workspace: プロトコルのリンクと publish 時の置換">
+  <figcaption><span class="fig-num">図 11-2</span> <code>workspace:</code> プロトコルのリンクと publish 時の置換</figcaption>
+</figure>
 
 <!-- 図 11-2 の生成プロンプト(採用版・ページには出しない)
 
@@ -153,9 +152,24 @@ Render every quoted label verbatim, exactly once, with no extra, invented, or du
 No text other than the labels listed below.
 
 DIAGRAM CONTENT:
-LAYOUT: Left half shows local development, right half shows the registry after publishing. A wide horizontal labeled arrow connects the two halves across the middle.
-ELEMENTS: On the left, a light gray container titled "develop" holding a white box labeled "app" with a small blue tag reading "workspace:^" attached to it, and below it a white box labeled "ui". On the right, a light gray container titled "registry" with a simple cloud icon, holding an orange tag reading "^1.5.0" with a small caption label "replaced" next to it.
-ARROWS: A labeled arrow reading "symlink" pointing from "app" down to "ui" inside the left container. A wide labeled arrow reading "pnpm publish" pointing from the left container to the right container.
+LAYOUT: Two light gray rounded containers of the same size, side by side, separated by generous
+white space, both vertically centered on the same axis. Each container has its title centered at
+the top inside it. The left container holds two white boxes stacked vertically with one arrow
+between them. The right container holds one white box. One horizontal arrow runs from the left
+container to the right container in the space between them.
+ICON STYLE: every icon is a simple line-art outline drawing, drawn with the same uniform dark
+stroke as the boxes, with no fill, no color, no gradient, and no 3D shading. Icons must look
+like monochrome outline pictograms, not illustrations.
+ELEMENTS:
+- Left container titled "develop". Its upper white box has a thin dark outline and two lines of
+  text: "app" then "workspace:^". Its lower white box has a thin dark outline and one line of
+  text: "ui".
+- Right container titled "registry". Its single white box has a thick blue outline and two lines
+  of text: "app" then "^1.5.0".
+ARROWS: exactly two plain dark arrows. One short arrow inside the left container pointing down
+from the upper box to the lower box, labeled "symlink". One horizontal arrow from the left
+container to the right container, pointing right, labeled "pnpm publish". No other lines or
+connectors anywhere in the diagram.
 -->
 
 ## --filter と -r — 対象を絞って実行
