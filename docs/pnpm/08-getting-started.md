@@ -47,9 +47,8 @@ flowchart TD
 > **🖼️ 図 8-1|pnpm の導入ルート 3 種**(画像プレースホルダー)
 > 生成後は `docs/public/images/fig-08-1.png` に配置してください。
 
-::: details 図 8-1 の ChatGPT 生成プロンプト(クリックで展開)
+<!-- 図 8-1 の生成プロンプト(採用版・ページには出しない)
 
-```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
@@ -71,9 +70,7 @@ ELEMENTS:
 - Right box (blue, gem icon) labeled "pnpm CLI"
 ARROWS: a labeled arrow reading "install" pointing from "curl script" to "pnpm CLI",
 a plain arrow from "npm -g" to "pnpm CLI", a plain arrow from "Homebrew" to "pnpm CLI".
-```
-
-:::
+-->
 
 ::: info なぜ Corepack を使わないのか
 Node.js 14.19.0〜24.x(24 LTS を含む)には、パッケージマネージャーのバージョン管理ツール **Corepack** が同梱されており、`corepack enable pnpm` で pnpm を使い始めることもできます。しかし 2025-03-19、Node.js の TSC(技術運営委員会)は **Node 25 以降で Corepack を同梱しない**ことを可決しました。Node 25 以降で使うには `npm install -g corepack` と別途インストールが必要で、「Node に付いてくるから楽」という利点は失われています。pnpm 自身も `pnpm self-update`・`packageManager` フィールド・v11/v12 のランタイム管理(`pnpm runtime set`)で自己完結する方向に進んでいるため、本書では Corepack に依存しない導入を採用します。
@@ -178,9 +175,8 @@ Done in 1.4s using pnpm v11.24.0
 > **🖼️ 図 8-2|pnpm コマンド体系マップ**(画像プレースホルダー)
 > 生成後は `docs/public/images/fig-08-2.png` に配置してください。
 
-::: details 図 8-2 の ChatGPT 生成プロンプト(クリックで展開)
+<!-- 図 8-2 の生成プロンプト(採用版・ページには出しない)
 
-```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
@@ -202,9 +198,7 @@ ELEMENTS:
 - Right container (light gray, play icon) labeled "Execute" containing three small
   boxes labeled "run", "dlx", "create"
 ARROWS: a plain arrow from "pnpm" to "Dependencies", a plain arrow from "pnpm" to "Execute".
-```
-
-:::
+-->
 
 ## npm ユーザーのための読み替え表
 

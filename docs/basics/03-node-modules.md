@@ -36,9 +36,8 @@ Node.js 側のルールも確認しておきます。`require('foo')` が実行�
 > **🖼️ 図 3-1|npm v2 のネスト構造と npm v3 のフラット構造の対比**(画像プレースホルダー)
 > 生成後は `docs/public/images/fig-03-1.png` に配置してください。
 
-::: details 図 3-1 の ChatGPT 生成プロンプト(クリックで展開)
+<!-- 図 3-1 の生成プロンプト(採用版・ページには出しない)
 
-```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
@@ -60,9 +59,7 @@ ELEMENTS:
 - Right panel titled "npm v3" containing a folder tree: a root folder labeled "flat", with
   three package boxes side by side at the same depth labeled "A2", "B2", "C2"
 ARROWS: none.
-```
-
-:::
+-->
 
 ## npm v3 — フラット化と hoisting
 
@@ -119,9 +116,8 @@ flowchart TD
 > **🖼️ 図 3-2|hoisting とバージョン衝突時のネスト**(画像プレースホルダー)
 > 生成後は `docs/public/images/fig-03-2.png` に配置してください。
 
-::: details 図 3-2 の ChatGPT 生成プロンプト(クリックで展開)
+<!-- 図 3-2 の生成プロンプト(採用版・ページには出しない)
 
-```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
@@ -144,9 +140,7 @@ ELEMENTS:
   labeled "C v2" with a small orange tag labeled "nested"
 ARROWS: a labeled arrow reading "needs v1" pointing from "A" to "C v1"; a labeled arrow
 reading "needs v2" pointing from "B" to "C v2".
-```
-
-:::
+-->
 
 これで npm v2 の 2 大問題(重複と深いパス)はかなり緩和されました。現在の npm もこのフラット方式の延長線上にあります。しかし、この賢い妥協は 3 つの厄介な副作用を生みました。ここからが本章の核心です。
 
@@ -164,9 +158,8 @@ reading "needs v2" pointing from "B" to "C v2".
 > **🖼️ 図 3-3|phantom dependency — 宣言していないのに import できてしまう**(画像プレースホルダー)
 > 生成後は `docs/public/images/fig-03-3.png` に配置してください。
 
-::: details 図 3-3 の ChatGPT 生成プロンプト(クリックで展開)
+<!-- 図 3-3 の生成プロンプト(採用版・ページには出しない)
 
-```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
@@ -190,9 +183,7 @@ ELEMENTS:
 - An orange warning triangle near the "debug" box with an orange tag labeled "not declared"
 ARROWS: a plain arrow from "package.json" to "express"; a labeled arrow reading
 "import debug" pointing from "app.js" to "debug".
-```
-
-:::
+-->
 
 たとえば express をインストールすると、express 自身の依存である `debug` や `body-parser` も最上位に hoist されます。すると、あなたのコードで `require('debug')` と書けば——宣言していないのに——動いてしまいます。
 

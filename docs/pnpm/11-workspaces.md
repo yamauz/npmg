@@ -61,9 +61,8 @@ flowchart TD
 > **🖼️ 図 11-1|モノレポの全体構造(apps/packages と共有 lockfile)**(画像プレースホルダー)
 > 生成後は `docs/public/images/fig-11-1.png` に配置してください。
 
-::: details 図 11-1 の ChatGPT 生成プロンプト(クリックで展開)
+<!-- 図 11-1 の生成プロンプト(採用版・ページには出しない)
 
-```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
@@ -79,9 +78,7 @@ DIAGRAM CONTENT:
 LAYOUT: One large light gray rounded container filling most of the canvas, titled "monorepo root" at its top-left corner. Inside, the top row holds two file icons side by side; the bottom row holds two white package boxes side by side.
 ELEMENTS: In the top row, a file icon with a blue accent labeled "pnpm-workspace.yaml" and a file icon with an orange highlight labeled "pnpm-lock.yaml". In the bottom row, a white rounded box labeled "apps/web" with a simple browser-window icon, and a white rounded box labeled "packages/ui" with a simple building-blocks icon.
 ARROWS: A labeled arrow reading "defines" pointing from "pnpm-workspace.yaml" down toward the two package boxes. A labeled arrow reading "locks all" pointing from "pnpm-lock.yaml" down toward the two package boxes.
-```
-
-:::
+-->
 
 ## workspace: プロトコル — 「隣の部屋」への確実なリンク
 
@@ -125,9 +122,8 @@ flowchart TD
 > **🖼️ 図 11-2|workspace: プロトコルのリンクと publish 時の置換**(画像プレースホルダー)
 > 生成後は `docs/public/images/fig-11-2.png` に配置してください。
 
-::: details 図 11-2 の ChatGPT 生成プロンプト(クリックで展開)
+<!-- 図 11-2 の生成プロンプト(採用版・ページには出しない)
 
-```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
@@ -143,9 +139,7 @@ DIAGRAM CONTENT:
 LAYOUT: Left half shows local development, right half shows the registry after publishing. A wide horizontal labeled arrow connects the two halves across the middle.
 ELEMENTS: On the left, a light gray container titled "develop" holding a white box labeled "app" with a small blue tag reading "workspace:^" attached to it, and below it a white box labeled "ui". On the right, a light gray container titled "registry" with a simple cloud icon, holding an orange tag reading "^1.5.0" with a small caption label "replaced" next to it.
 ARROWS: A labeled arrow reading "symlink" pointing from "app" down to "ui" inside the left container. A wide labeled arrow reading "pnpm publish" pointing from the left container to the right container.
-```
-
-:::
+-->
 
 ## --filter と -r — 対象を絞って実行
 
@@ -235,9 +229,8 @@ package.json 側はバージョンを書かず、カタログを指します。
 > **🖼️ 図 11-3|catalog による一元管理**(画像プレースホルダー)
 > 生成後は `docs/public/images/fig-11-3.png` に配置してください。
 
-::: details 図 11-3 の ChatGPT 生成プロンプト(クリックで展開)
+<!-- 図 11-3 の生成プロンプト(採用版・ページには出しない)
 
-```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
@@ -253,9 +246,7 @@ DIAGRAM CONTENT:
 LAYOUT: On the left, one light gray container titled "pnpm-workspace.yaml" holding a highlighted blue rounded box. On the right, three white boxes stacked vertically.
 ELEMENTS: The blue box inside the left container is labeled "catalog" and contains a single book icon with the label "react". The three white boxes on the right are labeled "app", "ui", and "docs"; the top box "app" has a small orange tag reading "catalog:" attached to its left edge.
 ARROWS: A labeled arrow reading "resolve" pointing from "app" to the blue "catalog" box. Two unlabeled arrows pointing from "ui" and "docs" to the same blue "catalog" box.
-```
-
-:::
+-->
 
 ## 設定ファイルとしての pnpm-workspace.yaml
 

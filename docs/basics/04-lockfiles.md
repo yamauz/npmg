@@ -29,9 +29,8 @@ semver の約束が完璧なら困らないはずですが、現実には MINOR 
 > **🖼️ 図 4-1|lockfile がないチームで起きるバージョンのズレ**(画像プレースホルダー)
 > 生成後は `docs/public/images/fig-04-1.png` に配置してください。
 
-::: details 図 4-1 の ChatGPT 生成プロンプト(クリックで展開)
+<!-- 図 4-1 の生成プロンプト(採用版・ページには出しない)
 
-```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
@@ -53,9 +52,7 @@ ELEMENTS:
 - An orange lightning bolt between the two package boxes labeled "mismatch"
 ARROWS: a labeled arrow reading "install January" pointing from "Registry" to "Developer A";
 a labeled arrow reading "install March" pointing from "Registry" to "Developer B".
-```
-
-:::
+-->
 
 原因は package.json が「範囲」しか語らないことにあります。であれば解決策は 1 つ。**実際に選ばれた結果を、ファイルとして記録して共有する**ことです。それがロックファイルです。npm では `package-lock.json`、yarn では `yarn.lock`、pnpm では `pnpm-lock.yaml` という名前で、いずれもインストール時に自動生成・自動更新されます。
 
@@ -130,9 +127,8 @@ package.json は注文書です。「牛乳を 1 本。メーカーはどこで�
 > **🖼️ 図 4-2|lockfile を介した再現可能なインストールフロー**(画像プレースホルダー)
 > 生成後は `docs/public/images/fig-04-2.png` に配置してください。
 
-::: details 図 4-2 の ChatGPT 生成プロンプト(クリックで展開)
+<!-- 図 4-2 の生成プロンプト(採用版・ページには出しない)
 
-```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
@@ -156,9 +152,7 @@ ELEMENTS:
 ARROWS: a labeled arrow reading "npm ci" pointing from "lockfile" to "local"; a second
 labeled arrow reading "npm ci" pointing from "lockfile" to "CI"; a plain arrow from "local"
 to "node_modules"; a plain arrow from "CI" to "same tree".
-```
-
-:::
+-->
 
 ここで CI 環境向けの専用コマンド **`npm ci`** が登場します。通常の `npm install` は「ロックファイルがあれば従うが、package.json と食い違っていればロックファイルの方を**書き換えて**しまう」という寛容な動きをします。対して `npm ci` は次のように動きます。
 

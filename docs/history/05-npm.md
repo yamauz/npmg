@@ -25,9 +25,8 @@ npm は 2010 年 1 月、Isaac Schlueter 氏によって公開されました。
 > **🖼️ 図 5-1|npm の年表(2010〜現在の主要イベント)**(画像プレースホルダー)
 > 生成後は `docs/public/images/fig-05-1.png` に配置してください。
 
-::: details 図 5-1 の ChatGPT 生成プロンプト(クリックで展開)
+<!-- 図 5-1 の生成プロンプト(採用版・ページには出しない)
 
-```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
@@ -50,9 +49,7 @@ ELEMENTS:
 - Dot 4 (blue) labeled "2017 npm v5"
 - Dot 5 (blue) labeled "2020 GitHub"
 ARROWS: only the main timeline arrow. No other arrows.
-```
-
-:::
+-->
 
 ## フラット化とロックファイル — v3 と v5
 
@@ -108,9 +105,8 @@ flowchart TD
 > **🖼️ 図 5-2|left-pad 事件 — 小さな 1 ブロックを抜くと崩れるタワー**(画像プレースホルダー)
 > 生成後は `docs/public/images/fig-05-2.png` に配置してください。
 
-::: details 図 5-2 の ChatGPT 生成プロンプト(クリックで展開)
+<!-- 図 5-2 の生成プロンプト(採用版・ページには出しない)
 
-```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
@@ -133,9 +129,7 @@ ELEMENTS:
   with an empty dashed outline where the bottom block used to be
 ARROWS: one labeled arrow reading "unpublish" pointing from the orange bottom block
 of the left tower outward to the space between the two towers.
-```
-
-:::
+-->
 
 事件が示した教訓は 2 つあります。第一に、**依存グラフは自分が見えている範囲よりはるかに深く、脆い**ということ。直接依存が 10 個でも、間接依存を含めれば数百〜数千になり、そのどれか 1 つが消えるだけで全体が壊れます。第二に、**レジストリはもはや公共インフラであり、「作者の自由」だけでは運営できない**ということ。npm はこの事件を受けて、一度公開して一定条件を満たしたパッケージは原則 unpublish できないようポリシーを改めました。
 

@@ -55,9 +55,8 @@ Done in 413ms
 > **🖼️ 図 10-1|store 共有によるディスク節約**(画像プレースホルダー)
 > 生成後は `docs/public/images/fig-10-1.png` に配置してください。
 
-::: details 図 10-1 の ChatGPT 生成プロンプト(クリックで展開)
+<!-- 図 10-1 の生成プロンプト(採用版・ページには出しない)
 
-```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
@@ -79,9 +78,7 @@ ELEMENTS:
   cylinder labeled "one store"
 ARROWS: a labeled arrow reading "hard link" pointing from "one store" to the nearest
 folder in the right panel, plain arrows from "one store" to the other two folders.
-```
-
-:::
+-->
 
 ## ② 速度 — 公式ベンチマークで見る
 
@@ -154,9 +151,8 @@ npm エコシステムへの攻撃が現実の脅威になった 2020 年代後�
 > **🖼️ 図 10-2|pnpm のセキュリティ多層防御**(画像プレースホルダー)
 > 生成後は `docs/public/images/fig-10-2.png` に配置してください。
 
-::: details 図 10-2 の ChatGPT 生成プロンプト(クリックで展開)
+<!-- 図 10-2 の生成プロンプト(採用版・ページには出しない)
 
-```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
@@ -180,9 +176,7 @@ ELEMENTS:
 - Far right box (light gray, folder icon) labeled "Your Project"
 ARROWS: a labeled arrow reading "package" pointing from "Registry" through the four
 shield gates to "Your Project".
-```
-
-:::
+-->
 
 ## ⑥ 非破壊的な進化の哲学
 
@@ -200,9 +194,8 @@ yarn 2(Berry)が PnP への方向転換でエコシステムを分断したの�
 > **🖼️ 図 10-3|7 つのアドバンテージの俯瞰マップ**(画像プレースホルダー)
 > 生成後は `docs/public/images/fig-10-3.png` に配置してください。
 
-::: details 図 10-3 の ChatGPT 生成プロンプト(クリックで展開)
+<!-- 図 10-3 の生成プロンプト(採用版・ページには出しない)
 
-```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
@@ -227,9 +220,7 @@ ELEMENTS:
 - Box (light gray, puzzle icon) labeled "Compatibility"
 - Box (orange, rocket icon) labeled "Momentum"
 ARROWS: plain lines from "pnpm" to each of the seven boxes.
-```
-
-:::
+-->
 
 ## アドバンテージを実務の力に変える
 

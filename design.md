@@ -67,6 +67,8 @@ to it. Amend intentionally — the file is the rule.
 - Mermaid: 自前 MermaidView.vue(プラグインの dark 強制を上書き)。ライト=白カード+墨、ダーク=墨カード+明色のネイティブパレット
 - TermDemo: ダーク画面(#14181F)+ブルーのプロンプト/カーソル。信号機ドット等の偽チュローム禁止
 - 図版プロンプト(全 33 点): 白背景・ink #1C1E21・blue #2563EB・gray #E2E8F0・orange #F59E0B は図版限定の第 2 ハイライト(プリセットは標準 3:2 / ワイド 2:1 の 2 系統、マスターは research/writing-guide.md)
+- 図版キャプション: `<figure>` + `<figcaption>`。画像の真下に 13px・ink-2、図番号のみ ink の太字。囲みは付けない
+- 表: 収まらないときは列を潰さず横スクロール(`display: block` + `overflow-x: auto`)。**セル内の `code` は折り返さない** — `npm init -y` が 1 語ずつ改行されて読めなくなるため。散文のセルは折り返す。1 列目は行の見出しなので `min-width: 8em`。スクロール可能なことは両端のフェード(background-attachment の local/scroll 差)で示す
 
 ## Provenance
 - source: image(ユーザー提供の参考モックアップ 2 点、2026-08-29〜30)。v1(生成り×深緑×明朝)は 2026-08-30 に本 v2 で置換

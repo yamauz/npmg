@@ -41,9 +41,8 @@ flowchart TD
 > **🖼️ 図 6-1|yarn v1 が解決した 3 つの課題**(画像プレースホルダー)
 > 生成後は `docs/public/images/fig-06-1.png` に配置してください。
 
-::: details 図 6-1 の ChatGPT 生成プロンプト(クリックで展開)
+<!-- 図 6-1 の生成プロンプト(採用版・ページには出しない)
 
-```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
@@ -66,9 +65,7 @@ ELEMENTS:
 - Column 3: top box with a broken-wifi icon labeled "offline fails",
   bottom box with a database icon labeled "offline cache"
 ARROWS: three plain downward arrows, one per column, from the problem box to the solution box.
-```
-
-:::
+-->
 
 ## yarn v1 の革新
 
@@ -116,9 +113,8 @@ flowchart TD
 > **🖼️ 図 6-2|yarn v1 と Berry の分岐年表**(画像プレースホルダー)
 > 生成後は `docs/public/images/fig-06-2.png` に配置してください。
 
-::: details 図 6-2 の ChatGPT 生成プロンプト(クリックで展開)
+<!-- 図 6-2 の生成プロンプト(採用版・ページには出しない)
 
-```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
@@ -141,9 +137,7 @@ ELEMENTS:
 - Lower dashed gray branch ending flat, labeled "v1 maintenance"
 - A small orange group-of-people icon sitting on the lower branch labeled "many teams"
 ARROWS: the two branch lines themselves; no additional arrows.
-```
-
-:::
+-->
 
 ::: info なぜ v2 を「別物」にしてしまったのか
 yarn チームには「v1 のコードベースは限界で、漸進的改良では npm との差別化も維持もできない」という判断がありました。互換性を守って停滞するか、互換性を捨てて理想を追うか。Berry は後者を選び、その理想(PnP、zip インストール、強力なプラグイン機構)は現在の v4 で大規模組織を中心に評価されています。ただし「既存ユーザーを連れて行く」ことには、部分的にしか成功しませんでした。

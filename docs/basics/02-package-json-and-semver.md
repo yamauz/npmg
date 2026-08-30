@@ -50,9 +50,8 @@ npm の世界のバージョン番号は、**セマンティックバージョ�
   <figcaption><span class="fig-num">図 2-1</span> semver の 3 つの数字の意味</figcaption>
 </figure>
 
-::: details 図 2-1 の ChatGPT 生成プロンプト(クリックで展開)
+<!-- 図 2-1 の生成プロンプト(採用版・ページには出しない)
 
-```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
@@ -77,9 +76,7 @@ ELEMENTS:
 - Lower right box (light gray fill) with two lines of text: "PATCH" then "bug fix"
 ARROWS: exactly three short plain vertical lines, no arrowheads, each connecting one digit
 straight down to the box directly beneath it. No other lines or connectors anywhere.
-```
-
-:::
+-->
 
 - **MAJOR(1 桁目)**: 互換性を壊す変更(breaking change)をしたら上げる。利用者のコード修正が必要になるかもしれない合図。
 - **MINOR(2 桁目)**: 後方互換な機能追加をしたら上げる。既存コードはそのまま動くはず。
@@ -98,9 +95,8 @@ straight down to the box directly beneath it. No other lines or connectors anywh
   <figcaption><span class="fig-num">図 2-2</span> <code>^1.2.3</code> と <code>~1.2.3</code> が許す範囲の数直線</figcaption>
 </figure>
 
-::: details 図 2-2 の ChatGPT 生成プロンプト(クリックで展開)
+<!-- 図 2-2 の生成プロンプト(採用版・ページには出しない)
 
-```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
@@ -127,9 +123,7 @@ ELEMENTS:
   just before the "1.3.0" tick, so the bar stops before the middle tick. A small orange X sits
   on the "1.3.0" tick.
 ARROWS: none. No other lines or connectors anywhere in the diagram.
-```
-
-:::
+-->
 
 - **`^1.2.3`(キャレット)**: MAJOR を固定し、MINOR と PATCH の更新を許す。つまり `1.2.3` 以上 `2.0.0` 未満。「互換性が保たれる範囲で最新を使う」という意味で、`npm install` の既定はこれです。
 - **`~1.2.3`(チルダ)**: MINOR まで固定し、PATCH の更新だけを許す。つまり `1.2.3` 以上 `1.3.0` 未満。より保守的な指定です。
@@ -197,9 +191,8 @@ dependencies 系のフィールドは 4 種類あります。どれに書くか�
 > **🖼️ 図 2-3|dependencies の種類マップ**(画像プレースホルダー)
 > 生成後は `docs/public/images/fig-02-3.png` に配置してください。
 
-::: details 図 2-3 の ChatGPT 生成プロンプト(クリックで展開)
+<!-- 図 2-3 の生成プロンプト(採用版・ページには出しない)
 
-```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
@@ -221,9 +214,7 @@ ELEMENTS:
 - Bottom right box (light gray, orange outline) titled "optionalDependencies" with
   descriptor "may fail"
 ARROWS: none.
-```
-
-:::
+-->
 
 - **dependencies**: アプリの実行そのものに必要なもの(react、express など)。あなたのパッケージを誰かがインストールしたとき、一緒にインストールされます。
 - **devDependencies**: 開発・ビルド・テストにだけ必要なもの(vite、vitest、eslint など)。自分のプロジェクトで `npm install` すれば入りますが、あなたのパッケージの利用者には入りません。`npm install --save-dev`(短縮形 `-D`)でここに追加されます。

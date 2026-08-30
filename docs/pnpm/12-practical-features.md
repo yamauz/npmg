@@ -58,9 +58,8 @@ yarn を使ってきた読者なら「`resolutions` と同じでは?」と気づ
 > **🖼️ 図 12-3|overrides が依存グラフを書き換える図**(画像プレースホルダー)
 > 生成後は `docs/public/images/fig-12-3.png` に配置してください。
 
-::: details 図 12-3 の ChatGPT 生成プロンプト(クリックで展開)
+<!-- 図 12-3 の生成プロンプト(採用版・ページには出しない)
 
-```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
@@ -76,9 +75,7 @@ DIAGRAM CONTENT:
 LAYOUT: A simple dependency chain runs from left to right across the middle: two white boxes, then a fork to two boxes on the right (one upper, one lower). A blue command box floats at the top center.
 ELEMENTS: A white box labeled "app", a white box labeled "lib", an upper-right box labeled "vulnerable" drawn with an orange dashed outline and a small orange cross mark, and a lower-right blue box labeled "safe version". At the top center, a blue rounded box labeled "overrides".
 ARROWS: An unlabeled arrow from "app" to "lib". A labeled arrow reading "requires" pointing from "lib" toward "vulnerable", drawn as a crossed-out dashed line. A labeled arrow reading "rewired" pointing from "lib" to "safe version". A labeled arrow reading "forces" pointing from "overrides" down to "safe version".
-```
-
-:::
+-->
 
 ## pnpm patch — fork せずにその場で繕う
 
@@ -112,9 +109,8 @@ flowchart LR
 > **🖼️ 図 12-1|patch のワークフロー(4 ステップ)**(画像プレースホルダー)
 > 生成後は `docs/public/images/fig-12-1.png` に配置してください。
 
-::: details 図 12-1 の ChatGPT 生成プロンプト(クリックで展開)
+<!-- 図 12-1 の生成プロンプト(採用版・ページには出しない)
 
-```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
@@ -130,9 +126,7 @@ DIAGRAM CONTENT:
 LAYOUT: Four rounded boxes arranged in a single horizontal row, connected by three plain arrows pointing right. Each box has a small blue circled number badge at its top-left.
 ELEMENTS: First box labeled "pnpm patch" with badge "1" and a folder icon. Second box labeled "edit copy" with badge "2" and a pencil icon. Third box labeled "pnpm patch-commit" with badge "3" and a file icon carrying an orange tag reading "patches/*.patch". Fourth box labeled "auto apply" with badge "4" and a checkmark icon.
 ARROWS: Three unlabeled arrows connecting the four boxes from left to right.
-```
-
-:::
+-->
 
 ## pnpm audit — 脆弱性の検知から封じ込めまで
 
@@ -198,9 +192,8 @@ minimumReleaseAgeExclude:
 > **🖼️ 図 12-2|サプライチェーン攻撃の侵入経路と pnpm の防御ポイント**(画像プレースホルダー)
 > 生成後は `docs/public/images/fig-12-2.png` に配置してください。
 
-::: details 図 12-2 の ChatGPT 生成プロンプト(クリックで展開)
+<!-- 図 12-2 の生成プロンプト(採用版・ページには出しない)
 
-```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
@@ -216,9 +209,7 @@ DIAGRAM CONTENT:
 LAYOUT: A horizontal flow from left to right. On the far left a dark figure icon, then a container box, then two vertical gate-shaped barriers standing on the path, and on the far right a house-shaped box.
 ELEMENTS: A dark navy hooded-figure icon labeled "attacker". A light gray container with a cloud icon labeled "registry". A first blue gate labeled "minimumReleaseAge". A second blue gate labeled "build approval". A white house-shaped box labeled "your project". An orange cross mark labeled "blocked" placed on the path between the two gates.
 ARROWS: A labeled arrow reading "malicious update" pointing from "attacker" to "registry". An unlabeled arrow from "registry" toward "your project" passing through both gates, drawn as a dashed line after the first gate.
-```
-
-:::
+-->
 
 ## pnpm dlx と pnpm create — 一時実行の作法
 

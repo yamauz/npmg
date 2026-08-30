@@ -40,9 +40,8 @@ Node.js そのものの入門(JavaScript の文法、モジュールの書き方
   <figcaption><span class="fig-num">図 0-1</span> この本の構成</figcaption>
 </figure>
 
-::: details 図 0-1 の ChatGPT 生成プロンプト(クリックで展開)
+<!-- 図 0-1 の生成プロンプト(採用版・ページには出しない)
 
-```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
@@ -66,16 +65,14 @@ ELEMENTS:
 - Wide bottom box (light gray, bookmark icon) labeled "Appendix"
 ARROWS: exactly two arrows, both blue and horizontal: one from Box 1 to Box 2, one from Box 2
 to Box 3. No other lines or connectors anywhere in the diagram.
-```
-
-:::
+-->
 
 | Part | 章 | 内容 |
 | --- | --- | --- |
 | Part I: 基礎を知る | 1〜4 章 | パッケージマネージャーの役割、package.json、node_modules、ロックファイル |
 | Part II: 変遷を知る | 5〜7 章 | npm・yarn・pnpm がそれぞれ何を解決するために生まれたか |
 | Part III: pnpm を知る | 8〜12 章 | pnpm の使い方、内部構造、アドバンテージ、ワークスペース、実務機能 |
-| 付録 | A〜C | コマンド対照表、用語集、図版の生成ガイド |
+| 付録 | A・B | コマンド対照表、用語集 |
 
 ## 手を動かしながら読めます
 

@@ -32,9 +32,8 @@ flowchart LR
 > **🖼️ 図 9-1|store → hardlink → symlink の 3 層全体図**(画像プレースホルダー)
 > 生成後は `docs/public/images/fig-09-1.png` に配置してください。
 
-::: details 図 9-1 の ChatGPT 生成プロンプト(クリックで展開)
+<!-- 図 9-1 の生成プロンプト(採用版・ページには出しない)
 
-```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
@@ -56,9 +55,7 @@ ELEMENTS:
 - Inside the container, right folder box labeled "node_modules"
 ARROWS: a labeled arrow reading "hard link" pointing from "Global Store" to ".pnpm",
 a labeled arrow reading "symlink" pointing from "node_modules" to ".pnpm".
-```
-
-:::
+-->
 
 ## 第 1 層: content-addressable store
 
@@ -88,9 +85,8 @@ Packages are cloned from the content-addressable store to the virtual store.
 > **🖼️ 図 9-4|複数プロジェクトが 1 つの store を共有する図**(画像プレースホルダー)
 > 生成後は `docs/public/images/fig-09-4.png` に配置してください。
 
-::: details 図 9-4 の ChatGPT 生成プロンプト(クリックで展開)
+<!-- 図 9-4 の生成プロンプト(採用版・ページには出しない)
 
-```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
@@ -113,9 +109,7 @@ ELEMENTS:
 ARROWS: a labeled arrow reading "hard link" pointing from "Global Store" to "Project A",
 a plain arrow from "Global Store" to "Project B",
 a plain arrow from "Global Store" to "Project C".
-```
-
-:::
+-->
 
 ## 第 2 層: virtual store `.pnpm` のレイアウト
 
@@ -153,9 +147,8 @@ node_modules/.pnpm/<pkg>@<version>/node_modules/<pkg>
 > **🖼️ 図 9-2|.pnpm 内のレイアウト詳細**(画像プレースホルダー)
 > 生成後は `docs/public/images/fig-09-2.png` に配置してください。
 
-::: details 図 9-2 の ChatGPT 生成プロンプト(クリックで展開)
+<!-- 図 9-2 の生成プロンプト(採用版・ページには出しない)
 
-```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
@@ -178,9 +171,7 @@ ELEMENTS:
 ARROWS: a labeled arrow reading "symlink" pointing from "foo" to "bar",
 a labeled arrow reading "hard link" pointing from "Global Store" to "foo@1.0.0",
 a plain arrow from "Global Store" to "bar@1.0.0".
-```
-
-:::
+-->
 
 ::: info なぜ `foo@1.0.0` の直下ではなく、さらに `node_modules/foo` と一段深いのか
 理由は 2 つあります。①**自己 require を可能にするため**。パッケージが自分自身のモジュールを `require('foo/package.json')` のようにフルパスで参照するケースがあり、Node.js の解決アルゴリズム上、自分の親に `node_modules/foo` が必要です。②**循環シンボリックリンクを避けるため**。依存のリンクを実体と同じ `node_modules` フォルダに並べて置けるので、foo と bar が相互依存していても、リンクはすべて「隣のフォルダへの横方向のリンク」で済み、たどると無限ループになるような循環リンクが生まれません(この章の後半で詳しく見ます)。
@@ -258,9 +249,8 @@ pnpm のルート node_modules に並ぶシンボリックリンクは、**packa
 > **🖼️ 図 9-3|npm の flat な node_modules と pnpm の strict な node_modules の対比**(画像プレースホルダー)
 > 生成後は `docs/public/images/fig-09-3.png` に配置してください。
 
-::: details 図 9-3 の ChatGPT 生成プロンプト(クリックで展開)
+<!-- 図 9-3 の生成プロンプト(採用版・ページには出しない)
 
-```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
@@ -283,9 +273,7 @@ ELEMENTS:
 ARROWS: a labeled arrow reading "import" pointing from "your code" to "phantom",
 a labeled arrow reading "blocked" (orange, with a small cross mark) pointing from
 "your code" to "hidden".
-```
-
-:::
+-->
 
 ## 副産物: ネストの深さが一定になる
 

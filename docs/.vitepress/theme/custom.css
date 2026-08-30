@@ -237,6 +237,64 @@ body {
   font-weight: 700;
 }
 
+/* --------------------------------------------------------------------------
+   表
+   狭い画面では列を潰さず横スクロールさせる。潰すとコマンド(npm init -y)が
+   1 語ずつ改行されて読めなくなるため。スクロールできることは右端のヘアラインの
+   途切れで示す(スクロールバーは環境依存で見えないことがある)。
+   -------------------------------------------------------------------------- */
+/* VitePress は表を個別の div でラップしない(本文 div の直下に table が並ぶ)。
+   そのため table 自身をスクロール領域にする。display: block が必要。
+   右端のフェードで「まだ続く」ことを示す。background-attachment の local と
+   scroll の差を使い、スクロールし切るとフェードが消える定石。 */
+.vp-doc table {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  margin: 24px 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  background:
+    linear-gradient(to right, var(--vp-c-bg) 30%, rgba(0, 0, 0, 0)) left center / 24px 100% no-repeat local,
+    linear-gradient(to left, var(--vp-c-bg) 30%, rgba(0, 0, 0, 0)) right center / 24px 100% no-repeat local,
+    linear-gradient(to right, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0)) left center / 12px 100% no-repeat scroll,
+    linear-gradient(to left, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0)) right center / 12px 100% no-repeat scroll;
+}
+
+/* コマンドや識別子は折り返さない。表の主役はこれ */
+.vp-doc table code {
+  white-space: nowrap;
+}
+
+/* 1 列目は行の見出し。狭くなると 1 文字ずつ縦に折り返されて読めなくなるので
+   下限を与える(コマンド対照表の「用途」列で実際に起きた) */
+.vp-doc table td:first-child,
+.vp-doc table th:first-child {
+  min-width: 8em;
+}
+
+@media (max-width: 640px) {
+  .vp-doc table {
+    /* 内容に合わせて広がってよい(親がスクロールする) */
+    width: auto;
+    min-width: 100%;
+    font-size: 14px;
+  }
+
+  .vp-doc table th,
+  .vp-doc table td {
+    padding: 10px 12px;
+  }
+
+  /* 散文のセルは折り返して読ませる(nowrap にすると横に伸びて読みにくい)。
+     折り返さないのはコマンドなどの code だけ — 上の .vp-doc table code で指定済み。
+     ただし折り返し可能なセルが潰れすぎないよう下限を与える */
+  .vp-doc table td,
+  .vp-doc table th {
+    min-width: 5em;
+  }
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *,

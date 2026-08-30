@@ -60,9 +60,8 @@ flowchart LR
 > **🖼️ 図 7-1|npm/yarn/pnpm/Bun の系譜図(2010〜2026)**(画像プレースホルダー)
 > 生成後は `docs/public/images/fig-07-1.png` に配置してください。
 
-::: details 図 7-1 の ChatGPT 生成プロンプト(クリックで展開)
+<!-- 図 7-1 の生成プロンプト(採用版・ページには出しない)
 
-```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
@@ -86,9 +85,7 @@ ELEMENTS:
   ending with an orange dot labeled "v12 Rust"
 - Lane 4 (orange line, shortest) starting with a dot labeled "Bun 2023"
 ARROWS: one labeled arrow reading "lockfile" pointing from "yarn 2016" up to the npm lane.
-```
-
-:::
+-->
 
 ## 2026 年の勢力図
 
@@ -143,9 +140,8 @@ flowchart LR
 > **🖼️ 図 7-2|4 ツールのポジショニングマップ**(画像プレースホルダー)
 > 生成後は `docs/public/images/fig-07-2.png` に配置してください。
 
-::: details 図 7-2 の ChatGPT 生成プロンプト(クリックで展開)
+<!-- 図 7-2 の生成プロンプト(採用版・ページには出しない)
 
-```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
@@ -168,9 +164,7 @@ ELEMENTS:
 - Gray dot at bottom-right labeled "yarn v4"
 - Orange dot at top-left labeled "Bun"
 ARROWS: none.
-```
-
-:::
+-->
 
 そのうえで、選び方の指針を正直に書きます。
 

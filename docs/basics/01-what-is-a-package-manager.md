@@ -30,9 +30,8 @@
   <figcaption><span class="fig-num">図 1-1</span> パッケージマネージャーを取り巻く 4 つの登場人物</figcaption>
 </figure>
 
-::: details 図 1-1 の ChatGPT 生成プロンプト(クリックで展開)
+<!-- 図 1-1 の生成プロンプト(採用版・ページには出しない)
 
-```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
@@ -57,9 +56,7 @@ ARROWS:
 - a labeled arrow reading "request" pointing from "Package Manager" to "Registry"
 - a labeled arrow reading "tarball" pointing from "Registry" to "Package Manager"
 - a labeled arrow reading "write" pointing from "Package Manager" to "node_modules"
-```
-
-:::
+-->
 
 開発者が `npm install` と打つと、CLI はレジストリに問い合わせ、必要なファイルを取り寄せ、node_modules に書き込みます。npm・yarn・pnpm という本書の主役たちは、いずれもこの図の「CLI ツール本体」の座を争ってきたプレイヤーです。矢印の中身——「何を問い合わせ、何をどう書き込むか」——の設計こそが各ツールの個性であり、本書の残り全部のテーマです。
 
@@ -72,9 +69,8 @@ ARROWS:
   <figcaption><span class="fig-num">図 1-2</span> パッケージマネージャーの 4 つの仕事のパイプライン</figcaption>
 </figure>
 
-::: details 図 1-2 の ChatGPT 生成プロンプト(クリックで展開)
+<!-- 図 1-2 の生成プロンプト(採用版・ページには出しない)
 
-```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Wide landscape orientation
 (2:1 aspect ratio, e.g. 2560 x 1280).
@@ -102,9 +98,7 @@ ELEMENTS:
 ARROWS: exactly five blue horizontal arrows, one between each adjacent pair, in this order:
 "package.json" to Box 1, Box 1 to Box 2, Box 2 to Box 3, Box 3 to Box 4, Box 4 to "node_modules".
 No other lines or connectors anywhere in the diagram.
-```
-
-:::
+-->
 
 1. **解決(resolution)**。package.json に書かれた「`react` の 19 系がほしい」のような**要求**を、「`react` の 19.2.8 を使う」という**具体的なバージョンの一覧**に確定させる仕事です。依存の依存も含めてすべてを洗い出し、依存関係の全体像(グラフ)を組み立てます。
 2. **取得(fetch)**。確定した各パッケージの実体(tarball という圧縮ファイル)をレジストリからダウンロードします。一度取得したものはマシン内にキャッシュされ、2 回目以降は通信せずに済みます。
@@ -136,9 +130,8 @@ flowchart LR
   <figcaption><span class="fig-num">図 1-3</span> 1 つの宣言から依存の依存がツリーに広がる</figcaption>
 </figure>
 
-::: details 図 1-3 の ChatGPT 生成プロンプト(クリックで展開)
+<!-- 図 1-3 の生成プロンプト(採用版・ページには出しない)
 
-```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
@@ -161,9 +154,7 @@ ELEMENTS:
 - A small navy tag near the right side labeled "transitive"
 ARROWS: plain arrows from "your-app" to "express"; from "express" to "body-parser", "debug",
 and "send"; from "debug" to "ms".
-```
-
-:::
+-->
 
 推移的依存があるおかげで、私たちはライブラリの内部事情を知らなくても使えます。一方でパッケージマネージャーには難題が生まれます。同じパッケージを複数の親が別々のバージョンで要求したらどうするか。この依存関係全体(グラフ)を、ディスク上のフォルダ(ツリー)にどう写し取るか。この問いが [3章](/basics/03-node-modules)の主役であり、npm → yarn → pnpm という歴史を駆動してきたエンジンです。
 
