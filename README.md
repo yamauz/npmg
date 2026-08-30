@@ -22,10 +22,10 @@ pnpm deploy   # ビルドして Cloudflare Workers へデプロイ(要 wrangler 
 
 ## デザインシステム
 
-- ルールはプロジェクトルートの **`design.md`**(Hallmark 形式でロック済み)。生成りの紙 × 深い森緑 × 明朝ディスプレイ、ボックス/絵文字/グラデーション禁止、区切りはヘアライン。
+- ルールはプロジェクトルートの **`design.md`**(Hallmark 形式でロック済み)。白 #FAFAFA × 墨 #1C1E21 × ブルー #2563EB の 1 点アクセント、全書体サンセリフ(Noto Sans JP + JetBrains Mono)、ボックス/絵文字/グラデーション禁止、区切りはヘアライン。
 - トークンの実装は `docs/.vitepress/theme/tokens.css`(design.md が仕様、tokens.css が実体)。
-- トップページは `docs/.vitepress/theme/HomeShinso.vue`。ビジュアルは [vgpu](https://github.com/vercel-labs/vgpu)(vercel-labs 製 WebGPU ライブラリ)による等角積層レイヤーのシェーダー(呼吸+グリント+マウス視差)。WebGPU 非対応環境では CSS フォールバック、`prefers-reduced-motion` では静止フレームになります。
-- シェーダーの見た目確認はヘッドレスで可能: `node scripts/preview-hero.mjs 3 light` → `hero-preview.png`。
+- トップページは `docs/.vitepress/theme/HomeShinso.vue`。ビジュアルは [vgpu](https://github.com/vercel-labs/vgpu)(vercel-labs 製 WebGPU ライブラリ)による「依存グラフ星座」のシェーダー(`hero-shader.js` + `HeroNetwork.vue`。ドローイン+リゾルブ・シグナル+カーソル・プローブ+視差)。WebGPU 非対応環境では CSS フォールバック、`prefers-reduced-motion` では静止フレームになります。
+- シェーダーの見た目確認はヘッドレスで可能: `node scripts/preview-hero.mjs 5` → `hero-preview.png`(第 2 引数に `1` を渡すとダーク)。
 - ページのスクリーンショット確認: `node scripts/screenshot.mjs <URL> <出力先>`(要 Google Chrome)。
 - 脱 AI スロップの設計指針として [Hallmark](https://github.com/nutlope/hallmark) を `.claude/skills/hallmark` に導入済み(ビルド履歴は `.hallmark/log.json`)。
 
@@ -48,4 +48,6 @@ research/
 
 ## 図版について
 
-本文中の図はすべて「画像プレースホルダー + ChatGPT 用生成プロンプト」の形で埋め込まれています。各図の `::: details` 内のプロンプトを ChatGPT に貼り付けて画像を生成し、`docs/public/images/fig-XX-Y.png` に保存してコメントアウトされた画像タグを有効化すると差し替わります。詳しい手順とプロンプト設計の意図は「付録C. 図版を ChatGPT で生成する」(`docs/appendix/c-image-generation.md`)を参照してください。
+本文中の図は「画像プレースホルダー + ChatGPT 用生成プロンプト」の形で埋め込まれています。各図の `::: details` 内のプロンプトを ChatGPT に貼り付けて画像を生成し、`docs/public/images/fig-XX-Y.png` に保存してコメントアウトされた画像タグを有効化すると差し替わります。**画像を採用したら details 内のプロンプトも採用版で上書きします**(これを飛ばすと画像とプロンプトが乖離する)。
+
+手順とプロンプト設計の意図は `research/writing-guide.md`、構図の判断と過去に踏んだ罠は `research/figure-log.md` にあります。

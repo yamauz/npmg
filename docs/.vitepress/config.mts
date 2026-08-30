@@ -95,7 +95,6 @@ export default withMermaid(defineConfig({
         items: [
           { text: 'A. コマンド対照表', link: '/appendix/a-command-cheatsheet' },
           { text: 'B. 用語集', link: '/appendix/b-glossary' },
-          { text: 'C. 図版を ChatGPT で生成する', link: '/appendix/c-image-generation' },
         ],
       },
     ],

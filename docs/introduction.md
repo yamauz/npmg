@@ -35,11 +35,10 @@ Node.js そのものの入門(JavaScript の文法、モジュールの書き方
 
 全 12 章 + 付録の 4 部構成です。前から順に読むことを想定していますが、章間の参照を細かく張ってあるので、気になるところから拾い読みしても迷わないはずです。たとえば「昨日まで動いていた CI が突然壊れた」の正体を知りたければ 3〜4 章、ツールの選び方の判断軸がほしければ 7 章、モダンなパッケージマネージャーの内部に潜りたければ Part III が入口になります。
 
-<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-intro-structure.png に保存し、下の行のコメントを外してください -->
-<!-- ![この本の構成](/images/fig-intro-structure.png) -->
+![この本の構成](/images/fig-intro-structure.png)
 
-> **🖼️ 図 0-1|この本の構成**(画像プレースホルダー)
-> 生成後は `docs/public/images/fig-intro-structure.png` に配置してください。
+> **図 0-1|この本の構成**
+> 配置済み: 2026-08-30 / 比率: 標準 3:2
 
 ::: details 図 0-1 の ChatGPT 生成プロンプト(クリックで展開)
 
@@ -56,14 +55,17 @@ Render every quoted label verbatim, exactly once, with no extra, invented, or du
 No text other than the labels listed below.
 
 DIAGRAM CONTENT:
-LAYOUT: A horizontal roadmap of 3 rounded rectangles connected left to right by plain arrows,
-with a smaller 4th box below the 3rd.
+LAYOUT: Two separate rows with clear vertical white space between them and no connecting line
+between the rows. The top row is 3 equally sized light gray rounded rectangles, evenly spaced,
+connected left to right by blue arrows. The bottom row is one wide light gray rounded rectangle
+spanning the full width of the top row, completely detached from the boxes above it.
 ELEMENTS:
-- Box 1 (light gray, book icon) labeled "Basics"
-- Box 2 (light gray, clock icon) labeled "History"
-- Box 3 (blue, gem icon) labeled "pnpm"
-- Small box below labeled "Appendix"
-ARROWS: plain arrows from Box 1 to Box 2, Box 2 to Box 3.
+- Box 1 (light gray, book icon) with two lines of text: "Part I" then "Basics"
+- Box 2 (light gray, clock icon) with two lines of text: "Part II" then "History"
+- Box 3 (light gray, layered disks icon) with two lines of text: "Part III" then "pnpm"
+- Wide bottom box (light gray, bookmark icon) labeled "Appendix"
+ARROWS: exactly two arrows, both blue and horizontal: one from Box 1 to Box 2, one from Box 2
+to Box 3. No other lines or connectors anywhere in the diagram.
 ```
 
 :::
@@ -84,6 +86,5 @@ ARROWS: plain arrows from Box 1 to Box 2, Box 2 to Box 3.
 - コマンドは `$` プロンプト付きで示します。`$` は入力しません。
 - 出力例は執筆時点(2026 年 8 月)のバージョンでの実行結果です。バージョン番号などは手元と異なることがあります。
 - 「パッケージマネージャー」は文脈上明らかな場合「PM」と略すことがあります。
-- 本書の図版は現在プレースホルダーです。各図に付属する生成プロンプト(ChatGPT 用)から画像を生成し、指定のパスに配置すると差し替わります。詳しくは[付録C](/appendix/c-image-generation)を参照してください。
 
 それでは、第 1 章「パッケージマネージャーとは何か」からはじめましょう。

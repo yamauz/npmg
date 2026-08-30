@@ -323,4 +323,4 @@ node_modules を消して `pnpm install` し直しても同じ結果になりま
 
 これで本書の本編は終わりです。パッケージマネージャーの仕組みから歴史、そして pnpm の内部構造と実務機能まで、`npm install` の下にあるものを一段ずつ潜ってきました。手元のプロジェクトで `ls -la node_modules` を打ったとき、以前とは違う景色が見えているはずです。
 
-このあとは付録が控えています。日々の作業では[付録A. コマンド対照表](/appendix/a-command-cheatsheet)を、用語の確認には[付録B. 用語集](/appendix/b-glossary)を、本書の図版を育てるには[付録C](/appendix/c-image-generation)をどうぞ。
+このあとは付録が控えています。日々の作業では[付録A. コマンド対照表](/appendix/a-command-cheatsheet)を、用語の確認には[付録B. 用語集](/appendix/b-glossary)をどうぞ。

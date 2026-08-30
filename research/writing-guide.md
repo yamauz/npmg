@@ -63,6 +63,27 @@
 
 (上の ```text の前の不可視文字は無視すること。実際にはふつうのコードフェンスを書く)
 
+### 画像を配置したあとの形式(必須)
+
+画像を `docs/public/images/` に置いたら、次の 3 点を必ず行う。**やらないと「採用画像」と「md に残るプロンプト」が乖離する**。
+
+1. コメントアウトされた img タグを外して実表示にする
+2. 引用ブロックを配置済み表記に書き換える(`🖼️` と「(画像プレースホルダー)」を消し、採用日を入れる)
+3. **`::: details` 内のプロンプトを、実際にその画像を生成した最終版で上書きする**
+
+```md
+![図 3-1: キャプション](/images/fig-03-1.png)
+
+> **図 3-1|キャプション**
+> 配置済み: 2026-08-30 / 比率: 標準 3:2
+
+::: details 図 3-1 の ChatGPT 生成プロンプト(クリックで展開)
+```
+
+`配置済み:` の行があるかどうかで進捗を数えられる(`grep -c "配置済み:" docs -r`)。未配置の図は従来どおりプレースホルダー形式のまま。
+
+プリセットからの逸脱(比率変更など)や、なぜその構図にしたかの判断は `research/figure-log.md` に記録する。**プロンプト全文は md 側の一箇所だけに持ち、台帳には書かない**(二重管理はズレる)。
+
 ### プロンプトの書き方
 
 プロンプトは英語。**毎回、下のスタイルプリセットを一字一句そのまま冒頭に貼り**、続けて `DIAGRAM CONTENT:` 以下に LAYOUT / ELEMENTS / ARROWS をセクション分けで書く。
@@ -73,7 +94,14 @@
 - 矢印にもラベルを付ける場合は `a labeled arrow reading "resolve" pointing from "A" to "B"` の形式
 - 数値やベンチマーク結果を図中に入れない(数値は本文で示す)
 
-スタイルプリセット(全プロンプト共通・改変禁止):
+スタイルプリセットは 2 系統。**2 行目(比率の行)だけが違い、それ以外は一字一句同一・改変禁止**。図の性質で選ぶ:
+
+- **標準 3:2** — 既定。ほとんどの図はこれ
+- **ワイド 2:1** — 横一列に 6 要素以上並ぶパイプライン図など、3:2 に押し込むと文字が小さくなる図のみ(例: 図 1-2)
+
+どちらを使ったかは配置時に引用ブロックの `比率:` に記録する。迷ったら標準を使う。
+
+**標準(3:2)**:
 
 ```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
@@ -87,6 +115,15 @@ All labels in English, short (1-3 words), bold sans-serif, high contrast, perfec
 Render every quoted label verbatim, exactly once, with no extra, invented, or duplicated text.
 No text other than the labels listed below.
 ```
+
+**ワイド(2:1)**: 上の 2 行目だけを次に差し替える。他の行は 1 文字も変えない。
+
+```text
+Flat 2D vector infographic in a minimal technical-illustration style. Wide landscape orientation
+(2:1 aspect ratio, e.g. 2560 x 1280).
+```
+
+ワイドを使う図では、LAYOUT に `spanning the full width of the canvas with even margins on the left and right` を入れる。比率だけ指定しても、中央に小さく描かれて余白が空くことがあるため。
 
 ## 目次と章の対応(リンクパス)
 
@@ -105,7 +142,6 @@ No text other than the labels listed below.
 - 12. 実務で効く機能たち: `/pnpm/12-practical-features`
 - 付録A. コマンド対照表: `/appendix/a-command-cheatsheet`
 - 付録B. 用語集: `/appendix/b-glossary`
-- 付録C. 図版を ChatGPT で生成する: `/appendix/c-image-generation`
 
 ファイルの実体は `docs/` 配下(例: `docs/basics/01-what-is-a-package-manager.md`)。
 

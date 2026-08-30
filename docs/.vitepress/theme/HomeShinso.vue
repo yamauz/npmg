@@ -36,7 +36,6 @@ const chapters = [
 const appendices = [
   { num: 'A', title: 'コマンド対照表', link: '/appendix/a-command-cheatsheet' },
   { num: 'B', title: '用語集', link: '/appendix/b-glossary' },
-  { num: 'C', title: '図版を ChatGPT で生成する', link: '/appendix/c-image-generation' },
 ]
 </script>
 

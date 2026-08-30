@@ -25,11 +25,10 @@
 
 パッケージマネージャーを取り巻く登場人物は、突き詰めると 4 つしかいません。①コマンドを打つ**開発者**、②npm や pnpm などの **CLI ツール本体**、③パッケージの置き場である**レジストリ(registry)**、④手元の置き場である **node_modules** です。
 
-<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-01-1.png に保存し、下の行のコメントを外してください -->
-<!-- ![図 1-1: パッケージマネージャーを取り巻く 4 つの登場人物](/images/fig-01-1.png) -->
+![図 1-1: パッケージマネージャーを取り巻く 4 つの登場人物](/images/fig-01-1.png)
 
-> **🖼️ 図 1-1|パッケージマネージャーを取り巻く 4 つの登場人物**(画像プレースホルダー)
-> 生成後は `docs/public/images/fig-01-1.png` に配置してください。
+> **図 1-1|パッケージマネージャーを取り巻く 4 つの登場人物**
+> 配置済み: 2026-08-30 / 比率: 標準 3:2
 
 ::: details 図 1-1 の ChatGPT 生成プロンプト(クリックで展開)
 
@@ -68,17 +67,17 @@ ARROWS:
 
 `npm install` の数秒間を分解すると、大きく 4 つの仕事に整理できます。これは npm や pnpm が公式にそう定義しているわけではなく、**本書が理解しやすさのために採用する整理**ですが、どのツールの動きもこの枠で読み解けます。
 
-<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-01-2.png に保存し、下の行のコメントを外してください -->
-<!-- ![図 1-2: パッケージマネージャーの 4 つの仕事のパイプライン](/images/fig-01-2.png) -->
+![図 1-2: パッケージマネージャーの 4 つの仕事のパイプライン](/images/fig-01-2.png)
 
-> **🖼️ 図 1-2|パッケージマネージャーの 4 つの仕事のパイプライン**(画像プレースホルダー)
-> 生成後は `docs/public/images/fig-01-2.png` に配置してください。
+> **図 1-2|パッケージマネージャーの 4 つの仕事のパイプライン**
+> 配置済み: 2026-08-30 / 比率: ワイド 2:1
 
 ::: details 図 1-2 の ChatGPT 生成プロンプト(クリックで展開)
 
 ```text
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
-Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
+Flat 2D vector infographic in a minimal technical-illustration style. Wide landscape orientation
+(2:1 aspect ratio, e.g. 2560 x 1280).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
 blue #2563EB as the single primary accent, light gray #E2E8F0 for container boxes,
 orange #F59E0B for highlights only. Uniform medium-weight rounded strokes, simple geometric
@@ -89,18 +88,20 @@ Render every quoted label verbatim, exactly once, with no extra, invented, or du
 No text other than the labels listed below.
 
 DIAGRAM CONTENT:
-LAYOUT: A horizontal pipeline of 4 rounded rectangles connected left to right by plain arrows.
-A small document icon on the far left feeds into the pipeline, and a folder icon on the far
-right receives the output.
+LAYOUT: A single horizontal pipeline arranged as one straight row, all items vertically centered
+on the same horizontal axis and spanning the full width of the canvas with even margins on the
+left and right. From left to right: a document icon, then 4 equally sized light gray rounded
+rectangles evenly spaced, then a folder icon. Blue arrows connect each item to the next.
 ELEMENTS:
 - Document icon on the far left labeled "package.json"
-- Box 1 (blue, magnifier icon) labeled "Resolve"
-- Box 2 (light gray, download icon) labeled "Fetch"
-- Box 3 (light gray, folder-tree icon) labeled "Link"
-- Box 4 (light gray, gear icon) labeled "Run Scripts"
+- Box 1 (light gray, magnifier icon) with two lines of text: "1" then "Resolve"
+- Box 2 (light gray, download icon) with two lines of text: "2" then "Fetch"
+- Box 3 (light gray, folder-tree icon) with two lines of text: "3" then "Link"
+- Box 4 (light gray, gear icon) with two lines of text: "4" then "Run Scripts"
 - Folder icon on the far right labeled "node_modules"
-ARROWS: plain arrows from "package.json" to "Resolve", "Resolve" to "Fetch", "Fetch" to "Link",
-"Link" to "Run Scripts", and "Run Scripts" to "node_modules".
+ARROWS: exactly five blue horizontal arrows, one between each adjacent pair, in this order:
+"package.json" to Box 1, Box 1 to Box 2, Box 2 to Box 3, Box 3 to Box 4, Box 4 to "node_modules".
+No other lines or connectors anywhere in the diagram.
 ```
 
 :::
