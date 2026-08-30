@@ -231,7 +231,7 @@ sequenceDiagram
 [3章](/basics/03-node-modules)の実験で express を入れたディレクトリに、package-lock.json ができているはずです。まず全体の規模を見てみます。
 
 ```sh
-$ cd ~/sandbox/pm-play/flat-lab
+$ cd ~/pm-sandbox/flat-lab
 $ jq '.packages | length' package-lock.json
 ```
 

@@ -230,8 +230,8 @@ npm の世界でのパッケージとは、正確には「package.json を持つ
 同じことを手元で再現していきます。実験には、文字列の左側を埋めるだけの小さなパッケージ `left-pad` を使います。使い捨てのディレクトリを作ってください。
 
 ```sh
-$ mkdir -p ~/sandbox/pm-play/hello-pm
-$ cd ~/sandbox/pm-play/hello-pm
+$ mkdir -p ~/pm-sandbox/hello-pm
+$ cd ~/pm-sandbox/hello-pm
 $ npm init -y
 ```
 

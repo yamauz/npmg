@@ -320,7 +320,7 @@ flowchart TD
 [3章](/basics/03-node-modules)では npm で express をインストールし、hoisting の副作用を観察しました。今度は**まったく同じ express** を pnpm でインストールし、3 層構造と厳格さを実測で確かめます。
 
 ```sh
-$ mkdir -p ~/sandbox/pm-play/pnpm-demo && cd ~/sandbox/pm-play/pnpm-demo
+$ mkdir -p ~/pm-sandbox/pnpm-demo && cd ~/pm-sandbox/pnpm-demo
 $ pnpm init
 $ pnpm add express
 ```
@@ -395,7 +395,7 @@ $ readlink accepts body-parser content-disposition
 ../../accepts@2.0.0/node_modules/accepts
 ../../body-parser@2.3.0/node_modules/body-parser
 ../../content-disposition@1.1.0/node_modules/content-disposition
-$ cd ~/sandbox/pm-play/pnpm-demo
+$ cd ~/pm-sandbox/pnpm-demo
 ```
 
 29 個の中身は「express の実体 1 つ+直接依存 28 個への相対 symlink」。すべて `../../<pkg>@<version>/node_modules/<pkg>` という横方向のリンクで、依存グラフの矢印がそのまま並んでいます。
@@ -415,7 +415,7 @@ console.log(typeof bp)
 <TermDemo
   title="zsh — npm 側(3 章の flat-lab)"
   :lines="[
-    { cmd: 'cd ~/sandbox/pm-play/flat-lab' },
+    { cmd: 'cd ~/pm-sandbox/flat-lab' },
     { cmd: 'node phantom.js' },
     { pause: 400 },
     { out: 'function' },
@@ -427,7 +427,7 @@ console.log(typeof bp)
 <TermDemo
   title="zsh — pnpm 側(pnpm-demo)"
   :lines="[
-    { cmd: 'cd ~/sandbox/pm-play/pnpm-demo' },
+    { cmd: 'cd ~/pm-sandbox/pnpm-demo' },
     { cmd: 'node phantom.js' },
     { pause: 400 },
     { out: 'Error: Cannot find module \'body-parser\'' },
@@ -437,9 +437,9 @@ console.log(typeof bp)
 コピペ用に静的な形でも載せておきます。
 
 ```sh
-$ cd ~/sandbox/pm-play/flat-lab && node phantom.js
+$ cd ~/pm-sandbox/flat-lab && node phantom.js
 function
-$ cd ~/sandbox/pm-play/pnpm-demo && node phantom.js
+$ cd ~/pm-sandbox/pnpm-demo && node phantom.js
 Error: Cannot find module 'body-parser'
 ```
 
@@ -466,7 +466,7 @@ npm の 3.8M とほぼ同じに見えます(pnpm 側のファイル実体数は 
 <TermDemo
   title="zsh — 2 つ目のプロジェクトで再利用"
   :lines="[
-    { cmd: 'mkdir ~/sandbox/pm-play/pnpm-demo2 && cd ~/sandbox/pm-play/pnpm-demo2' },
+    { cmd: 'mkdir ~/pm-sandbox/pnpm-demo2 && cd ~/pm-sandbox/pnpm-demo2' },
     { cmd: 'pnpm init' },
     { pause: 300 },
     { cmd: 'pnpm add express' },
@@ -477,7 +477,7 @@ npm の 3.8M とほぼ同じに見えます(pnpm 側のファイル実体数は 
 />
 
 ```sh
-$ mkdir ~/sandbox/pm-play/pnpm-demo2 && cd ~/sandbox/pm-play/pnpm-demo2
+$ mkdir ~/pm-sandbox/pnpm-demo2 && cd ~/pm-sandbox/pnpm-demo2
 $ pnpm init && pnpm add express
 ```
 

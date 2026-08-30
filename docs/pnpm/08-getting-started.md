@@ -225,7 +225,7 @@ ARROWS: a plain arrow from "pnpm" to "Dependencies", a plain arrow from "pnpm" t
   title="zsh — pnpm create vite"
   :lines="[
     { cmd: 'pnpm create vite my-app' },
-    { out: 'Scaffolding project in /Users/you/sandbox/pm-play/my-app...' },
+    { out: 'Scaffolding project in /Users/you/pm-sandbox/my-app...' },
     { out: 'Done.' },
     { pause: 400 },
     { cmd: 'cd my-app' },
@@ -240,7 +240,7 @@ ARROWS: a plain arrow from "pnpm" to "Dependencies", a plain arrow from "pnpm" t
   ]"
 />
 
-同じことを手元で再現していきます。実験用ディレクトリ(例: `~/sandbox/pm-play`)で次を実行してください。
+同じことを手元で再現していきます。実験用ディレクトリ(例: `~/pm-sandbox`)で次を実行してください。
 
 ```sh
 $ pnpm create vite my-app
@@ -250,7 +250,7 @@ $ pnpm create vite my-app
 ✔ Select a framework: › Vanilla
 ✔ Select a variant: › TypeScript
 
-Scaffolding project in /Users/you/sandbox/pm-play/my-app...
+Scaffolding project in /Users/you/pm-sandbox/my-app...
 
 Done. Now run:
 
@@ -283,7 +283,7 @@ $ pnpm dev
 ```
 
 ```
-> my-app@0.0.0 dev /Users/you/sandbox/pm-play/my-app
+> my-app@0.0.0 dev /Users/you/pm-sandbox/my-app
 > vite
 
   VITE v7.1.3  ready in 320 ms

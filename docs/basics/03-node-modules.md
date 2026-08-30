@@ -229,7 +229,7 @@ doppelgänger は単なるディスクの無駄では済みません。Node.js �
 フラット化を実際に見てみましょう。使い捨てディレクトリで express をインストールします。
 
 ```sh
-$ mkdir -p ~/sandbox/pm-play/flat-lab && cd ~/sandbox/pm-play/flat-lab
+$ mkdir -p ~/pm-sandbox/flat-lab && cd ~/pm-sandbox/flat-lab
 $ npm init -y
 $ npm install express
 ```
@@ -245,7 +245,7 @@ $ npm ls --depth=0
 ```
 
 ```
-flat-lab@1.0.0 /Users/you/sandbox/pm-play/flat-lab
+flat-lab@1.0.0 /Users/you/pm-sandbox/flat-lab
 └── express@5.2.1
 ```
 
@@ -273,7 +273,7 @@ $ npm ls --depth=1
 ```
 
 ```
-flat-lab@1.0.0 /Users/you/sandbox/pm-play/flat-lab
+flat-lab@1.0.0 /Users/you/pm-sandbox/flat-lab
 └─┬ express@5.2.1
   ├── accepts@2.0.0
   ├── body-parser@2.3.0
@@ -303,7 +303,7 @@ $ npm ls content-type
 ```
 
 ```
-flat-lab@1.0.0 /Users/you/sandbox/pm-play/flat-lab
+flat-lab@1.0.0 /Users/you/pm-sandbox/flat-lab
 └─┬ express@5.2.1
   ├─┬ accepts@2.0.0
   │ └─┬ negotiator@1.1.0

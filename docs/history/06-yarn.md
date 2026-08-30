@@ -166,7 +166,7 @@ yarn チームには「v1 のコードベースは限界で、漸進的改良で
 yarn v1 が持ち込んだ決定性の実物を見てみます。使い捨てディレクトリで、npx 経由で yarn v1 を実行し(グローバルインストール不要)、前章にも登場した left-pad を追加してみます。
 
 ```sh
-$ mkdir -p ~/sandbox/pm-play/yarn-demo && cd ~/sandbox/pm-play/yarn-demo
+$ mkdir -p ~/pm-sandbox/yarn-demo && cd ~/pm-sandbox/yarn-demo
 $ npm init -y
 $ npx yarn@1 add left-pad
 $ head -9 yarn.lock
