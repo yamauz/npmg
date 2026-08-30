@@ -14,12 +14,18 @@ VitePress 製の日本語オンライン教科書。npm / yarn / pnpm を「仕�
 ```sh
 npm run dev      # 開発サーバー (http://localhost:5173)
 npm run build    # 本番ビルド。リンク切れで失敗するので検証を兼ねる
-npm run deploy   # ビルド + wrangler deploy(要 wrangler login)
+npm run deploy   # 手動デプロイ。ビルド + wrangler deploy(要 wrangler login)
 node scripts/preview-hero.mjs 5        # ヒーローシェーダーをヘッドレス描画 → hero-preview.png
 node scripts/screenshot.mjs <URL> <出力先> [full]  # headless Chrome でページ撮影(要 Google Chrome)
 ```
 
 変更は必ず `npm run build` とスクリーンショット(ライト/ダーク両方)で確認してからデプロイする。
+
+## デプロイ
+
+**通常は main への push で自動デプロイされる**(Cloudflare Workers Builds が GitHub リポジトリ `yamauz/npmg` と GUI 連携済み。ダッシュボード側でビルド・デプロイまで実行される)。GitHub Actions のワークフローは置いていない。
+
+`npm run deploy` は手元からの手動デプロイ用に残してある。Cloudflare 側のビルドが落ちたときの逃げ道。
 
 ## 執筆の絶対原則
 
