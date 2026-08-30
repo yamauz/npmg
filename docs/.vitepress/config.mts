@@ -146,6 +146,21 @@ export default withMermaid(defineConfig({
       ['meta', { name: 'twitter:image', content: image }],
     )
   },
+  markdown: {
+    config(md) {
+      // H1 の直後に「Markdown をコピー」ボタンを差し込む。
+      // doc-before スロットは .vp-doc の外側(H1 より上)にしか置けないため、
+      // 見出しの下に出すにはレンダリング時に注入するしかない。
+      const defaultRender =
+        md.renderer.rules.heading_close ??
+        ((tokens, idx, options, _env, self) => self.renderToken(tokens, idx, options))
+
+      md.renderer.rules.heading_close = (tokens, idx, options, env, self) => {
+        const html = defaultRender(tokens, idx, options, env, self)
+        return tokens[idx].tag === 'h1' ? `${html}\n<CopyMarkdown />` : html
+      }
+    },
+  },
   vite: {
     optimizeDeps: {
       // mermaid 11 の CJS 依存(fastdom)を dev で事前バンドルさせる

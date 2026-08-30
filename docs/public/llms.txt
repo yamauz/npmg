@@ -1,0 +1,22 @@
+# Node.js Package Manager Guide(npmg)
+
+> npm / yarn / pnpm を「仕組み」から解説する日本語のオンライン教科書。
+> 各ページの本文は下記の Markdown からそのまま取得できます。
+
+## 本文
+
+- [付録A. コマンド対照表](https://npmg.yamauz.workers.dev/raw/appendix-a-command-cheatsheet.md): https://npmg.yamauz.workers.dev/appendix/a-command-cheatsheet.html
+- [付録B. 用語集](https://npmg.yamauz.workers.dev/raw/appendix-b-glossary.md): https://npmg.yamauz.workers.dev/appendix/b-glossary.html
+- [1. パッケージマネージャーとは何か](https://npmg.yamauz.workers.dev/raw/basics-01-what-is-a-package-manager.md): https://npmg.yamauz.workers.dev/basics/01-what-is-a-package-manager.html
+- [2. package.json — 依存の宣言とバージョン範囲](https://npmg.yamauz.workers.dev/raw/basics-02-package-json-and-semver.md): https://npmg.yamauz.workers.dev/basics/02-package-json-and-semver.html
+- [3. node_modules の構造](https://npmg.yamauz.workers.dev/raw/basics-03-node-modules.md): https://npmg.yamauz.workers.dev/basics/03-node-modules.html
+- [4. ロックファイルの役割](https://npmg.yamauz.workers.dev/raw/basics-04-lockfiles.md): https://npmg.yamauz.workers.dev/basics/04-lockfiles.html
+- [5. npm の誕生と進化](https://npmg.yamauz.workers.dev/raw/history-05-npm.md): https://npmg.yamauz.workers.dev/history/05-npm.html
+- [6. yarn の登場と分岐](https://npmg.yamauz.workers.dev/raw/history-06-yarn.md): https://npmg.yamauz.workers.dev/history/06-yarn.html
+- [7. pnpm と新世代ツール](https://npmg.yamauz.workers.dev/raw/history-07-pnpm-and-next-gen.md): https://npmg.yamauz.workers.dev/history/07-pnpm-and-next-gen.html
+- [この本について](https://npmg.yamauz.workers.dev/raw/introduction.md): https://npmg.yamauz.workers.dev/introduction.html
+- [8. pnpm はじめの一歩](https://npmg.yamauz.workers.dev/raw/pnpm-08-getting-started.md): https://npmg.yamauz.workers.dev/pnpm/08-getting-started.html
+- [9. pnpm の仕組み — ストアとリンク](https://npmg.yamauz.workers.dev/raw/pnpm-09-how-pnpm-works.md): https://npmg.yamauz.workers.dev/pnpm/09-how-pnpm-works.html
+- [10. pnpm のアドバンテージ総覧](https://npmg.yamauz.workers.dev/raw/pnpm-10-advantages.md): https://npmg.yamauz.workers.dev/pnpm/10-advantages.html
+- [11. ワークスペースとモノレポ](https://npmg.yamauz.workers.dev/raw/pnpm-11-workspaces.md): https://npmg.yamauz.workers.dev/pnpm/11-workspaces.html
+- [12. 実務で効く機能たち](https://npmg.yamauz.workers.dev/raw/pnpm-12-practical-features.md): https://npmg.yamauz.workers.dev/pnpm/12-practical-features.html

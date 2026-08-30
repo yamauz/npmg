@@ -20,6 +20,8 @@ node scripts/screenshot.mjs <URL> <出力先> [full]  # headless Chrome でペ�
 node scripts/og-image.mjs             # TOP の OGP → docs/public/og.png / og-light.png
 node scripts/og-image.mjs --chapters  # 章ごとの OGP → docs/public/og/<slug>.png
 node scripts/og-image.mjs --all       # 両方
+pnpm llms        # 貼り付け用 Markdown + llms.txt を再生成
+pnpm test        # vitest。md 変換ロジック(scripts/lib/md-transform.mjs)のユニットテスト
 ```
 
 変更は必ず `pnpm build` とスクリーンショット(ライト/ダーク両方)で確認してからデプロイする。
@@ -48,6 +50,25 @@ OGP 画像は **H1 から焼いた静的 PNG**(`docs/public/og/<slug>.png`)。�
 - TOP だけは別枠(`docs/public/og.png`)。ヒーローのキャッチコピーではなく **`Node.js Package Manager Guide`** をサブタイトルに置く
 - 章タイトルのフォントサイズはブラウザ側で実測して自動調整される。和欧混植では文字数から行数を予測できないため、**長いタイトルを付けても組みは壊れない**(34px まで縮めて 1 行に収まらなければ 2 行を許容)
 - 生成後は必ず出来上がった PNG を目視する。文字が背景の星座と重なって読みにくくなっていないか確認する
+
+## Markdown コピー / llms.txt(本文を書き換えたら必ず読む)
+
+各ページの H1 直下・右寄せに「Markdown をコピー」ボタンがある(`theme/CopyMarkdown.vue`)。**配置は config.mts の `markdown.config` で markdown-it の `heading_close` を差し替え、H1 の直後に `<CopyMarkdown />` を注入している**。VitePress の `doc-before` スロットは `.vp-doc` の外側(H1 より上)にしか置けず、見出しの下に出せないため。LP は H1 を持たない(`layout: page` + `<HomeShinso />`)ので注入されない。押すと `docs/public/raw/<slug>.md` を fetch してクリップボードに入れる。読者が章まるごと LLM に貼るための導線。
+
+**OGP と同じで、これもビルドでは生成されない。** 本文を書き換えたら `pnpm llms`(= `node scripts/llms-txt.mjs`)を再実行する。忘れるとコピーされる中身が古いままになり、**ビルドは通るのでエラーも出ない**。
+
+スクリプトがやっている変換(生の md をそのまま配ると貼り付け先で壊れるため):
+
+- **図版の生成プロンプト**(`<!-- ... -->` 内の英語 30〜60 行)を削除。これを残すと本文よりプロンプトの方が長くなる
+- **TermDemo** → 素の ```sh ブロック(`cmd` は `$` 付き、`out` はそのまま、`pause` は捨てる)
+- **`:::` / `::::` コンテナ** → `**[注意] つまずきポイント**` のような太字見出し
+- **`<figure>`** → `[図 7-1 …]` の 1 行(画像は貼り付け先で見えないが、図があった事実は残す)
+- **相対リンク** → 絶対 URL(貼り付け先でリンクが死なないように)
+
+変換ロジックは `scripts/lib/md-transform.mjs` に純粋関数として切り出してあり、`pnpm test` で守られている(25 ケース)。正規表現の順序依存が壊れやすく、**壊れても grep の残留チェックでは気づけない**ため、変換を触ったらテストを足す。
+
+スラッグ規則は OGP と同一(`pnpm/09-how-pnpm-works.md` → `pnpm-09-how-pnpm-works.md`)。`CopyMarkdown.vue` が同じ規則で URL を組むので**ファイル名を手で変えない**。索引 `docs/public/llms.txt` も同時に生成される(llmstxt.org 形式)。
+
 
 ## 執筆の絶対原則
 

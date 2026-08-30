@@ -6,6 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "vitepress dev docs",
+    "llms": "node scripts/llms-txt.mjs",
+    "test": "vitest run",
     "build": "vitepress build docs",
     "preview": "vitepress preview docs",
     "deploy": "pnpm run build && wrangler deploy"
@@ -17,6 +19,7 @@
     "pngjs": "^7.0.0",
     "vitepress": "^1.6.4",
     "vitepress-plugin-mermaid": "^2.0.17",
+    "vitest": "^4.1.11",
     "wrangler": "^4.127.1"
   },
   "dependencies": {
