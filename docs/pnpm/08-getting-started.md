@@ -41,11 +41,10 @@ flowchart TD
   S -->|"以後の更新"| U["pnpm self-update"]
 ```
 
-<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-08-1.png に保存し、下の行のコメントを外してください -->
-<!-- ![図 8-1: pnpm の導入ルート 3 種](/images/fig-08-1.png) -->
-
-> **🖼️ 図 8-1|pnpm の導入ルート 3 種**(画像プレースホルダー)
-> 生成後は `docs/public/images/fig-08-1.png` に配置してください。
+<figure>
+  <img src="/images/fig-08-1.png" alt="pnpm の導入ルート 3 種">
+  <figcaption><span class="fig-num">図 8-1</span> pnpm の導入ルート 3 種</figcaption>
+</figure>
 
 <!-- 図 8-1 の生成プロンプト(採用版・ページには出しない)
 
@@ -61,15 +60,23 @@ Render every quoted label verbatim, exactly once, with no extra, invented, or du
 No text other than the labels listed below.
 
 DIAGRAM CONTENT:
-LAYOUT: Three rounded rectangles stacked vertically on the left, one large rounded
-rectangle on the right, connected by arrows from left to right.
+LAYOUT: Two columns with generous white space between them. The left column has three equally
+sized rounded boxes stacked vertically and evenly spaced. The right column has one rounded box,
+vertically centered so that it sits level with the middle box of the left column. Each left box
+has one small icon above its text. Three arrows go from the left boxes to the single right box.
+ICON STYLE: every icon is a simple line-art outline drawing, drawn with the same uniform dark
+stroke as the boxes, with no fill, no color, no gradient, and no 3D shading. Icons must look
+like monochrome outline pictograms, not illustrations.
 ELEMENTS:
-- Box 1 (light gray, terminal icon) labeled "curl script"
-- Box 2 (light gray, cube icon) labeled "npm -g"
-- Box 3 (light gray, mug icon) labeled "Homebrew"
-- Right box (blue, gem icon) labeled "pnpm CLI"
-ARROWS: a labeled arrow reading "install" pointing from "curl script" to "pnpm CLI",
-a plain arrow from "npm -g" to "pnpm CLI", a plain arrow from "Homebrew" to "pnpm CLI".
+- Left column top: a white box with a thin dark outline, an outline icon of a terminal window,
+  labeled "curl script"
+- Left column middle: a white box with a thin dark outline, an outline icon of a downward arrow
+  into a tray, labeled "npm -g"
+- Left column bottom: a white box with a thin dark outline, an outline icon of a beer mug,
+  labeled "Homebrew"
+- Right column: a white box with a thick blue outline, no icon, labeled "pnpm CLI"
+ARROWS: exactly three plain dark arrows, one from each left box pointing right to the single
+"pnpm CLI" box. No arrow labels. No other lines or connectors anywhere in the diagram.
 -->
 
 ::: info なぜ Corepack を使わないのか
