@@ -138,11 +138,10 @@ flowchart LR
 
 4 つのツールを、2 つの軸で整理してみます。横軸は「node_modules の作り方が従来型か、新方式か」、縦軸は「パッケージマネージャー専業か、ランタイム込みか」です。
 
-<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-07-2.png に保存し、下の行のコメントを外してください -->
-<!-- ![図 7-2: 4 ツールのポジショニングマップ](/images/fig-07-2.png) -->
-
-> **🖼️ 図 7-2|4 ツールのポジショニングマップ**(画像プレースホルダー)
-> 生成後は `docs/public/images/fig-07-2.png` に配置してください。
+<figure>
+  <img src="/images/fig-07-2.png" alt="4 ツールのポジショニングマップ">
+  <figcaption><span class="fig-num">図 7-2</span> 4 ツールのポジショニングマップ</figcaption>
+</figure>
 
 <!-- 図 7-2 の生成プロンプト(採用版・ページには出しない)
 
@@ -158,16 +157,23 @@ Render every quoted label verbatim, exactly once, with no extra, invented, or du
 No text other than the labels listed below.
 
 DIAGRAM CONTENT:
-LAYOUT: A two-axis quadrant chart with a horizontal axis and a vertical axis crossing
-in the center. Four dots are placed on the chart.
+LAYOUT: A two-axis quadrant chart. One horizontal axis line and one vertical axis line cross at
+the center of the canvas, both drawn in dark with an arrowhead at each of their four ends. Four
+dots are placed in the chart area, each with its text label directly below the dot. The axis end
+labels sit just outside the arrowheads.
 ELEMENTS:
-- Horizontal axis: left end labeled "classic layout", right end labeled "new layout"
-- Vertical axis: bottom end labeled "manager only", top end labeled "full runtime"
-- Gray dot at bottom-left labeled "npm"
-- Blue dot (largest) at bottom-center-right labeled "pnpm"
-- Gray dot at bottom-right labeled "yarn v4"
-- Orange dot at top-left labeled "Bun"
-ARROWS: none.
+- Horizontal axis: the label "classic layout" sits just outside the left arrowhead, the label
+  "new layout" sits just outside the right arrowhead
+- Vertical axis: the label "manager only" sits just below the bottom arrowhead, the label
+  "full runtime" sits just above the top arrowhead
+- A dark dot in the lower-left quadrant, labeled "npm"
+- A dark dot in the lower-left quadrant to the right of "npm", closer to the vertical axis,
+  labeled "pnpm", drawn in blue
+- A dark dot in the lower-right quadrant, labeled "yarn v4"
+- A dark dot in the upper-left quadrant, labeled "Bun"
+- All four dots are the same size
+ARROWS: only the four arrowheads on the two axis lines. No other arrows, lines, or connectors
+anywhere in the diagram.
 -->
 
 そのうえで、選び方の指針を正直に書きます。
