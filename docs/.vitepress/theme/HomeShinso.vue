@@ -5,6 +5,19 @@
 import { withBase } from 'vitepress'
 import HeroNetwork from './HeroNetwork.vue'
 
+// 固定ナビの高さぶんオフセットして目次へスクロールする
+// (素のアンカーだとヒーローの下端が覗いてしまう)
+function scrollToToc(e) {
+  e.preventDefault()
+  const el = document.getElementById('toc')
+  if (!el) return
+  const nav = document.querySelector('.VPNav')
+  const offset = nav ? nav.offsetHeight : 64
+  const top = el.getBoundingClientRect().top + window.scrollY - offset
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  window.scrollTo({ top, behavior: reduced ? 'auto' : 'smooth' })
+}
+
 const chapters = [
   { num: '01', title: 'パッケージマネージャーとは何か', link: '/basics/01-what-is-a-package-manager' },
   { num: '02', title: 'package.json とバージョン範囲', link: '/basics/02-package-json-and-semver' },
@@ -38,7 +51,7 @@ const appendices = [
           <p class="hero__lead">Node.js パッケージマネージャーの仕組みを、根本から理解する。</p>
           <div class="hero__actions">
             <a class="btn btn--primary" :href="withBase('/introduction')">読む</a>
-            <a class="btn btn--ghost" href="#toc">目次を見る</a>
+            <button type="button" class="btn btn--ghost" @click="scrollToToc">目次を見る</button>
           </div>
         </div>
       </div>
@@ -64,17 +77,6 @@ const appendices = [
             </a>
           </li>
         </ul>
-      </div>
-    </section>
-
-    <!-- 締め -->
-    <section class="outro">
-      <span class="outro__dot" aria-hidden="true"></span>
-      <p class="outro__line">仕組みを理解すると、<br class="narrow-only" />選択が変わる。</p>
-      <p class="outro__sub">仕組みの基礎から最新世代の実装まで、全 12 章+付録。手を動かす実験つき。</p>
-      <div class="outro__actions">
-        <a class="btn btn--primary" :href="withBase('/introduction')">読む</a>
-        <a class="btn btn--ghost" href="#toc">目次を見る</a>
       </div>
     </section>
 
@@ -112,19 +114,12 @@ const appendices = [
   overflow-x: clip;
 }
 
-.narrow-only {
-  display: none;
-}
 
-@media (max-width: 560px) {
-  .narrow-only {
-    display: inline;
-  }
-}
-
-/* ボタン */
+/* ボタン(a / button 両対応) */
 .btn {
   display: inline-block;
+  cursor: pointer;
+  font-family: inherit;
   padding: 13px 30px;
   border-radius: 3px;
   font-size: 14.5px;
@@ -284,44 +279,6 @@ const appendices = [
 .toc__title {
   font-size: 14.5px;
   transition: color var(--dur-base) var(--ease-out);
-}
-
-/* --- 締め --- */
-.outro {
-  border-top: 1px solid var(--v2-rule);
-  text-align: center;
-  padding: clamp(56px, 8vw, 104px) 24px;
-}
-
-.outro__dot {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--v2-accent);
-  margin-bottom: var(--space-lg);
-}
-
-.outro__line {
-  font-size: clamp(22px, 2.8vw, 30px);
-  font-weight: 700;
-  line-height: 1.7;
-  letter-spacing: 0.05em;
-  margin: 0 0 var(--space-sm);
-}
-
-.outro__sub {
-  font-size: 13.5px;
-  color: var(--v2-ink-2);
-  letter-spacing: 0.03em;
-  margin: 0 0 var(--space-xl);
-}
-
-.outro__actions {
-  display: flex;
-  gap: var(--space-sm);
-  justify-content: center;
-  flex-wrap: wrap;
 }
 
 /* --- フッター --- */
