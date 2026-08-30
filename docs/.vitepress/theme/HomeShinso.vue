@@ -84,9 +84,7 @@ const appendices = [
       <div class="foot__inner">
         <span class="foot__mark">npmg — Node.js Package Manager Guide</span>
         <nav class="foot__links">
-          <a :href="withBase('/introduction')">この本について</a>
-          <a :href="withBase('/basics/01-what-is-a-package-manager')">第 1 章</a>
-          <a :href="withBase('/appendix/a-command-cheatsheet')">付録</a>
+          <a href="https://github.com/yamauz/npmg" target="_blank" rel="noopener">GitHub ↗</a>
         </nav>
       </div>
     </footer>

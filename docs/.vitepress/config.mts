@@ -68,6 +68,7 @@ export default withMermaid(defineConfig({
         ],
       },
     ],
+    socialLinks: [{ icon: 'github', link: 'https://github.com/yamauz/npmg' }],
     outline: { label: 'このページの内容', level: [2, 3] },
     docFooter: { prev: '前の章', next: '次の章' },
     returnToTopLabel: 'トップへ戻る',
