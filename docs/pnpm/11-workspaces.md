@@ -44,7 +44,9 @@ flowchart TD
 
 [6章](/history/06-yarn)で見た yarn v1 のワークスペースは、ルートの package.json に `workspaces` フィールドを書く方式でした。pnpm はこれを採用せず、**専用ファイルに分離**しています。package.json は「パッケージとして publish される可能性のあるファイル」なので、リポジトリの構成というローカルな情報を混ぜない、という設計判断です。この分離は後述するとおり、v11 で「pnpm 設定全般の置き場」へと発展します。
 
-なお、ワークスペース内のパッケージ同士が自動でリンクされるかどうかは `linkWorkspacePackages` 設定で決まり、デフォルトは `false` です。つまり pnpm の既定では、次に説明する `workspace:` プロトコルを**明示的に書いたときだけ**リンクされます。暗黙の魔法に頼らない、pnpm らしい既定値です。
+::: warning つまずきポイント
+`pnpm-workspace.yaml` に登録しただけでは、パッケージ同士はまだリンク**されません**。自動リンクを制御する `linkWorkspacePackages` 設定のデフォルトが `false` だからです。pnpm の既定では、次に説明する `workspace:` プロトコルを package.json に**明示的に書いたときだけ**リンクされます。「同じワークスペースに置いたのに import できない」と悩んだら、まず依存の宣言を確認してください。暗黙の魔法に頼らない、pnpm らしい既定値です。
+:::
 
 <!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-11-1.png に保存し、下の行のコメントを外してください -->
 <!-- ![図 11-1: モノレポの全体構造(apps/packages と共有 lockfile)](/images/fig-11-1.png) -->
@@ -76,7 +78,7 @@ ARROWS: A labeled arrow reading "defines" pointing from "pnpm-workspace.yaml" do
 
 ## workspace: プロトコル — 「隣の部屋」への確実なリンク
 
-ワークスペース内のパッケージを依存として使うには、バージョン範囲の代わりに `workspace:` プロトコルを書きます。
+では、app から隣の ui を使いたいとき、dependencies には何と書けばよいのでしょうか。答えは、バージョン範囲の代わりに `workspace:` プロトコルです。
 
 ```json
 {
@@ -95,6 +97,18 @@ ARROWS: A labeled arrow reading "defines" pointing from "pnpm-workspace.yaml" do
 | `workspace:~` | 同上 | `~1.5.0` |
 
 `workspace:` プロトコルの最大の価値は、**レジストリへのフォールバックを禁止する**ことです。yarn v1 では通常のバージョン範囲(`"^1.0.0"` など)でワークスペースを参照するため、範囲が合わないとレジストリから同名パッケージを黙って取得してしまうことがありました。「同じ家に住む家族に渡すつもりの手紙が、郵便局経由で赤の他人に配達される」ような事故です。`workspace:` を書いておけば、ワークスペース内で解決できないときはインストールがエラーで止まり、事故が起きる前に気づけます。
+
+この分岐を図で確かめておきましょう。`workspace:` が塞いでいるのは、下段の「静かに混入する」経路です。
+
+```mermaid
+flowchart TD
+  A["通常のバージョン範囲で参照"] -->|"範囲が合致"| L["ローカルの ui にリンク"]
+  A -->|"範囲不一致や名前のタイポ"| R["レジストリの同名パッケージを取得"]
+  R --> X["他人のコードが静かに混入"]
+  W["workspace:* で参照"] -->|"ローカルで解決できないとき"| E["インストールがエラーで停止"]
+```
+
+怖いのは、混入した瞬間には何のエラーも出ないことです。実際、社内パッケージと同じ名前のパッケージを公開レジストリに仕込んでおく「依存関係かく乱(dependency confusion)」という攻撃手法が知られているとおり、この経路は攻撃者にとっての入口にもなりえます。`workspace:` プロトコルは、この入口を運用ルールではなく**仕様として**閉じます。
 
 一方、publish 時には `workspace:^` が `^1.5.0` のような**実バージョンに自動置換**されます。利用者のもとに `workspace:` という内部事情が漏れることはありません。[2章](/basics/02-package-json-and-semver)で学んだ `^` と `~` の意味の違いが、そのままここに現れます。なお、`pnpm add` でワークスペース内パッケージを追加したときにどんな記法で保存するかは `saveWorkspaceProtocol` 設定(デフォルト `rolling`)で制御できます。
 
@@ -134,7 +148,13 @@ ARROWS: A labeled arrow reading "symlink" pointing from "app" down to "ui" insid
 $ pnpm --filter web dev
 ```
 
-これは `web` という名前のパッケージで `dev` スクリプトを実行します。glob(`--filter "@myapp/*"`)や、依存関係をたどる記法も使えます。特に CI で強力なのが、**Git の変更ベースの絞り込み**です。
+これは `web` という名前のパッケージで `dev` スクリプトを実行します。
+
+::: warning つまずきポイント
+`--filter web` の `web` は **package.json の `name` フィールド**であって、ディレクトリ名ではありません。`apps/web` に置いたパッケージの name が `@myapp/web` なら、`--filter @myapp/web` と指定します(glob で `--filter "@myapp/*"` とも書けます)。ディレクトリで指したい場合は `--filter ./apps/web` とパス形式で書きます。
+:::
+
+`--filter` には、依存関係をたどる記法もあります。特に CI で強力なのが、**Git の変更ベースの絞り込み**です。
 
 ```sh
 $ pnpm --filter "...[origin/main]" run test
@@ -158,7 +178,7 @@ $ pnpm -r run build
 
 ## catalogs — バージョンの「レシピ帳」
 
-モノレポが 30 パッケージ規模になると、新しい問題が生まれます。「React のバージョンを 30 個の package.json で揃える」問題です。1 つだけ `^18` のまま取り残されると、型の不一致や二重バンドルという厄介なバグになります。
+モノレポが 30 パッケージ規模になると、新しい問題が生まれます。「React のバージョンを 30 個の package.json で揃える」問題です。React を上げると決めた日、あなたは `grep -rn react` で 30 ファイルを洗い出し、30 ファイルを書き換え、30 ファイル分の diff をレビューに出すことになります。そして 1 つだけ `^18` のまま取り残されると、型の不一致や二重バンドルという厄介なバグが待っています。
 
 pnpm 9.5.0 で導入された catalogs(カタログ)は、これを 1 箇所で解決します。`pnpm-workspace.yaml` にバージョン範囲の一覧を定義し、各 package.json からは `catalog:` で参照するのです。全店舗が共通のレシピ帳を見て調理する、チェーン店の厨房のような仕組みです。
 
@@ -188,7 +208,17 @@ package.json 側はバージョンを書かず、カタログを指します。
 }
 ```
 
-`"catalog:"` はデフォルトカタログ(`catalog:` セクション)を参照します。移行途中のパッケージだけ古い React を使いたい場合は、名前付きカタログを `"react": "catalog:react18"` のように指定します。React を上げるときに編集するのは `pnpm-workspace.yaml` の 1 行だけ。30 個の package.json を grep して回る作業は過去のものになります。publish 時には `workspace:` と同様、実バージョンに置換されます。
+`"catalog:"` はデフォルトカタログ(`catalog:` セクション)を参照します。移行途中のパッケージだけ古い React を使いたい場合は、名前付きカタログを `"react": "catalog:react18"` のように指定します。publish 時には `workspace:` と同様、実バージョンに置換されます。
+
+ビフォーアフターを見比べてみましょう。カタログ導入後、「全パッケージの React を上げる」作業はこの 1 行の diff になります。
+
+```diff
+ catalog:
+-  react: ^19.1.0
++  react: ^19.2.0
+```
+
+導入前は「30 ファイルを grep → 30 ファイルを書き換え → 30 ファイル分の diff をレビュー」。導入後は「`pnpm-workspace.yaml` を 1 行編集して `pnpm install`」。package.json 側は `"catalog:"` のまま変わらないので、レビュアーが見る diff もこの 1 行だけです。
 
 関連設定として `catalogMode` があり、`manual`(既定)/ `strict` / `prefer` の 3 値で「`pnpm add` したときにカタログをどう使うか」を制御できます。`strict` にすると、カタログに載っているパッケージはカタログ経由でしか追加できなくなり、バージョンの一元管理を強制できます。
 

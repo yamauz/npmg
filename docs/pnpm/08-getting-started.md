@@ -11,25 +11,35 @@
 
 ## pnpm をインストールする 3 つのルート
 
-pnpm の導入ルートは大きく 3 つあります。まずは公式の standalone スクリプトです。Node.js に依存しない単体バイナリとして入るため、後述の `pnpm self-update` との相性がもっとも良い方法です。
+pnpm の導入ルートは大きく 3 つあります。どれを選ぶのが正解なのでしょうか。先に結論を書いておきます — **迷ったら standalone スクリプト**です。
 
 ```sh
 $ curl -fsSL https://get.pnpm.io/install.sh | sh -
 ```
 
-2 つ目は、npm ユーザーにとっていちばん抵抗のない方法、npm でのグローバルインストールです。
+standalone スクリプトは、pnpm を Node.js に依存しない単体バイナリとして入れます。後述の `pnpm self-update` で pnpm が自分自身を更新できるため、導入後の管理がいちばん素直です。本書もこのルートを前提に進めます。
+
+2 つ目は、npm ユーザーにとっていちばん抵抗のない方法、npm でのグローバルインストールです。すでに npm で各種 CLI ツールを管理しているなら、これでも困りません。
 
 ```sh
 $ npm install -g pnpm
 ```
 
-3 つ目は macOS / Linux で定番の Homebrew です。ただしバージョンアップのタイミングが Homebrew のリポジトリ更新に依存する点は覚えておいてください。
+3 つ目は macOS / Linux で定番の Homebrew です。「開発ツールは全部 brew で揃える」方針のマシンなら選択肢になりますが、バージョンアップのタイミングが Homebrew のリポジトリ更新に依存する点は覚えておいてください。
 
 ```sh
 $ brew install pnpm
 ```
 
-本書では **standalone スクリプトか `npm install -g pnpm` を推奨**します。理由は次のコラムのとおりです。
+選び方を 1 枚にまとめると次のとおりです。
+
+```mermaid
+flowchart TD
+  Q["どのルートで入れる?"] -->|"迷ったらこれ"| S["standalone スクリプト"]
+  Q -->|"npm -g で CLI を管理中"| N["npm install -g pnpm"]
+  Q -->|"brew で統一したい"| B["Homebrew"]
+  S -->|"以後の更新"| U["pnpm self-update"]
+```
 
 <!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-08-1.png に保存し、下の行のコメントを外してください -->
 <!-- ![図 8-1: pnpm の導入ルート 3 種](/images/fig-08-1.png) -->
@@ -118,6 +128,47 @@ $ pnpm create vite      # プロジェクトの雛形を生成
 ```
 
 ポイントは 3 つです。第一に、追加は `install` ではなく **`add`** です。pnpm では `install` は「package.json に書かれたものを揃える」専用で、役割が明確に分かれています。第二に、`pnpm dev` のように **`run` を省略してスクリプト名を直接実行**できます(pnpm の組み込みコマンド名と衝突しない限り)。第三に、`pnpm dlx`(エイリアス `pnpx`)は npx と同じく使い捨て実行ですが、v11 以降はセキュリティ機構(公開直後のパッケージの実行拒否)にも従います。これは[10章](/pnpm/10-advantages)で説明します。
+
+::: warning つまずきポイント
+`run` の省略記法には 1 つ罠があります。スクリプト名が pnpm の組み込みコマンドと同名の場合(たとえば `"install"` や `"add"` という名前のスクリプト)、**組み込みコマンドのほうが優先**されます。その場合は `pnpm run install` のように `run` を明示してください。
+:::
+
+では `pnpm add` を 1 回だけ実行して、pnpm が何を報告してくるかを見てみましょう。空のプロジェクトに express を追加します。
+
+<TermDemo
+  title="zsh — pnpm add express(初回)"
+  :lines="[
+    { cmd: 'mkdir add-lab && cd add-lab && pnpm init' },
+    { pause: 400 },
+    { cmd: 'pnpm add express' },
+    { out: 'Packages: +66' },
+    { out: 'Progress: resolved 66, reused 51, downloaded 15, added 66, done' },
+    { out: 'Packages are cloned from the content-addressable store to the virtual store.' },
+    { out: 'Done in 1.4s' },
+  ]"
+/>
+
+コピペ用のコマンドと出力の全体は次のとおりです。
+
+```sh
+$ mkdir add-lab && cd add-lab && pnpm init
+$ pnpm add express
+```
+
+```
+Packages: +66
++++++++++++++
+Progress: resolved 66, reused 51, downloaded 15, added 66, done
+Packages are cloned from the content-addressable store to the virtual store.
+  Virtual store is at:             node_modules/.pnpm
+
+dependencies:
++ express 5.2.1
+
+Done in 1.4s using pnpm v11.6.0
+```
+
+注目してほしいのは `Progress:` の行です。`resolved 66` は依存グラフとして解決したパッケージ数、`downloaded 15` はレジストリから実際に取得した数、そして `reused 51` は**このマシンで過去に一度使ったファイルを再利用した数**です(まっさらなマシンでの初実行なら `reused 0` になります)。npm の `added 68 packages` という素っ気ない報告と違い、pnpm は「どれだけ取得せずに済んだか」を毎回教えてくれます。では、どこから再利用しているのか — `Packages are cloned from the content-addressable store` という 1 行がその答えなのですが、「内容アドレスストア」とは何なのかは次章でじっくり解き明かします。
 
 <!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-08-2.png に保存し、下の行のコメントを外してください -->
 <!-- ![図 8-2: pnpm コマンド体系マップ](/images/fig-08-2.png) -->
@@ -259,12 +310,16 @@ lrwxr-xr-x   1 you  staff   35  8 29 10:12 vite -> .pnpm/vite@7.1.3/node_modules
 
 [3章](/basics/03-node-modules)で見た npm の node_modules とは、明らかに様子が違います。数百のパッケージがフラットに並ぶ代わりに、`.pnpm` という見慣れないディレクトリと、そこへ向かう矢印(`->`)付きのエントリ、つまり**シンボリックリンク**だけが並んでいます。この「矢印の正体」こそが pnpm の心臓部です。
 
+::: warning つまずきポイント
+node_modules の直下にパッケージの実体が見当たらなくても、壊れていません。それが pnpm の正常な姿です。ここで慌てて `npm install` を打ち直すと、npm が npm 流のフラットな node_modules と package-lock.json を作り始め、lockfile が二重になって本当に壊れます。1 つのプロジェクトで使うパッケージマネージャーは 1 つに揃えてください。
+:::
+
 ## まとめ
 
-- pnpm の導入は standalone スクリプト・`npm install -g pnpm`・Homebrew の 3 ルート。Corepack は Node 25 以降同梱されないため本書では推奨しない
+- pnpm の導入は standalone スクリプト・`npm install -g pnpm`・Homebrew の 3 ルート。**迷ったら standalone スクリプト**。Corepack は Node 25 以降同梱されないため本書では推奨しない
 - 執筆時点の最新は v11 系(npm の `latest`)。Rust 版の v12 が `next` として公開済みで、`pnpm self-update` で本体を更新できる
 - チームでは package.json の `packageManager` フィールドでバージョンを固定する
-- 追加は `pnpm add`(`-D` / `-g`)、削除は `pnpm remove`、スクリプトは `pnpm dev` と直接実行できる。使い捨て実行は `pnpm dlx`
+- 追加は `pnpm add`(`-D` / `-g`)、削除は `pnpm remove`、スクリプトは `pnpm dev` と直接実行できる。使い捨て実行は `pnpm dlx`。インストール出力の `reused` は「取得せずに再利用した数」を示す
 - node_modules の中身は npm と大きく異なり、`.pnpm` ディレクトリとシンボリックリンクで構成される
 
 次章では、この「様子の違う node_modules」の正体、つまり pnpm のストアとリンクの 3 層構造を解説します。本書の技術的ハイライトです。

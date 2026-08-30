@@ -102,6 +102,10 @@ flowchart LR
 
 `.patch` ファイルはリポジトリにコミットするので、チームメイトも CI も同じ修正を受け取ります。不要になったら `pnpm patch-remove` で外せます。パッチの適用先は `lodash@4.17.21` のような完全一致指定が最優先で、バージョン範囲指定、名前のみ指定の順に優先度が下がります。章末の実験で実際に試します。
 
+::: warning つまずきポイント
+パッチは「当てた瞬間のバージョンのコード」に対する diff です。`lodash@4.17.21` のような完全一致で当てたパッチは、依存を更新した時点で対象から外れます。範囲や名前のみで当てていた場合も、新バージョンでコードが変わっていれば diff の適用に失敗し、インストールが止まります。依存の更新時は「このパッチはまだ必要か(upstream で直っていないか)」を確認し、必要なら `pnpm patch` からやり直してください。パッチはあくまで応急処置で、恒久対応は upstream への報告や PR です。
+:::
+
 <!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-12-1.png に保存し、下の行のコメントを外してください -->
 <!-- ![図 12-1: patch のワークフロー(4 ステップ)](/images/fig-12-1.png) -->
 
@@ -150,7 +154,19 @@ audit:
 
 [7章](/history/07-pnpm-and-next-gen)で触れたサプライチェーン攻撃の主要な侵入経路は、インストール時に自動実行される lifecycle スクリプト(postinstall など)でした。pnpm 10 は、Rspack がこの手口で攻撃された事件を受けて、**依存パッケージの lifecycle スクリプトをデフォルトで実行しない**という破壊的変更に踏み切りました。
 
-とはいえ esbuild のように、正当な理由で postinstall を必要とするパッケージもあります。そこで pnpm は対話的な承認コマンド `pnpm approve-builds` を用意しました。実行すると「ビルドスクリプトを持つ依存」が一覧され、選んだものだけが許可リストに載ります。v10 では許可リストは `onlyBuiltDependencies` という設定でしたが、**v11 で `allowBuilds` に統合**され、`onlyBuiltDependencies` / `neverBuiltDependencies` / `ignoredBuiltDependencies` の 3 設定を置き換えました。あわせて v11 では `strictDepBuilds: true` がデフォルトになり、未承認のビルドスクリプトは警告ではなく**インストール失敗**として扱われます。
+とはいえ esbuild のように、正当な理由で postinstall を必要とするパッケージもあります。そこで pnpm は対話的な承認コマンド `pnpm approve-builds` を用意しました。実行すると「ビルドスクリプトを持つ依存」が一覧され、選んだものだけが許可リストに載ります。対話 UI の様子はおおよそ次のとおりです。スペースキーで選択し、Enter で確定します。
+
+```
+$ pnpm approve-builds
+? Choose which packages to build (Press <space> to select,
+  <a> to toggle all, <i> to invert selection)
+● esbuild
+○ sharp
+✔ The next packages will now be built: esbuild.
+Do you approve? (y/N) · yes
+```
+
+空港の税関で申告品を 1 つずつ見せるように、「インストール時にスクリプトを走らせたいパッケージ」を 1 つずつ申告して通す仕組みです。v10 では許可リストは `onlyBuiltDependencies` という設定でしたが、**v11 で `allowBuilds` に統合**され、`onlyBuiltDependencies` / `neverBuiltDependencies` / `ignoredBuiltDependencies` の 3 設定を置き換えました。あわせて v11 では `strictDepBuilds: true` がデフォルトになり、未承認のビルドスクリプトは警告ではなく**インストール失敗**として扱われます。
 
 ```yaml
 allowBuilds:
@@ -166,7 +182,7 @@ allowBuilds:
 
 近年のサプライチェーン攻撃には共通パターンがあります。メンテナーのアカウントを乗っ取り、マルウェア入りバージョンを publish し、被害が広がるのは**公開直後の数時間**、というものです。逆に言えば、公開から時間が経ったバージョンは、コミュニティの検証をくぐり抜けてきた分だけ安全度が上がります。
 
-pnpm 11 の `minimumReleaseAge` はこの性質を利用します。**公開から指定分数が経過していないバージョンを解決しない**設定で、デフォルトは 1440 分(= 1 日)です。`0` で無効化、`10080` にすれば 1 週間の「検疫期間」になります。社内パッケージなど即時反映したいものは `minimumReleaseAgeExclude` で除外できます。
+pnpm 11 の `minimumReleaseAge` はこの性質を利用します。**公開から指定分数が経過していないバージョンを解決しない**設定で、デフォルトは 1440 分(= 1 日)です。`0` で無効化、`10080` にすれば 1 週間の「検疫期間」になります。裏返しのコストとして、正規のバグ修正版も公開直後は同じだけ待たされます。社内パッケージなど「待てない」ものだけを `minimumReleaseAgeExclude` で除外する、が基本の運用です。
 
 ```yaml
 minimumReleaseAge: 10080
@@ -224,14 +240,32 @@ $ pnpm create vite my-app
 
 最後に、深入りはしないものの「存在を知っておくと、いつか助かる」機能を 2 つ紹介します。
 
-- **injected dependencies**: package.json の `dependenciesMeta.<pkg>.injected` を `true` にすると、ワークスペースパッケージをシンボリックリンクではなく**ハードリンクのコピー**として注入します。通常のリンクでは ui パッケージの実体は 1 つなので peer dependency も 1 通りにしか解決できませんが、injected にすると「react@18 のアプリと react@19 のアプリが同じ ui を使う」といった消費側ごとの peer 解決が可能になります。
+- **injected dependencies**: package.json の `dependenciesMeta.<pkg>.injected` を `true` にすると、ワークスペースパッケージをシンボリックリンクではなく**ハードリンク(macOS/APFS ではコピーオンライトのクローン)によるコピー**として注入します。通常のリンクでは ui パッケージの実体は 1 つなので peer dependency も 1 通りにしか解決できませんが、injected にすると「react@18 のアプリと react@19 のアプリが同じ ui を使う」といった消費側ごとの peer 解決が可能になります。
 - **configDependencies**: 通常の依存より**先に**インストールされる特殊な依存です。`.pnpmfile.mjs` フックやパッチ、カタログといった「設定そのもの」をパッケージ化し、複数リポジトリで共有できます。大規模組織で pnpm の運用ルールを配布する用途に向いています。
 
 どちらも必要になったときに公式ドキュメントを読めば十分です。「pnpm にはその道がある」と覚えておくことが、この節の目的です。
 
 ## 実験: pnpm patch でパッチ運用を確認する
 
-実際にパッチを当ててみます。題材として lodash に「バージョン文字列を書き換える」だけの無害な変更を加えます。
+実際にパッチを当ててみます。題材として lodash に「バージョン文字列を書き換える」だけの無害な変更を加えます。まず、4 ステップの流れを通しで見てみましょう。
+
+<TermDemo
+  title="zsh — pnpm patch の 4 ステップ"
+  :lines="[
+    { cmd: 'pnpm patch lodash@4.17.21' },
+    { out: 'Patch: You can now edit the package at:' },
+    { out: '  /private/var/folders/qy/3fk2m91d5xg/T/e6bb5413-lodash@4.17.21/user' },
+    { pause: 400 },
+    { cmd: 'code /private/var/folders/qy/3fk2m91d5xg/T/e6bb5413-lodash@4.17.21/user/lodash.js' },
+    { pause: 600 },
+    { cmd: 'pnpm patch-commit /private/var/folders/qy/3fk2m91d5xg/T/e6bb5413-lodash@4.17.21/user' },
+    { pause: 400 },
+    { cmd: 'grep patched node_modules/lodash/lodash.js' },
+    { out: '  var VERSION = \'4.17.21-patched\';' },
+  ]"
+/>
+
+同じことを手元で再現していきます。
 
 ```sh
 $ mkdir patch-lab && cd patch-lab
@@ -283,7 +317,7 @@ node_modules を消して `pnpm install` し直しても同じ結果になりま
 
 - `pnpm why` / `pnpm outdated` / `pnpm licenses list` が日々の依存調査の基本 3 点セット
 - overrides(`pnpm-workspace.yaml` に記述)は推移的依存のバージョンを強制する。yarn v1 の `resolutions` に相当し、`pnpm audit --fix` が自動追記してくれる
-- `pnpm patch` → 編集 → `pnpm patch-commit` で、fork せずに依存パッケージを修正できる
+- `pnpm patch` → 編集 → `pnpm patch-commit` で、fork せずに依存パッケージを修正できる。依存を更新したらパッチの要否を見直す
 - v10 で postinstall はデフォルト無効になり、v11 では承認リストが `allowBuilds` に統合された。`dangerouslyAllowAllBuilds` には頼らない
 - `minimumReleaseAge`(デフォルト 1440 分)は公開直後のパッケージを掴まない検疫期間で、`pnpm dlx` にも効く
 
