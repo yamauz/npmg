@@ -67,7 +67,7 @@ export default withMermaid(defineConfig({
         text: 'Part I: パッケージ管理の基礎を知る',
         items: [
           { text: '1. パッケージマネージャーとは何か', link: '/basics/01-what-is-a-package-manager' },
-          { text: '2. package.json とバージョン範囲', link: '/basics/02-package-json-and-semver' },
+          { text: '2. package.json — 依存の宣言とバージョン範囲', link: '/basics/02-package-json-and-semver' },
           { text: '3. node_modules の構造', link: '/basics/03-node-modules' },
           { text: '4. ロックファイルの役割', link: '/basics/04-lockfiles' },
         ],

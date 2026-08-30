@@ -1,18 +1,21 @@
-# 2. package.json とバージョン範囲
+# 2. package.json — 依存の宣言とバージョン範囲
 
-[1章](/basics/01-what-is-a-package-manager)の実験で、`npm install left-pad` が package.json に `"left-pad": "^1.3.0"` と書き込むのを見ました。なぜ `1.3.0` ちょうどではなく `^` 付きなのでしょうか。この章では package.json というファイルの全体像と、`^` や `~` が表す「バージョン範囲」の読み方を身につけます。
+[1章](/basics/01-what-is-a-package-manager)の実験で、`npm install left-pad` が package.json に `"left-pad": "^1.3.0"` と書き込むのを見ました。なぜ `1.3.0` ちょうどではなく `^` 付きなのでしょうか。そもそも、この 1 行はどこに書かれるべきなのでしょうか。
+
+この章で扱うのは、package.json という 1 枚のファイルが担う **2 つの役割**です。1 つは `^` や `~` が表す「**どのバージョンを許すか**」、もう 1 つは dependencies / devDependencies / peerDependencies / optionalDependencies という「**どういう性質の依存か**」。前者がバージョンの軸、後者が置き場所の軸で、この 2 つが揃って初めて 1 つの依存が宣言されます。
 
 ::: tip この章でわかること
 - package.json の主要フィールドの役割を説明できる
 - セマンティックバージョニングの 3 つの数字の意味を説明できる
 - `^1.2.3` と `~1.2.3` がそれぞれ許すバージョンの範囲を読み取れる
 - dependencies / devDependencies / peerDependencies / optionalDependencies を使い分けられる
+- peerDependencies が必要な理由と、`ERESOLVE` / `unmet peer` の読み方がわかる
 - lifecycle スクリプト(pre / post / postinstall)の仕組みを説明できる
 :::
 
 ## package.json はプロジェクトのマニフェスト
 
-package.json は、プロジェクトの**マニフェスト(積荷目録)**です。船の積荷目録に「何をどれだけ積んでいるか」が書かれているように、package.json には「このプロジェクトは何者で、何に依存し、どんなコマンドを持つか」が書かれています。1 章で見た「解決」の工程は、必ずこのファイルを読むところから始まります。
+package.json は、プロジェクトの**マニフェスト(積荷目録)** です。船の積荷目録に「何をどれだけ積んでいるか」が書かれているように、package.json には「このプロジェクトは何者で、何に依存し、どんなコマンドを持つか」が書かれています。1 章で見た「解決」の工程は、必ずこのファイルを読むところから始まります。
 
 主要なフィールドを見てみましょう。
 
@@ -181,7 +184,7 @@ MAJOR が 0 のバージョン(`0.x.y`)は「まだ何が壊れるかわから�
 固定すればズレは起きませんが、バグ修正やセキュリティ修正も自動では入らなくなり、数十〜数百の依存を手で上げ続ける羽目になります。`^` は「semver の約束を信頼して、安全なはずの更新は自動で受け取る」という、利便性側に倒したトレードオフです。そして、その信頼だけでは足りない部分を補うのが 4 章のロックファイルです。
 :::
 
-## 依存の 4 つの置き場所
+## 依存の 4 つの置き場所 — 全体像
 
 dependencies 系のフィールドは 4 種類あります。どれに書くかで「いつ・誰の環境にインストールされるか」が変わります。
 
@@ -221,10 +224,241 @@ ARROWS: none. No other lines or connectors anywhere in the diagram.
 
 - **dependencies**: アプリの実行そのものに必要なもの(react、express など)。あなたのパッケージを誰かがインストールしたとき、一緒にインストールされます。
 - **devDependencies**: 開発・ビルド・テストにだけ必要なもの(vite、vitest、eslint など)。自分のプロジェクトで `npm install` すれば入りますが、あなたのパッケージの利用者には入りません。`npm install --save-dev`(短縮形 `-D`)でここに追加されます。
-- **peerDependencies**: 「私はこれと**一緒に**使われる前提です。ただし実体は利用者側が用意してください」という宣言。典型例は React のプラグインで、プラグイン自身が react を抱え込むと、アプリ本体の react と二重になって壊れるため、「react 19 系を隣に置いてね」とだけ表明します。バージョンが合わない場合の挙動はツールごとに違いがあり、警告の読み方は 10 章のアドバンテージ比較でも触れます。
+- **peerDependencies**: 「私はこれと**一緒に**使われる前提です。ただし実体は利用者側が用意してください」という宣言。実体はインストールされず、要求だけが表明されます。
 - **optionalDependencies**: 入れば使うが、インストールに失敗しても全体を止めないもの。OS 依存の高速化モジュールなどに使われます。
 
-アプリ開発での使い分けはシンプルに、「本番コードが `import` するものは dependencies、それ以外は devDependencies」と覚えておけばほぼ困りません。
+アプリ開発での使い分けはシンプルに、「本番コードが `import` するものは dependencies、それ以外は devDependencies」と覚えておけばほぼ困りません。**アプリを書いているだけなら、自分で peerDependencies を書く場面はまずありません**。
+
+——とはいえ、この 1 行で片づけると必ず引っかかるものが 2 つあります。「peerDependencies って結局なんだっけ?」という疑問と、インストール時に流れてくる `unmet peer` の警告です。以降でこの 2 つを、実際に手を動かしながらほどいていきます。
+
+## dependencies と devDependencies を分ける本当の理由
+
+まず前提の確認です。なぜ 2 つに分かれているのでしょうか。答えは「**依存は伝染するが、devDependencies は伝染しない**」からです。
+
+あなたが作った `my-lib` が dependencies に lodash を、devDependencies に vitest を持っているとします。誰かが `npm install my-lib` すると、lodash は一緒に降ってきますが、vitest は来ません。vitest はあなたが `my-lib` を開発するときにだけ必要なもので、`my-lib` を**使う**人には無関係だからです。
+
+```mermaid
+flowchart LR
+  subgraph L["my-lib の package.json"]
+    D["dependencies: lodash"]
+    V["devDependencies: vitest"]
+  end
+  U["利用者の node_modules"]
+  D -->|一緒に入る| U
+  V -.->|入らない| U
+```
+
+この「伝染するかどうか」が判断基準です。判断に迷ったら「**このコードは、利用者の環境で実行されるか?**」と問い直してください。TypeScript の型定義(`@types/*`)が devDependencies でよいのも、型はビルド時に消えて実行時には存在しないからです。
+
+::: warning つまずきポイント: アプリでは区別しなくても「動いてしまう」
+アプリ(publish しないプロジェクト)では、`npm install` が両方とも入れてくれるため、**間違った場所に書いても手元では普通に動きます**。困るのは本番デプロイのときです。`npm install --omit=dev`(旧 `--production`)や多くの Docker ビルドは devDependencies を除外するため、そこで初めて「本番にだけモジュールが無い」と発覚します。手元で動くことは、置き場所が正しい証拠にはなりません。
+:::
+
+## peerDependencies — 「あなたが持っている方を使わせて」
+
+では本題です。peerDependencies は何のためにあるのでしょうか。
+
+**普通の依存では困る場面がある**からです。具体例で考えます。`react-dom` は React でブラウザに描画するためのパッケージで、当然 React 本体を必要とします。ではなぜ `react-dom` は react を dependencies に書かないのでしょうか。実際に見てみましょう。
+
+<TermDemo
+  title="zsh — react-dom が react をどう要求しているか"
+  :lines="[
+    { cmd: 'npm view react-dom peerDependencies' },
+    { out: '{ react: \'^19.2.8\' }' },
+  ]"
+/>
+
+```sh
+$ npm view react-dom peerDependencies
+```
+
+```
+{ react: '^19.2.8' }
+```
+
+dependencies ではなく **peerDependencies** に入っています。もしこれが dependencies だったら何が起きるか。3 章で詳しく見ますが、npm は依存が競合したとき「それぞれの中に別々のコピーを入れる」ことで解決します。つまり、あなたのアプリの react と、react-dom が抱え込んだ react の**2 つの React が同時に存在する**状態になりえます。
+
+もし dependencies だったら、react の実体が 2 つに分かれます。
+
+```mermaid
+flowchart LR
+  A1["アプリ"] --> R1["react 実体 A"]
+  A1 --> RD1["react-dom"]
+  RD1 --> R2["react 実体 B"]
+```
+
+peerDependencies なら、react-dom は要求を表明するだけなので実体は 1 つに保たれます。
+
+```mermaid
+flowchart LR
+  A2["アプリ"] --> R3["react 実体は 1 つ"]
+  A2 --> RD2["react-dom"]
+  RD2 -.->|"要求するだけ"| R3
+```
+
+React は内部にグローバルな状態(現在レンダリング中のコンポーネント、フックの呼び出し位置など)を持っています。実体が 2 つあると、アプリが実体 A のフックを呼び、react-dom が実体 B を見て描画する、という食い違いが起きます。これが有名な「Invalid hook call」エラーの主要因の 1 つで、React 公式も原因として「アプリ内に React のコピーが 2 つある」ことを挙げています。
+
+peerDependencies はこれを防ぎます。「**私は react を使うが、実体は持ち込まない。あなた(利用者)の react を使わせてほしい**」——これが peer(同僚・対等な隣人)という名前の意味です。ホストが 1 つだけ持っているものを、プラグイン側が共有して使う。
+
+::: info どんなときに peerDependencies を書くのか
+自分がパッケージを publish する側になったとき、次の 3 つに当てはまるなら peerDependencies です。
+
+1. **プラグイン・アドオンである**(`eslint-plugin-*`、`vite-plugin-*`、`@vitejs/plugin-react` など。ホストが読み込んで動かす)
+2. **相手がシングルトンでなければ壊れる**(react、vue のようにグローバル状態やコンテキストを持つもの)
+3. **利用者がすでに持っているのが自然**(eslint プラグインを入れる人は必ず eslint を持っている)
+
+実例として `eslint-plugin-react` の peerDependencies は `eslint: '^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9.7'` です。`||` で複数のメジャーを並べて「この範囲のどれでも動きます」と表明しています。peerDependencies の範囲は**広く取るのが作法**です。狭くすると、利用者側の更新をプラグインが妨げてしまうからです。
+:::
+
+## 実験: peer が合わないとどうなるか
+
+「バージョンが合わない場合」は、ツールによって挙動がはっきり違います。文章で読むより見た方が早いので、**わざと壊れた組み合わせ**を作ります。react 18 と、react 19 を要求する react-dom 19 を並べます。
+
+```json
+{
+  "name": "peer-demo",
+  "version": "1.0.0",
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^19.2.0"
+  }
+}
+```
+
+npm でインストールすると、**インストール自体が失敗**します。
+
+<TermDemo
+  title="zsh — npm は peer 不一致をエラーにする"
+  :lines="[
+    { cmd: 'npm install' },
+    { pause: 500 },
+    { out: 'npm error code ERESOLVE' },
+    { out: 'npm error ERESOLVE unable to resolve dependency tree' },
+    { out: 'npm error' },
+    { out: 'npm error While resolving: peer-demo@1.0.0' },
+    { out: 'npm error Found: react@18.3.1' },
+    { out: 'npm error node_modules/react' },
+    { out: 'npm error   react@^18.3.1 from the root project' },
+    { out: 'npm error' },
+    { out: 'npm error Could not resolve dependency:' },
+    { out: 'npm error peer react@^19.2.8 from react-dom@19.2.8' },
+  ]"
+/>
+
+```sh
+$ npm install
+```
+
+```
+npm error code ERESOLVE
+npm error ERESOLVE unable to resolve dependency tree
+npm error
+npm error While resolving: peer-demo@1.0.0
+npm error Found: react@18.3.1
+npm error node_modules/react
+npm error   react@"^18.3.1" from the root project
+npm error
+npm error Could not resolve dependency:
+npm error peer react@"^19.2.8" from react-dom@19.2.8
+npm error node_modules/react-dom
+npm error   react-dom@"^19.2.0" from the root project
+npm error
+npm error Fix the upstream dependency conflict, or retry
+npm error this command with --force or --legacy-peer-deps
+npm error to accept an incorrect (and potentially broken) dependency resolution.
+```
+
+この `ERESOLVE` は、npm を使っていれば必ず一度は出会うエラーです。**読み方さえ分かれば怖くありません**。`Found:` が「いま入れようとしている実体」、`Could not resolve dependency:` の `peer ...` が「誰が何を要求しているか」です。上の例なら「react 18.3.1 を入れようとしたが、react-dom 19.2.8 が react ^19.2.8 を要求している」と読めます。原因のパッケージと必要なバージョンが、そのまま書いてあります。
+
+同じ package.json を pnpm でインストールすると、結果が変わります。
+
+<TermDemo
+  title="zsh — pnpm は警告して先に進む"
+  :lines="[
+    { cmd: 'pnpm install' },
+    { pause: 500 },
+    { out: 'Packages: +5' },
+    { out: 'Progress: resolved 5, reused 5, downloaded 0, added 5, done' },
+    { out: '' },
+    { out: 'dependencies:' },
+    { out: '+ react 18.3.1 (19.2.8 is available)' },
+    { out: '+ react-dom 19.2.8' },
+    { out: '' },
+    { out: '[WARN] Issues with peer dependencies found. Run pnpm peers check to list them.' },
+  ]"
+/>
+
+pnpm は**エラーにせず警告に留め、インストールを完了します**。何が問題なのかは `pnpm peers check` で確認できます。
+
+```sh
+$ pnpm peers check
+```
+
+```
+Issues with peer dependencies found
+
+✕ unmet peer react
+  Installed: 18.3.1
+  Wanted:
+    ^19.2.8:
+      react-dom@19.2.8
+```
+
+`Installed`(実際に入ったもの)と `Wanted`(誰が何を求めているか)が分かれていて、npm の ERESOLVE と同じ情報がより読みやすい形で出ています。
+
+::: warning つまずきポイント: `--force` と `--legacy-peer-deps` は「解決」ではない
+ERESOLVE に出くわしたとき、エラーメッセージが案内するとおり `--legacy-peer-deps` を付ければインストールは通ります。実際、先ほどの壊れた組み合わせも `npm install --legacy-peer-deps` なら `added 5 packages` で完了します。
+
+しかしこれは、npm 7 より前の「peerDependencies を単に無視する」挙動に戻すオプションです。**矛盾は消えておらず、検出をやめただけ**で、実行時に「Invalid hook call」のような形で表面化します。使ってよいのは「古いライブラリが peer 範囲を更新していないだけで、実際には動くと分かっている」場合に限ります。一時しのぎとして使うなら、なぜ必要かをコメントに残しておくのが安全です。
+
+本来の対処は、エラーが名指ししたパッケージのバージョンを揃えることです。上の例なら react を 19 に上げるか、react-dom を 18 に下げるかの二択です。
+:::
+
+**なぜツールで挙動が違うのか**は、npm 自身の歴史がそのまま理由になっています。npm 3〜6 では peerDependencies は警告のみで自動インストールされず、npm 7 で「自動インストール+不一致はエラー」に変わりました。厳格になった結果、**古いライブラリを使うと大量に ERESOLVE が出る**という副作用も生まれました。この経緯は 5 章で扱います。
+
+## optionalDependencies — 失敗してもいい依存
+
+4 つ目は optionalDependencies です。「入れば使うが、入らなくても止まらない」もので、代表例は **OS 固有のネイティブモジュール**です。
+
+vite の package.json を覗いてみましょう。
+
+```sh
+$ npm view vite optionalDependencies
+```
+
+```
+{ fsevents: '~2.3.3' }
+```
+
+`fsevents` は macOS のファイル変更検知 API を使うモジュールで、`npm view fsevents os` を見ると `darwin`(macOS)としか書かれていません。Linux や Windows ではインストールが失敗しますが、**失敗しても vite は動きます**。fsevents が無ければポーリング方式のファイル監視にフォールバックするだけで、少し遅くなるだけだからです。
+
+```mermaid
+flowchart TD
+  I["インストール"] --> Q["fsevents は入ったか"]
+  Q -->|"macOS: 入った"| F["高速なファイル監視"]
+  Q -->|"Linux: 失敗"| P["ポーリングにフォールバック"]
+  F --> OK["どちらでも動く"]
+  P --> OK
+```
+
+つまり optionalDependencies は「**あれば速い/便利だが、無くても代替手段がある**」ものの置き場所です。逆に言えば、使う側のコードは必ず「無かった場合」を書いておく必要があります。書かなければ、単に壊れるインストールになるだけです。
+
+::: warning つまずきポイント: optional は「ロックファイルの再現性」の穴になる
+optionalDependencies は OS や CPU によって入ったり入らなかったりします。ということは、**同じロックファイルからインストールしても、macOS と Linux では node_modules の中身が違う**ということです。「ロックファイルがあれば全員まったく同じ node_modules になる」と思っていると、ここでズレます。4 章で「ロックファイルが固定できるのは解決結果まで」と書くのは、この種の要因があるためです。
+:::
+
+なお `dependenciesMeta.<pkg>.optional` を使うと、dependencies に書いたまま個別に「これは省略可」と指定することもできますが、実務で書く場面はほとんどありません。
+
+## 4 つの使い分け早見表
+
+最後に 4 つを 1 つの表にまとめます。判断に迷ったらここに戻ってきてください。
+
+| フィールド | 実体が入るのは | 利用者にも入るか | 典型例 |
+| --- | --- | :-: | --- |
+| `dependencies` | 常に | 入る | react、express |
+| `devDependencies` | 自分の開発時のみ | 入らない | vite、vitest、`@types/*` |
+| `peerDependencies` | **入らない**(要求のみ) | — | プラグインが要求する eslint、react |
+| `optionalDependencies` | 入れば入る | 入る(入れば) | fsevents |
 
 ## 範囲指定が生む「人によって違う」問題
 
@@ -290,7 +524,9 @@ $ npm view react versions --json | tail -4
 - semver は MAJOR(破壊的変更)/ MINOR(機能追加)/ PATCH(バグ修正)という更新内容の通信規約
 - `^1.2.3` は 2.0.0 未満まで、`~1.2.3` は 1.3.0 未満までの更新を許す。npm の既定は `^`
 - ただし 0.x 系では `^` の意味が変わる(一番左のゼロでない数字を固定。`^0.2.3` に 0.3.0 は含まれない)
-- 依存の置き場所は dependencies / devDependencies / peerDependencies / optionalDependencies の 4 種類
+- 依存の置き場所は dependencies / devDependencies / peerDependencies / optionalDependencies の 4 種類。分かれ目は「利用者の環境にも入るか」
+- peerDependencies は「実体は持ち込まず、利用者のものを共有して使う」宣言。React の二重化のようなシングルトン破壊を防ぐためにある
+- peer 不一致の扱いはツールで違う。npm はエラー(`ERESOLVE`)、pnpm は警告。`--legacy-peer-deps` は矛盾を消さず検出をやめるだけ
 - 範囲指定は「同じ package.json でも人によって違うバージョンが入る」問題を生む(4 章で回収)
 - postinstall などの lifecycle スクリプトにより、インストールはコード実行を伴いうる(Part III で回収)
 

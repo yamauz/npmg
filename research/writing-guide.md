@@ -131,7 +131,7 @@ Flat 2D vector infographic in a minimal technical-illustration style. Wide lands
 
 - はじめに: `/introduction`
 - 1. パッケージマネージャーとは何か: `/basics/01-what-is-a-package-manager`
-- 2. package.json とバージョン範囲: `/basics/02-package-json-and-semver`
+- 2. package.json — 依存の宣言とバージョン範囲: `/basics/02-package-json-and-semver`
 - 3. node_modules の構造: `/basics/03-node-modules`
 - 4. ロックファイルの役割: `/basics/04-lockfiles`
 - 5. npm の誕生と進化: `/history/05-npm`
