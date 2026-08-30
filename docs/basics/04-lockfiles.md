@@ -23,11 +23,10 @@ semver の約束が完璧なら困らないはずですが、現実には MINOR 
 念のため強調しておきます。上のズレが起きるのは、**ロックファイルがない(またはコミットされていない)場合**です。いまの npm はインストール時に package-lock.json を自動生成し、それがあれば `npm install` も記録された確定バージョンを使います。「CI は毎回最新を引く」のは現代の既定の挙動ではなく、**ロックファイルが登場する前の世界**、あるいはロックファイルを `.gitignore` に入れてしまったプロジェクトで起きることだと理解してください。この章の残りは、まさにその解決策の話です。
 :::
 
-<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-04-1.png に保存し、下の行のコメントを外してください -->
-<!-- ![図 4-1: lockfile がないチームで起きるバージョンのズレ](/images/fig-04-1.png) -->
-
-> **🖼️ 図 4-1|lockfile がないチームで起きるバージョンのズレ**(画像プレースホルダー)
-> 生成後は `docs/public/images/fig-04-1.png` に配置してください。
+<figure>
+  <img src="/images/fig-04-1.png" alt="lockfile がないチームで起きるバージョンのズレ">
+  <figcaption><span class="fig-num">図 4-1</span> lockfile がないチームで起きるバージョンのズレ</figcaption>
+</figure>
 
 <!-- 図 4-1 の生成プロンプト(採用版・ページには出しない)
 
@@ -43,15 +42,20 @@ Render every quoted label verbatim, exactly once, with no extra, invented, or du
 No text other than the labels listed below.
 
 DIAGRAM CONTENT:
-LAYOUT: A cloud shape centered at the top. Two person icons at the bottom left and bottom
-right, each with a package box beneath them. A jagged divider between the two package boxes.
+LAYOUT: A symmetric layout. One cloud shape centered at the top. Below it, two identical
+branches going down-left and down-right, mirroring each other. Each branch has a person icon
+with its label below it, and under that a rounded box. The two branches are at the same height
+as each other.
 ELEMENTS:
-- Cloud at top labeled "Registry"
-- Bottom left person icon labeled "Developer A" with a blue package box under it labeled "1.2.3"
-- Bottom right person icon labeled "Developer B" with a gray package box under it labeled "1.3.0"
-- An orange lightning bolt between the two package boxes labeled "mismatch"
-ARROWS: a labeled arrow reading "install January" pointing from "Registry" to "Developer A";
-a labeled arrow reading "install March" pointing from "Registry" to "Developer B".
+- Cloud at the top labeled "Registry"
+- Left branch: a person icon labeled "Developer A", and below it a white box with a thin dark
+  outline labeled "1.2.3"
+- Right branch: a person icon labeled "Developer B", and below it a white box with a thick
+  orange outline labeled "1.3.0"
+- Centered between the two boxes, at the same height as them, an orange text label reading
+  "same package.json"
+ARROWS: exactly two plain dark arrows from the cloud, one to each person icon. The left arrow is
+labeled "January", the right arrow is labeled "March". No other lines or connectors anywhere.
 -->
 
 原因は package.json が「範囲」しか語らないことにあります。であれば解決策は 1 つ。**実際に選ばれた結果を、ファイルとして記録して共有する**ことです。それがロックファイルです。npm では `package-lock.json`、yarn では `yarn.lock`、pnpm では `pnpm-lock.yaml` という名前で、いずれもインストール時に自動生成・自動更新されます。
