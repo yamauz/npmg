@@ -86,11 +86,10 @@ Packages are cloned from the content-addressable store to the virtual store.
 「本当に節約されているのか」を `du -sh node_modules` で確かめようとすると、混乱します。pnpm のプロジェクトでも npm とほぼ同じ 3.7M と表示されるからです。しかし **du が数えるのは論理サイズ**で、クローンやハードリンクが共有している物理ブロックの重複までは見抜けません。実際には各プロジェクトの node_modules はストアと同じブロックを指しており、2 つ目のプロジェクトを作っても物理的な消費はほとんど増えません。「du の数字が同じ=節約されていない」ではないのです。同様に、macOS では `ls -l` のリンク数も 1 のままです(ハードリンクではなくクローンだから)。数字の読み方は章末の実験で確かめます。
 :::
 
-<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-09-4.png に保存し、下の行のコメントを外してください -->
-<!-- ![図 9-4: 複数プロジェクトが 1 つの store を共有する図](/images/fig-09-4.png) -->
-
-> **🖼️ 図 9-4|複数プロジェクトが 1 つの store を共有する図**(画像プレースホルダー)
-> 生成後は `docs/public/images/fig-09-4.png` に配置してください。
+<figure>
+  <img src="/images/fig-09-4.png" alt="複数プロジェクトが 1 つの store を共有する図">
+  <figcaption><span class="fig-num">図 9-4</span> 複数プロジェクトが 1 つの store を共有する図</figcaption>
+</figure>
 
 <!-- 図 9-4 の生成プロンプト(採用版・ページには出しない)
 
@@ -106,16 +105,24 @@ Render every quoted label verbatim, exactly once, with no extra, invented, or du
 No text other than the labels listed below.
 
 DIAGRAM CONTENT:
-LAYOUT: One cylinder in the center, three folder boxes arranged around it (top left,
-top right, bottom center).
+LAYOUT: Two columns with generous white space between them. The left column has one tall
+cylinder shape, vertically centered. The right column has three equally sized rounded boxes
+stacked vertically and evenly spaced. Three arrows fan out from the cylinder to the three boxes.
+ICON STYLE: every icon is a simple line-art outline drawing, drawn with the same uniform dark
+stroke as the boxes, with no fill, no color, no gradient, and no 3D shading. Icons must look
+like monochrome outline pictograms, not illustrations.
 ELEMENTS:
-- Center cylinder (blue, database icon) labeled "Global Store"
-- Folder box (light gray) labeled "Project A"
-- Folder box (light gray) labeled "Project B"
-- Folder box (light gray) labeled "Project C"
-ARROWS: a labeled arrow reading "hard link" pointing from "Global Store" to "Project A",
-a plain arrow from "Global Store" to "Project B",
-a plain arrow from "Global Store" to "Project C".
+- Left: a cylinder with a thick blue outline and white fill, no icon, with a two-line label
+  below it: "Global Store" then "one copy on disk"
+- Right column top: a white box with a thin dark outline, an outline icon of a folder, labeled
+  "Project A"
+- Right column middle: a white box with a thin dark outline, an outline icon of a folder,
+  labeled "Project B"
+- Right column bottom: a white box with a thin dark outline, an outline icon of a folder,
+  labeled "Project C"
+ARROWS: exactly three plain dark arrows, one from the cylinder to each of the three boxes,
+all pointing right. Only the arrow to "Project A" has a label, reading "hard link or clone".
+No other lines or connectors anywhere in the diagram.
 -->
 
 ## 第 2 層: virtual store `.pnpm` のレイアウト
