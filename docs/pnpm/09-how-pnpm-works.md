@@ -26,11 +26,10 @@ flowchart LR
 
 図書館に例えると、ストアは**閉架書庫**です。本(ファイル)の実体は書庫に 1 冊だけあります。`.pnpm` は各プロジェクトの**閲覧室**で、そこに置かれているのは本のコピーではなく「同じ本そのものを指す索引カード」(ハードリンクまたはクローン)。そしてルートの node_modules は閲覧室の入口にある**案内板**(シンボリックリンク)で、あなたが借りると申告した本のカードだけが載っています。
 
-<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-09-1.png に保存し、下の行のコメントを外してください -->
-<!-- ![図 9-1: store → hardlink → symlink の 3 層全体図](/images/fig-09-1.png) -->
-
-> **🖼️ 図 9-1|store → hardlink → symlink の 3 層全体図**(画像プレースホルダー)
-> 生成後は `docs/public/images/fig-09-1.png` に配置してください。
+<figure>
+  <img src="/images/fig-09-1.png" alt="store → hardlink → symlink の 3 層全体図">
+  <figcaption><span class="fig-num">図 9-1</span> store → hardlink → symlink の 3 層全体図</figcaption>
+</figure>
 
 <!-- 図 9-1 の生成プロンプト(採用版・ページには出しない)
 
@@ -46,15 +45,23 @@ Render every quoted label verbatim, exactly once, with no extra, invented, or du
 No text other than the labels listed below.
 
 DIAGRAM CONTENT:
-LAYOUT: A large cylinder on the left, and a big rounded container on the right holding
-two folder boxes side by side.
+LAYOUT: Three elements arranged in one horizontal row, all vertically centered on the same axis,
+with generous white space between them. On the left, one tall cylinder shape. In the middle and
+on the right, two rounded boxes of the same size. Two arrows connect them left to right.
+ICON STYLE: every icon is a simple line-art outline drawing, drawn with the same uniform dark
+stroke as the boxes, with no fill, no color, no gradient, and no 3D shading. Icons must look
+like monochrome outline pictograms, not illustrations.
 ELEMENTS:
-- Left cylinder (blue, database icon) labeled "Global Store"
-- Right container (light gray outline) labeled "Project"
-- Inside the container, left folder box labeled ".pnpm"
-- Inside the container, right folder box labeled "node_modules"
-ARROWS: a labeled arrow reading "hard link" pointing from "Global Store" to ".pnpm",
-a labeled arrow reading "symlink" pointing from "node_modules" to ".pnpm".
+- Left: a cylinder with a thick blue outline and white fill, no icon, with a two-line label
+  below it: "Global Store" then "one per machine"
+- Middle: a white box with a thin dark outline, an outline icon of a folder, with a two-line
+  label below it. The first line is the exact text "node_modules/.pnpm" with exactly one period
+  before the letters "pnpm" and no other periods. The second line is "virtual store".
+- Right: a white box with a thin dark outline, an outline icon of a folder, with a two-line
+  label below it: "node_modules" then "what you declared"
+ARROWS: exactly two plain dark arrows pointing right. The left arrow goes from the cylinder to
+the middle box and is labeled "hard link or clone". The right arrow goes from the middle box to
+the right box and is labeled "symlink". No other lines or connectors anywhere in the diagram.
 -->
 
 ## 第 1 層: content-addressable store

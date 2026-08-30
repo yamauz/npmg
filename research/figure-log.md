@@ -14,6 +14,7 @@
 - **特定の要素だけを青で塗らない**。「1 つだけ青」は視覚的に「これが主役/ゴール」と読まれる。並列な要素は同じ塗りにし、青は矢印など「進行」に使う(CLAUDE.md の中立性ルールと直結する)
 - **横一列に 6 要素以上を 3:2 に入れない**。文字が小さくなる。ワイド 2:1 プリセットを使う
 - **前後を比べる図は、変化を矢印で描かず `before` / `after` のラベルで示す**。「行き先が図の外の空間」になる矢印は位置が定まらない。左右が時間の前後だと分かれば、変化そのものは絵が語る(図 5-2)
+- **ドット始まりのファイル名・長いパスはピリオドの個数を指定する**。`node_modules/.pnpm` が `node_modules/..pnpm` になった(生成モデルが先行ドットを省略記号と誤認する)。`with exactly one period before the letters "pnpm" and no other periods` のように**数で指定**すると通る。ディレクトリ名は読者が手元で `ls` する対象なので見逃さない(図 9-1)
 - **アイコンを使う図には `ICON STYLE:` を明示する**。プリセットの `simple geometric icons` だけでは弱く、カラーの 3D イラスト(グラデ付きの立方体、塗り絵のビールジョッキ)が出ることがある。DIAGRAM CONTENT に `every icon is a simple line-art outline drawing ... no fill, no color, no gradient, and no 3D shading` を足すと線画に揃う。線の禁止を 2 箇所に書くのと同じ考え方(図 8-1)
 - **装飾アイコン(警告三角形・稲妻)より言葉を置く**。「異常が起きた」ことは枠の色とタグで伝わる。図が足すべきは異常の**中身**(`not declared` / `same package.json`)。アイコンは要素が増えるだけで、プリセットの `simple geometric icons` からも外れる(図 3-3・4-1)
 - **塗りは階層を、枠の色は状態を表す**。同じ階層の要素を 1 つだけベタ塗りにすると、階層が違うように見える。白背景+太い色枠なら「同格だが状態が違う」を表現できる(図 3-2 で確立。図 2-1 の MAJOR/MINOR も同じ形)
@@ -251,3 +252,17 @@ Bun のドットを orange から dark へ。オレンジは警告色で、Bun �
 要素 9 個(pnpm + 2 タイトル + 6 コマンド)とやや多いが、左右対称のコンテナ構図(3-1 で成功済み)なので箱は潰れなかった。
 
 残る `gem icon` は `docs/pnpm/10-advantages.md:214`(図 10-2)の 1 箇所。
+
+### 図 9-1 store → hardlink → symlink の 3 層(2026-08-31 / 標準 3:2)
+
+`docs/pnpm/09-how-pnpm-works.md` — グローバルストア → virtual store → ルート node_modules。
+
+**symlink の矢印の向きを逆にした**。初版は `from "node_modules" to ".pnpm"` で、リンクの実装としては正しい(シンボリックリンクの実体は node_modules 側にあり .pnpm を指す)。だがこの図は**3 層の流れ**を示すもので、直前の Mermaid が `ストア → .pnpm → ルート` と左から右へ流れている。図だけ逆向きだと層の順序が読めない。
+
+`hard link` を **`hard link or clone`** に。CLAUDE.md の正確性ルール(macOS/APFS では CoW クローン)を図にも反映する。
+
+`Project` コンテナ(中に .pnpm と node_modules を入れ子にする)をやめ、横一列の 3 要素にした。本文が「3 層」と言っているのに 2 つが 1 箱に入っていると 2 層に見える。
+
+各要素のラベルを 2 行にして役割(`one per machine` / `virtual store` / `what you declared`)を併記。図だけで 3 層の違いが分かるようにする。
+
+**1 回目の生成は `node_modules/..pnpm` とドットが 2 つになり不採用。**ピリオドの個数を明示する指定で解消(教訓に一般化済み)。
