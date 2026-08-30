@@ -110,16 +110,16 @@ flowchart TD
   friction --> fork["開発は Berry へ・v1 はメンテナンスモード"]
 ```
 
-<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-06-2.png に保存し、下の行のコメントを外してください -->
-<!-- ![図 6-2: yarn v1 と Berry の分岐年表](/images/fig-06-2.png) -->
-
-> **🖼️ 図 6-2|yarn v1 と Berry の分岐年表**(画像プレースホルダー)
-> 生成後は `docs/public/images/fig-06-2.png` に配置してください。
+<figure>
+  <img src="/images/fig-06-2.png" alt="yarn v1 と Berry の分岐年表">
+  <figcaption><span class="fig-num">図 6-2</span> yarn v1 と Berry の分岐年表</figcaption>
+</figure>
 
 <!-- 図 6-2 の生成プロンプト(採用版・ページには出しない)
 
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
-Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
+Flat 2D vector infographic in a minimal technical-illustration style. Wide landscape orientation
+(2:1 aspect ratio, e.g. 2560 x 1280).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
 blue #2563EB as the single primary accent, light gray #E2E8F0 for container boxes,
 orange #F59E0B for highlights only. Uniform medium-weight rounded strokes, simple geometric
@@ -130,16 +130,21 @@ Render every quoted label verbatim, exactly once, with no extra, invented, or du
 No text other than the labels listed below.
 
 DIAGRAM CONTENT:
-LAYOUT: A horizontal timeline starting at the left that forks into two branches
-at a point around the middle. The upper branch continues as a solid blue line;
-the lower branch continues as a dashed gray line.
+LAYOUT: A horizontal timeline. A single dark line starts at the left edge at the vertical center
+and runs right to a fork point at about the middle of the canvas. From that fork point, two
+branches continue to the right: one angling up and then running flat to the right edge, the
+other angling down and then running flat to the right edge. Both branches end at the same
+horizontal position. Each branch has a two-line text label at its right end.
 ELEMENTS:
-- Starting dot on the left labeled "2016 yarn v1"
-- Fork point marked with a dot labeled "2020 Berry"
-- Upper solid blue branch ending with an arrowhead, labeled "yarn v4 PnP"
-- Lower dashed gray branch ending flat, labeled "v1 maintenance"
-- A small orange group-of-people icon sitting on the lower branch labeled "many teams"
-ARROWS: the two branch lines themselves; no additional arrows.
+- A dot at the left end of the starting line, with a two-line label above it: "2016" then
+  "yarn v1"
+- A dot at the fork point, with a two-line label above it: "2020" then "Berry"
+- The upper branch is a solid blue line. At its right end, a two-line label: "yarn v4" then
+  "PnP"
+- The lower branch is a dashed dark line. At its right end, a two-line label: "yarn v1" then
+  "maintenance"
+ARROWS: the upper branch ends with an arrowhead pointing right. The lower branch ends flat with
+no arrowhead. No other arrows, lines, or connectors anywhere in the diagram.
 -->
 
 ::: info なぜ v2 を「別物」にしてしまったのか
