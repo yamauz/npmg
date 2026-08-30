@@ -49,11 +49,10 @@ Done in 413ms
 ここで `du -sh node_modules` を実行すると、1 つ目のプロジェクトと同じ **3.7M** と表示されます。「共有されていないのでは?」と疑いたくなりますが、du が数えているのは各パスから見えた**論理サイズ**です。実体のディスクブロックはストアと共有されており、macOS/APFS のクローンでは、書き換えが起きたファイルだけがその時点で実体化します。「du の数字が同じ = 節約されていない」ではありません。
 :::
 
-<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-10-1.png に保存し、下の行のコメントを外してください -->
-<!-- ![図 10-1: store 共有によるディスク節約](/images/fig-10-1.png) -->
-
-> **🖼️ 図 10-1|store 共有によるディスク節約**(画像プレースホルダー)
-> 生成後は `docs/public/images/fig-10-1.png` に配置してください。
+<figure>
+  <img src="/images/fig-10-1.png" alt="store 共有によるディスク節約">
+  <figcaption><span class="fig-num">図 10-1</span> store 共有によるディスク節約</figcaption>
+</figure>
 
 <!-- 図 10-1 の生成プロンプト(採用版・ページには出しない)
 
@@ -69,15 +68,24 @@ Render every quoted label verbatim, exactly once, with no extra, invented, or du
 No text other than the labels listed below.
 
 DIAGRAM CONTENT:
-LAYOUT: Two panels side by side. The left panel shows three folders each with its own
-solid stack of files. The right panel shows three folders all connected to one cylinder.
+LAYOUT: Two panels side by side, separated by generous white space, each the same width and
+height, and each with its title centered above the panel, outside it. Inside the left panel,
+three equally sized boxes are stacked vertically, and each one contains a smaller box inside it.
+Inside the right panel, three equally sized boxes are stacked vertically on the right side, and
+one tall cylinder stands on the left side, with three arrows going from the cylinder to the
+three boxes.
+ICON STYLE: every icon is a simple line-art outline drawing, drawn with the same uniform dark
+stroke as the boxes, with no fill, no color, no gradient, and no 3D shading. Icons must look
+like monochrome outline pictograms, not illustrations.
 ELEMENTS:
-- Left panel (light gray) labeled "npm" containing three folder icons, each with a solid
-  file-stack icon, and a group caption labeled "full copies"
-- Right panel (light gray) labeled "pnpm" containing three folder icons and one blue
-  cylinder labeled "one store"
-ARROWS: a labeled arrow reading "hard link" pointing from "one store" to the nearest
-folder in the right panel, plain arrows from "one store" to the other two folders.
+- Left panel titled "npm". Its three white boxes with thin dark outlines are labeled "Project A",
+  "Project B", "Project C". Each contains one smaller box with a thick orange outline, and each
+  of those three inner boxes is labeled "files".
+- Right panel titled "pnpm". Its three white boxes with thin dark outlines are labeled
+  "Project A", "Project B", "Project C", and none of them contains an inner box. The cylinder
+  has a thick blue outline and white fill, no icon, and is labeled "store".
+ARROWS: exactly three plain dark arrows, all inside the right panel, one from the cylinder to
+each of the three boxes. No arrow labels. No other lines, arrows, or connectors anywhere.
 -->
 
 ## ② 速度 — 公式ベンチマークで見る
