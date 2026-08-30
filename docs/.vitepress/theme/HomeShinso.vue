@@ -34,8 +34,8 @@ const appendices = [
       <HeroNetwork />
       <div class="hero__inner">
         <div class="hero__copy">
-          <h1 class="hero__title">見えない階層を、<br />正確にたどる。</h1>
-          <p class="hero__lead">パッケージマネージャーの仕組みを、根本から理解する。</p>
+          <h1 class="hero__title">node_modulesの深層を、<br />正確にたどる。</h1>
+          <p class="hero__lead">Node.js パッケージマネージャーの仕組みを、根本から理解する。</p>
           <div class="hero__actions">
             <a class="btn btn--primary" :href="withBase('/introduction')">読む</a>
             <a class="btn btn--ghost" href="#toc">目次を見る</a>
@@ -175,9 +175,11 @@ const appendices = [
 }
 
 .hero__title {
-  font-size: clamp(34px, 4.4vw, 56px);
+  /* latin(node_modules)だけ自然にモノスペースになり、和文は Noto Sans のまま */
+  font-family: 'JetBrains Mono', var(--font-body);
+  font-size: clamp(28px, 3.6vw, 46px);
   font-weight: 700;
-  line-height: 1.42;
+  line-height: 1.55;
   letter-spacing: 0.01em;
   margin: 0 0 var(--space-md);
 }

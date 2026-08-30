@@ -2,7 +2,7 @@
 
 npm / yarn / pnpm、その下にある構造。フロントエンド開発者のための教科書サイト(VitePress 製)です。
 
-公開 URL: https://node-modules-shinso.yamauz.workers.dev
+公開 URL: https://npmg.yamauz.workers.dev
 
 パッケージマネージャーの基礎(package.json、node_modules、ロックファイル)から、npm → yarn → pnpm の変遷、そして pnpm の内部構造と実務機能までを、全 12 章 + 付録で解説します。
 

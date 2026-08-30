@@ -94,11 +94,12 @@ body {
 /* --------------------------------------------------------------------------
    ナビゲーション
    -------------------------------------------------------------------------- */
+/* ワードマーク npmg はモノスペース小文字(URL: npmg.yamauz.workers.dev と揃える) */
 .VPNavBarTitle .title {
-  font-family: var(--font-body);
+  font-family: var(--font-mono-tokens);
   font-weight: 700;
   font-size: 16px;
-  letter-spacing: 0;
+  letter-spacing: 0.06em;
 }
 
 .VPNavBar {

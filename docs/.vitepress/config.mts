@@ -20,7 +20,7 @@ export default withMermaid(defineConfig({
   ],
   themeConfig: {
     logo: { light: '/logo.svg', dark: '/logo-dark.svg' },
-    siteTitle: 'node_modulesの深層',
+    siteTitle: 'npmg',
     nav: [
       { text: 'はじめに', link: '/introduction' },
       { text: '基礎', link: '/basics/01-what-is-a-package-manager' },
