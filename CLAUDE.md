@@ -24,8 +24,6 @@ node scripts/og-image.mjs --all       # 両方
 
 変更は必ず `pnpm build` とスクリーンショット(ライト/ダーク両方)で確認してからデプロイする。
 
-⚠️ **章の H1 を変更したら `node scripts/og-image.mjs --chapters` を再実行する**。OGP 画像は H1 から焼いた静的 PNG なので、自動では追従しない。
-
 ## デプロイ
 
 **通常は main への push で自動デプロイされる**(Cloudflare Workers Builds が GitHub リポジトリ `yamauz/npmg` と GUI 連携済み。ダッシュボード側でビルド・デプロイまで実行される)。GitHub Actions のワークフローは置いていない。
@@ -33,6 +31,23 @@ node scripts/og-image.mjs --all       # 両方
 ⚠️ **パッケージマネージャーは pnpm**。Cloudflare のビルド設定はダッシュボード側にあるため、リポジトリからは変更できない。ビルドコマンド/インストールコマンドが `npm` のままだと失敗するので、Cloudflare ダッシュボードの Build settings も pnpm に合わせること(`pnpm install` / `pnpm build`)。
 
 `pnpm deploy` は手元からの手動デプロイ用に残してある。Cloudflare 側のビルドが落ちたときの逃げ道。
+
+## OGP(ページを追加・編集したら必ず読む)
+
+OGP 画像は **H1 から焼いた静的 PNG**(`docs/public/og/<slug>.png`)。ビルドでは生成されないので、**自動では追従しない**。動的生成は検討済みだが、背景の星座が WebGPU 由来で Workers 上では描けないため静的で運用する(2026-08-30 決定)。
+
+以下をやったら `node scripts/og-image.mjs --chapters` を再実行する:
+
+- **ページを新規追加した** — 再実行しないと OGP 画像が 404 になる。**ビルドは通ってしまい、エラーも出ない**ので気づけない
+- **H1(章タイトル)を変更した** — 画像は古いタイトルのまま残る
+- **ページを削除・リネームした** — `docs/public/og/` に孤児 PNG が残るので手で消す
+
+補足:
+
+- スラッグは `docs/` からの相対パスの `/` を `-` にしたもの(`pnpm/09-how-pnpm-works.md` → `pnpm-09-how-pnpm-works.png`)。`config.mts` の `transformPageData` が同じ規則で参照するため、**ファイル名を手で変えない**
+- TOP だけは別枠(`docs/public/og.png`)。ヒーローのキャッチコピーではなく **`Node.js Package Manager Guide`** をサブタイトルに置く
+- 章タイトルのフォントサイズはブラウザ側で実測して自動調整される。和欧混植では文字数から行数を予測できないため、**長いタイトルを付けても組みは壊れない**(34px まで縮めて 1 行に収まらなければ 2 行を許容)
+- 生成後は必ず出来上がった PNG を目視する。文字が背景の星座と重なって読みにくくなっていないか確認する
 
 ## 執筆の絶対原則
 
