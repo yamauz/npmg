@@ -103,11 +103,10 @@ flowchart TD
 
 注目すべきは、この連鎖の当事者のほぼ全員が left-pad を**直接は使っていない**ことです。本章冒頭の水道網の比喩でいえば、浄水場の小さなバルブが 1 つ閉じただけで、蛇口しか知らない全世帯が断水した——依存グラフの「深さ」が、そのまま被害の「広さ」に変換されたのです。
 
-<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-05-2.png に保存し、下の行のコメントを外してください -->
-<!-- ![図 5-2: left-pad 事件 — 小さな 1 ブロックを抜くと崩れるタワー](/images/fig-05-2.png) -->
-
-> **🖼️ 図 5-2|left-pad 事件 — 小さな 1 ブロックを抜くと崩れるタワー**(画像プレースホルダー)
-> 生成後は `docs/public/images/fig-05-2.png` に配置してください。
+<figure>
+  <img src="/images/fig-05-2.png" alt="left-pad 事件 — 小さな 1 ブロックを抜くと崩れるタワー">
+  <figcaption><span class="fig-num">図 5-2</span> left-pad 事件 — 小さな 1 ブロックを抜くと崩れるタワー</figcaption>
+</figure>
 
 <!-- 図 5-2 の生成プロンプト(採用版・ページには出しない)
 
@@ -123,16 +122,22 @@ Render every quoted label verbatim, exactly once, with no extra, invented, or du
 No text other than the labels listed below.
 
 DIAGRAM CONTENT:
-LAYOUT: Two towers of stacked blocks side by side. The left tower stands stable;
-the right tower is the same tower tilting and collapsing because its bottom block is missing.
+LAYOUT: Two towers of stacked blocks side by side, separated by generous white space, both
+sitting on the same horizontal baseline. Each tower is four blocks tall, stacked vertically with
+the widest block at the bottom. The left tower stands upright and intact. The right tower is the
+same tower after its bottom block has been removed: the three upper blocks are tilted and
+falling apart, and an empty dashed outline sits where the bottom block used to be.
 ELEMENTS:
-- Left tower, from top to bottom: a blue block labeled "your app",
-  a light gray block labeled "Babel", a light gray block labeled "many packages",
-  and a small orange block at the very bottom labeled "left-pad"
-- Right tower: the same three upper blocks tilting and falling,
-  with an empty dashed outline where the bottom block used to be
-ARROWS: one labeled arrow reading "unpublish" pointing from the orange bottom block
-of the left tower outward to the space between the two towers.
+- Left tower, from top to bottom: a white box with a thin dark outline labeled "your app", a
+  white box with a thin dark outline labeled "Babel", a white box with a thin dark outline
+  labeled "many packages", and at the very bottom a white box with a thick orange outline
+  labeled "left-pad"
+- Right tower: the same three upper boxes, tilted at different angles and separated as if
+  falling, keeping their labels "your app", "Babel", "many packages"
+- At the bottom of the right tower, an empty dashed orange outline where "left-pad" used to be
+- Below the left tower, centered, a text label reading "before"
+- Below the right tower, centered, an orange text label reading "after unpublish"
+ARROWS: none. No other lines or connectors anywhere in the diagram.
 -->
 
 事件が示した教訓は 2 つあります。第一に、**依存グラフは自分が見えている範囲よりはるかに深く、脆い**ということ。直接依存が 10 個でも、間接依存を含めれば数百〜数千になり、そのどれか 1 つが消えるだけで全体が壊れます。第二に、**レジストリはもはや公共インフラであり、「作者の自由」だけでは運営できない**ということ。npm はこの事件を受けて、一度公開して一定条件を満たしたパッケージは原則 unpublish できないようポリシーを改めました。
