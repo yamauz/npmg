@@ -57,7 +57,7 @@ npm の世界のバージョン番号は、**セマンティックバージョ�
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: dark navy #1E293B for text and outlines,
-blue #3B82F6 as the single primary accent, light gray #E2E8F0 for container boxes,
+blue #2563EB as the single primary accent, light gray #E2E8F0 for container boxes,
 orange #F59E0B for highlights only. Uniform medium-weight rounded strokes, simple geometric
 icons, generous white space, clear visual hierarchy.
 No gradients, no shadows, no 3D, no textures, no photorealism, no decorative background elements.
@@ -104,7 +104,7 @@ semver の約束を前提に、package.json では「どこまでの更新を自
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: dark navy #1E293B for text and outlines,
-blue #3B82F6 as the single primary accent, light gray #E2E8F0 for container boxes,
+blue #2563EB as the single primary accent, light gray #E2E8F0 for container boxes,
 orange #F59E0B for highlights only. Uniform medium-weight rounded strokes, simple geometric
 icons, generous white space, clear visual hierarchy.
 No gradients, no shadows, no 3D, no textures, no photorealism, no decorative background elements.
@@ -153,7 +153,7 @@ dependencies 系のフィールドは 4 種類あります。どれに書くか�
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: dark navy #1E293B for text and outlines,
-blue #3B82F6 as the single primary accent, light gray #E2E8F0 for container boxes,
+blue #2563EB as the single primary accent, light gray #E2E8F0 for container boxes,
 orange #F59E0B for highlights only. Uniform medium-weight rounded strokes, simple geometric
 icons, generous white space, clear visual hierarchy.
 No gradients, no shadows, no 3D, no textures, no photorealism, no decorative background elements.

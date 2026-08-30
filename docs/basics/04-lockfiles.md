@@ -31,7 +31,7 @@ semver の約束が完璧なら困らないはずですが、現実には MINOR 
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: dark navy #1E293B for text and outlines,
-blue #3B82F6 as the single primary accent, light gray #E2E8F0 for container boxes,
+blue #2563EB as the single primary accent, light gray #E2E8F0 for container boxes,
 orange #F59E0B for highlights only. Uniform medium-weight rounded strokes, simple geometric
 icons, generous white space, clear visual hierarchy.
 No gradients, no shadows, no 3D, no textures, no photorealism, no decorative background elements.
@@ -128,7 +128,7 @@ package.json は注文書です。「牛乳を 1 本。メーカーはどこで�
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
 Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
 Pure white background (#FFFFFF). Limited palette: dark navy #1E293B for text and outlines,
-blue #3B82F6 as the single primary accent, light gray #E2E8F0 for container boxes,
+blue #2563EB as the single primary accent, light gray #E2E8F0 for container boxes,
 orange #F59E0B for highlights only. Uniform medium-weight rounded strokes, simple geometric
 icons, generous white space, clear visual hierarchy.
 No gradients, no shadows, no 3D, no textures, no photorealism, no decorative background elements.

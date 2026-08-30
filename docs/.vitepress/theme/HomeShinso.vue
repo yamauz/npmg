@@ -3,12 +3,7 @@
 // ユーザー承認済みのモックアップ(research/lp-redesign-prompt-v4.md の成果物)を実装。
 // 現段階ではトップページのみ。章ページへの展開はこの方向の確定後。
 import { withBase } from 'vitepress'
-import { onBeforeUnmount, onMounted } from 'vue'
 import HeroNetwork from './HeroNetwork.vue'
-
-// トップ表示中だけナビを新トーンに切り替えるためのフック
-onMounted(() => document.documentElement.classList.add('home-v2'))
-onBeforeUnmount(() => document.documentElement.classList.remove('home-v2'))
 
 const chapters = [
   { num: '01', title: 'パッケージマネージャーとは何か', link: '/basics/01-what-is-a-package-manager' },
@@ -99,15 +94,16 @@ const appendices = [
 <style scoped>
 .home {
   /* v2 ローカルトークン(この方向で確定したら design.md / tokens.css に昇格する) */
-  --v2-bg: #fafafa;
-  --v2-ink: #1c1e21;
-  --v2-ink-2: #4b5563;
-  --v2-ink-3: #9aa1ac;
-  --v2-rule: #e4e6ea;
-  --v2-hover: #f1f2f4;
-  --v2-accent: #2563eb;
-  --v2-accent-strong: #1d4ed8;
-  --v2-accent-ink: #ffffff;
+  /* グローバルトークン(tokens.css)への参照。ダークは自動追従する */
+  --v2-bg: var(--color-paper);
+  --v2-ink: var(--color-ink);
+  --v2-ink-2: var(--color-ink-2);
+  --v2-ink-3: var(--color-ink-3);
+  --v2-rule: var(--color-rule);
+  --v2-hover: var(--color-paper-2);
+  --v2-accent: var(--color-accent);
+  --v2-accent-strong: var(--color-accent-strong);
+  --v2-accent-ink: var(--color-accent-ink);
   --container: 1080px;
 
   font-family: var(--font-body);
@@ -115,9 +111,6 @@ const appendices = [
   background: var(--v2-bg);
   overflow-x: clip;
 }
-
-/* ダークモード変種の変数は custom.css の html.dark .home で上書きする
-   (scoped style 内の :global() はコンパイルが壊れる前例があるため使わない) */
 
 .narrow-only {
   display: none;

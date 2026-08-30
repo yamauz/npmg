@@ -1,7 +1,8 @@
 /* ==========================================================================
-   node_modulesの深層 — テーマ実装
-   design.md(プロジェクトルート)がルール。生成りの紙 × 深い森緑 × 明朝。
-   ボックス・絵文字アイコン・グラデーション・グロー禁止。区切りはヘアライン。
+   node_modulesの深層 — テーマ実装 v2
+   design.md(プロジェクトルート)がルール。白 × 墨 × ブルーの「静かな玄関」。
+   カードボックス・絵文字アイコン・グラデーション禁止。区切りはヘアライン。
+   大胆さの予算はトップページのヒーロー(星座シェーダー)に集中し、本文は静かに。
    ========================================================================== */
 @import './tokens.css';
 
@@ -12,7 +13,7 @@
   --vp-c-brand-1: var(--color-accent);
   --vp-c-brand-2: var(--color-accent-strong);
   --vp-c-brand-3: var(--color-accent);
-  --vp-c-brand-soft: oklch(38% 0.065 160 / 0.1);
+  --vp-c-brand-soft: rgba(37, 99, 235, 0.1);
 
   --vp-c-bg: var(--color-paper);
   --vp-c-bg-alt: var(--color-paper-2);
@@ -27,9 +28,9 @@
   --vp-c-text-2: var(--color-ink-2);
   --vp-c-text-3: var(--color-ink-3);
 
-  --vp-code-block-bg: oklch(93% 0.014 95);
+  --vp-code-block-bg: #f1f2f4;
   --vp-c-tip-1: var(--color-accent);
-  --vp-c-tip-soft: oklch(38% 0.065 160 / 0.08);
+  --vp-c-tip-soft: rgba(37, 99, 235, 0.07);
 
   --vp-button-brand-bg: var(--color-accent);
   --vp-button-brand-text: var(--color-accent-ink);
@@ -47,9 +48,9 @@
   --vp-c-bg-alt: var(--color-paper-2);
   --vp-c-bg-soft: var(--color-paper-2);
   --vp-c-bg-elv: var(--color-paper-2);
-  --vp-code-block-bg: oklch(20% 0.028 168);
-  --vp-c-brand-soft: oklch(78% 0.08 155 / 0.14);
-  --vp-c-tip-soft: oklch(78% 0.08 155 / 0.12);
+  --vp-code-block-bg: #14181f;
+  --vp-c-brand-soft: rgba(91, 140, 255, 0.14);
+  --vp-c-tip-soft: rgba(91, 140, 255, 0.1);
 }
 
 /* 横スクロール禁止(slop-test gate 34: clip であって hidden ではない) */
@@ -59,20 +60,20 @@ body {
 }
 
 /* --------------------------------------------------------------------------
-   タイポグラフィ: 見出しは明朝・roman のみ
+   タイポグラフィ: サンセリフ。見出しはウェイトと余白で立てる(イタリック禁止)
    -------------------------------------------------------------------------- */
 .vp-doc h1,
 .vp-doc h2,
 .vp-doc h3 {
   font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: 700;
   font-style: normal;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
 }
 
 .vp-doc h1 {
   font-size: var(--text-2xl);
-  line-height: 1.4;
+  line-height: 1.45;
 }
 
 .vp-doc h2 {
@@ -81,7 +82,7 @@ body {
   margin-top: var(--space-2xl);
 }
 
-/* 英字スモールラベル(COMPARE 等)の共通声色 */
+/* 英字スモールラベルの共通声色 */
 .eyebrow {
   font-family: var(--font-mono-tokens);
   font-size: 12px;
@@ -94,10 +95,10 @@ body {
    ナビゲーション
    -------------------------------------------------------------------------- */
 .VPNavBarTitle .title {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 17px;
-  letter-spacing: 0.02em;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0;
 }
 
 .VPNavBar {
@@ -137,10 +138,6 @@ body {
   font-size: 13px;
 }
 
-.vp-doc table {
-  border-radius: 0;
-}
-
 .vp-doc th {
   background: var(--color-paper-2);
   font-weight: 600;
@@ -175,55 +172,14 @@ body {
   outline-offset: 2px;
 }
 
-/* ボタンは矩形に */
 .VPButton {
   border-radius: var(--radius-card) !important;
   font-family: var(--font-body);
 }
 
 /* --------------------------------------------------------------------------
-   トップページ v2(白×墨×ブルー)表示中のナビ調整
-   ※ この方向で確定したらトークンごと全ページへ展開する
+   Mermaid 図(白いカードに載せ、両モード共通の描画にする)
    -------------------------------------------------------------------------- */
-html.home-v2:not(.dark) {
-  --vp-c-bg: #fafafa;
-  --vp-nav-bg-color: #fafafa;
-  --vp-c-divider: #e4e6ea;
-  --vp-c-text-1: #1c1e21;
-  --vp-c-text-2: #4b5563;
-  --vp-c-brand-1: #2563eb;
-}
-
-html.home-v2 .VPNavBarTitle .title {
-  font-family: var(--font-body);
-  font-weight: 700;
-  letter-spacing: 0;
-}
-
-/* トップページ v2 のダークモード: 墨紙 × 明るいブルー */
-html.home-v2.dark {
-  --vp-c-bg: #101319;
-  --vp-nav-bg-color: #101319;
-  --vp-c-divider: #262b34;
-  --vp-c-text-1: #e6e9ef;
-  --vp-c-text-2: #a3acbb;
-  --vp-c-brand-1: #5b8cff;
-}
-
-/* HomeShinso のローカルトークンをダーク値へ(scoped の :global は使わない) */
-html.dark .home {
-  --v2-bg: #101319;
-  --v2-ink: #e6e9ef;
-  --v2-ink-2: #a3acbb;
-  --v2-ink-3: #5b6472;
-  --v2-rule: #262b34;
-  --v2-hover: #191e26;
-  --v2-accent: #5b8cff;
-  --v2-accent-strong: #7aa2ff;
-  --v2-accent-ink: #0d1117;
-}
-
-/* Mermaid 図 */
 .mermaid-figure {
   display: flex;
   justify-content: center;
@@ -231,26 +187,25 @@ html.dark .home {
   padding: 20px 12px;
   border: 1px solid var(--color-rule);
   border-radius: var(--radius-card);
-  background: #f7f5ef;
+  background: #f7f8fa;
   overflow-x: auto;
 }
 
 .dark .mermaid-figure {
-  background: #f0eee6;
+  background: #f0f1f4;
 }
 
-/* エッジラベルの背景を塗り、同色ストロークで周囲に余白を作って
-   線や矢印がラベル文字に食い込まないようにする */
+/* エッジラベルの背景を塗り、同色ストロークで余白を作って線の食い込みを防ぐ */
 .mermaid-figure .edgeLabel rect.background {
-  fill: #f7f5ef;
-  stroke: #f7f5ef;
+  fill: #f7f8fa;
+  stroke: #f7f8fa;
   stroke-width: 26px;
   stroke-linejoin: round;
 }
 
 .dark .mermaid-figure .edgeLabel rect.background {
-  fill: #f0eee6;
-  stroke: #f0eee6;
+  fill: #f0f1f4;
+  stroke: #f0f1f4;
 }
 
 /* Reduced motion */

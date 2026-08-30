@@ -14,12 +14,12 @@ export default withMermaid(defineConfig({
       'link',
       {
         rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho+B1:wght@600;700&display=swap',
+        href: 'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap',
       },
     ],
   ],
   themeConfig: {
-    logo: '/logo.svg',
+    logo: { light: '/logo.svg', dark: '/logo-dark.svg' },
     siteTitle: 'node_modulesの深層',
     nav: [
       { text: 'はじめに', link: '/introduction' },

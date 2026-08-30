@@ -1,5 +1,13 @@
 [
   {
+    "date": "2026-08-30",
+    "macrostructure": "studied-DNA v2 (quiet documentation entrance + docs layout)",
+    "theme": "studied-DNA v2 (source: image)",
+    "theme_axes": "light / clean-sans / chromatic-blue",
+    "enrichment": "WebGPU constellation (draw-in / resolve signal / cursor probe)",
+    "brief": "v2 全ページ展開: 白×墨×ブルーへ統一、明朝廃止"
+  },
+  {
     "date": "2026-08-29",
     "macrostructure": "studied-DNA (asymmetric hero → numbered hairline strip → inverted compare → TOC rows)",
     "theme": "studied-DNA (source: image)",

@@ -130,7 +130,7 @@ onBeforeUnmount(() => {
   border: 1px solid var(--color-rule);
   border-radius: var(--radius-card);
   overflow: hidden;
-  background: oklch(22% 0.028 168);
+  background: #14181f;
 }
 
 .term__bar {
@@ -138,21 +138,21 @@ onBeforeUnmount(() => {
   justify-content: space-between;
   align-items: center;
   padding: 8px 14px;
-  border-bottom: 1px solid oklch(35% 0.03 168);
-  background: oklch(26% 0.03 168);
+  border-bottom: 1px solid #262b34;
+  background: #191e26;
 }
 
 .term__title {
   font-family: var(--font-mono-tokens);
   font-size: 11px;
   letter-spacing: 0.12em;
-  color: oklch(70% 0.02 145);
+  color: #8b93a2;
 }
 
 .term__replay {
   font-family: var(--font-mono-tokens);
   font-size: 11px;
-  color: oklch(78% 0.05 155);
+  color: #5b8cff;
   background: none;
   border: none;
   cursor: pointer;
@@ -160,7 +160,7 @@ onBeforeUnmount(() => {
 }
 
 .term__replay:hover {
-  color: oklch(90% 0.05 150);
+  color: #7aa2ff;
 }
 
 .term__screen {
@@ -178,16 +178,16 @@ onBeforeUnmount(() => {
 }
 
 .term__row--cmd .term__text {
-  color: oklch(93% 0.015 100);
+  color: #e6e9ef;
   font-weight: 500;
 }
 
 .term__row--out .term__text {
-  color: oklch(72% 0.025 145);
+  color: #9aa5b5;
 }
 
 .term__prompt {
-  color: oklch(78% 0.08 155);
+  color: #5b8cff;
   margin-right: 9px;
   user-select: none;
 }
@@ -198,7 +198,7 @@ onBeforeUnmount(() => {
   height: 15px;
   margin-left: 2px;
   vertical-align: -2px;
-  background: oklch(78% 0.08 155);
+  background: #5b8cff;
   animation: term-blink 1.05s steps(1) infinite;
 }
 
