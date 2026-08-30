@@ -104,8 +104,10 @@ const appendices = [
   --v2-ink-2: #4b5563;
   --v2-ink-3: #9aa1ac;
   --v2-rule: #e4e6ea;
+  --v2-hover: #f1f2f4;
   --v2-accent: #2563eb;
   --v2-accent-strong: #1d4ed8;
+  --v2-accent-ink: #ffffff;
   --container: 1080px;
 
   font-family: var(--font-body);
@@ -113,6 +115,9 @@ const appendices = [
   background: var(--v2-bg);
   overflow-x: clip;
 }
+
+/* ダークモード変種の変数は custom.css の html.dark .home で上書きする
+   (scoped style 内の :global() はコンパイルが壊れる前例があるため使わない) */
 
 .narrow-only {
   display: none;
@@ -139,7 +144,7 @@ const appendices = [
 
 .btn--primary {
   background: var(--v2-accent);
-  color: #fff;
+  color: var(--v2-accent-ink);
   border: 1px solid var(--v2-accent);
 }
 
@@ -267,7 +272,7 @@ const appendices = [
 }
 
 .toc__link:hover {
-  background: #f1f2f4;
+  background: var(--v2-hover);
 }
 
 .toc__link:hover .toc__title {

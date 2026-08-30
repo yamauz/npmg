@@ -12,7 +12,7 @@ const time = Number(process.argv[2] ?? 5)
 const gpu = await init()
 const colorTarget = target(gpu, { size: [width, height] })
 const fx = effect(gpu, NETWORK_WGSL, {
-  set: { params: { time, aspect: width / height, pointer: [0, 0], pscene: [99, 99] } },
+  set: { params: { time, aspect: width / height, pointer: [0, 0], pscene: [99, 99], dark: Number(process.argv[3] ?? 0) } },
 })
 fx.draw(colorTarget)
 const pixels = await colorTarget.read()

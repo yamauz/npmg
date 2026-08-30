@@ -200,6 +200,29 @@ html.home-v2 .VPNavBarTitle .title {
   letter-spacing: 0;
 }
 
+/* トップページ v2 のダークモード: 墨紙 × 明るいブルー */
+html.home-v2.dark {
+  --vp-c-bg: #101319;
+  --vp-nav-bg-color: #101319;
+  --vp-c-divider: #262b34;
+  --vp-c-text-1: #e6e9ef;
+  --vp-c-text-2: #a3acbb;
+  --vp-c-brand-1: #5b8cff;
+}
+
+/* HomeShinso のローカルトークンをダーク値へ(scoped の :global は使わない) */
+html.dark .home {
+  --v2-bg: #101319;
+  --v2-ink: #e6e9ef;
+  --v2-ink-2: #a3acbb;
+  --v2-ink-3: #5b6472;
+  --v2-rule: #262b34;
+  --v2-hover: #191e26;
+  --v2-accent: #5b8cff;
+  --v2-accent-strong: #7aa2ff;
+  --v2-accent-ink: #0d1117;
+}
+
 /* Mermaid 図 */
 .mermaid-figure {
   display: flex;

@@ -2,9 +2,11 @@
 // ヒーロー背面の「依存グラフ星座」(WebGPU / vgpu)。
 // セクション全面に敷く背景レイヤー。テキストはこの上に重なる。
 // WebGPU 非対応環境では何も描かない(静かな白背景のまま)。
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { useData } from 'vitepress'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { NETWORK_WGSL } from './hero-shader.js'
 
+const { isDark } = useData()
 const canvasRef = ref(null)
 const active = ref(false)
 
@@ -35,11 +37,25 @@ onMounted(async () => {
     const target = surface(gpu, canvas, { dpr: [1, 2] })
     const aspect = () => canvas.clientWidth / Math.max(canvas.clientHeight, 1)
     const fx = effect(gpu, NETWORK_WGSL, {
-      set: { params: { time: 5, aspect: aspect(), pointer: [0, 0], pscene: [99, 99] } },
+      set: {
+        params: {
+          time: 5,
+          aspect: aspect(),
+          pointer: [0, 0],
+          pscene: [99, 99],
+          dark: isDark.value ? 1 : 0,
+        },
+      },
     })
     target.onResize(() => fx.set({ params: { aspect: aspect() } }))
 
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    watch(isDark, (v) => {
+      fx.set({ params: { dark: v ? 1 : 0 } })
+      if (reduced) fx.draw(target)
+    })
+
+    if (reduced) {
       // ドローイン完了後の静止フレーム
       fx.set({ params: { time: 40 } })
       fx.draw(target)
