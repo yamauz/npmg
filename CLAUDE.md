@@ -25,6 +25,7 @@ pnpm test        # vitest。md 変換ロジック(scripts/lib/md-transform.mjs)�
 pnpm lint        # oxlint
 pnpm format      # oxfmt で整形。format:check は差分があると落ちる(CI が使う)
 pnpm e2e         # Playwright。ビルド成果物を preview で配信して叩く(e2e:ui で UI モード)
+                 # a11y(axe / WCAG 2.1 AA)も含む
 ```
 
 変更は必ず `pnpm build` とスクリーンショット(ライト/ダーク両方)で確認してからデプロイする。
@@ -55,6 +56,30 @@ PR には CI が走り、以下 2 つが必須チェック(緑にならないと
 ページを追加・リネームしたら **`e2e/pages.ts` の `DOCS` にも足す**。ここが全 E2E の単一の情報源になっている(スラッグ規則は OGP・llms.txt と同一)。
 
 そのほか見ているもの: 全ページ遷移とコンソールエラー、サイドバー全リンクの到達性、Mermaid の SVG 描画、TermDemo の再生、Markdown コピーの実動作、ダーク切替。
+
+### アクセシビリティ(axe)
+
+`e2e/a11y.spec.ts` が全ページ × ライト/ダークを axe で検査し、**WCAG 2.1 AA 違反ゼロを強制**している。淡い補助色やシンタックスハイライトは「読めるが AA には届かない」になりやすく、目視では気づけない。
+
+色を変えるときの注意:
+
+- **コントラストは実測してから決める**。導入時は 920 件出た。特にインラインコードは、半透明の背景が custom-block や表の縞と重なって地が濃くなり、同じ青でも 4.5:1 を割る。そのため `--vp-code-bg` は**不透明色で固定**してある(薄めるだけでは解決しない)
+- **Shiki のトークン色**(コメント・キーワード・文字列)はインライン `style` の CSS 変数で入るため、変数を再定義しても効かない。`custom.css` で `color` を直接上書きしている
+- **ダークの検証はトランジションを止めてから測る**。配色に `background-color 0.5s` が掛かっており、切り替え直後だと遷移途中の色を拾って誤検出する
+
+### Lighthouse
+
+`chrome-devtools-mcp` の `lighthouse_audit` で測れる(`.mcp.json` に設定済み。performance は `performance_start_trace` 側)。
+
+2026-08-31 時点、ローカルの preview で **Performance 98 / Accessibility 100 / Best Practices 100 / SEO 100 / Agentic Browsing 100**。
+
+公開サイトだと Performance が 79 まで落ちるが、これは**コードではなくネットワーク要因**。Google Fonts が `fonts.googleapis.com` → `fonts.gstatic.com` の 2 段になり、CSS だけで 343KB・`@font-face` 390 個を読む(FCP 2.0s / LCP 2.1s)。TBT 0ms・CLS 0 は満点なので、これ以上詰めるならフォントの自己ホスティングが次の一手。
+
+### MCP
+
+`.mcp.json` に **chrome-devtools-mcp**(Chrome DevTools チーム公式、Apache-2.0)を入れてある。ブラウザ操作・コンソール・ネットワーク・パフォーマンストレースに加えて `lighthouse_audit` を持つので、a11y と Lighthouse はこれ 1 つで足りる。Google への使用統計送信は既定で有効なため `--no-usage-statistics` で切ってある。
+
+axe には Deque 公式の MCP(`axe-mcp-server`)もあるが、**有効なライセンス契約が必要な商用製品**なので入れていない。検証に使っているエンジン本体の `axe-core` / `@axe-core/playwright` は MPL-2.0 で無償。
 
 ### フォーマッタ / linter
 

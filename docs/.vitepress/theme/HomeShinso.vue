@@ -44,7 +44,9 @@ const appendices = [
 </script>
 
 <template>
-  <div class="home">
+  <!-- ランドマークとして main を持たせる。VitePress の doc レイアウトは
+       自前で <main> を出すが、layout: page の LP には出ないため -->
+  <main class="home">
     <!-- ヒーロー(背面に依存グラフ星座) -->
     <section class="hero">
       <HeroNetwork />
@@ -91,7 +93,7 @@ const appendices = [
         </nav>
       </div>
     </footer>
-  </div>
+  </main>
 </template>
 
 <style scoped>
