@@ -132,6 +132,35 @@ PR には CI が走り、以下 2 つが必須チェック(緑にならないと
 - 設定を変えたら **バリデータに通す**: `pnpm dlx --package renovate renovate-config-validator`(**引数なしで実行する**。ファイル名を渡すと global config として検証され、リポジトリ設定用のチェックが掛からない)。`packageRules` は**後のルールが前を上書きする**ので、順序を変えると自動マージの線引きが黙って変わる
 - `matchPackageNames` は `depName` ではなく **`packageName` に照合される**。npm では抽出時に `packageName` が空で、lookup 直前に `depName` から補完される(`fetch.ts` の `dep.packageName ??= dep.depName`)。設定を手元で試すスクリプトを書くときはこの補完を再現しないと、ルールがマッチせず「効いていない」と誤読する
 
+### Dependabot alerts(open のまま残っている 4 件について)
+
+**Dependabot alerts は有効**(2026-08-31)。Renovate の `vulnerabilityAlerts` は独自スキャンではなく **GitHub の alerts を読む**ので、これを切ると脆弱性由来の即時 PR が空振りする。
+
+有効化した時点で **4 件が open になり、いずれも今は解消できない**。放置ではなく「上げ先が存在しない」ため。毎回調べ直さないようここに残す:
+
+| # | 深刻度 | パッケージ | 影響 | 修正版 |
+| --- | --- | --- | --- | --- |
+| 3 | high | vite | `server.fs.deny` バイパス(**Windows 限定**) | 6.4.3 |
+| 4 | medium | vite | launch-editor の NTLMv2 ハッシュ漏洩(Windows) | 6.4.3 |
+| 2 | medium | vite | 最適化 deps の `.map` でパストラバーサル | 6.4.2 |
+| 1 | medium | esbuild | 開発サーバーが任意サイトからのリクエストに応答する | 0.25.0 |
+
+**4 件すべて `vitepress@1.6.4` → `vite@5.4.21` / `esbuild@0.21.5` の推移的依存**(`pnpm-lock.yaml`、scope は development)。上げられない理由:
+
+- **vitepress の最新安定版が 1.6.4**(現在使っている版)で、`vite: ^5.4.14` に固定されている
+- **vite 5.4.21 と esbuild 0.21.5 はすでに各系列の最終版**。5.x / 0.21.x にバックポートされたパッチはなく、修正は vite 6.4.3 / esbuild 0.25.0 以降にしかない
+- vitepress 2.0 は **alpha のみ**(2.0.0-alpha.19)。テーマが自作コンポーネントに依存しているので alpha は入れられない
+- vitest(vite 8.2.2)と wrangler(esbuild 0.28.1)側は既に新しく、**そちらは対象外**
+
+実害の評価: **いずれも開発サーバーへの攻撃で、本番配信(Cloudflare Workers の静的アセット)には影響しない。** high の #3 も Windows 限定(本プロジェクトは macOS)、他も `pnpm dev` 稼働中に悪意あるサイトを開いた場合に限られる。
+
+**解消できるのは vitepress 2.0 が安定版になったとき。** そのとき 4 件まとめて消える見込み。Renovate は上げ先がないので PR を出さず、Dependency Dashboard に未解決として並ぶ。
+
+気づくための仕掛けは**既存の設定で足りている**(検証済み。追加設定は不要):
+
+- vitepress 2.0 が安定版になれば **major の PR が出る**(`automerge: false` + `major` ラベルで手動レビューに回る)
+- **alpha では PR は出ない**。`ignoreUnstable` が既定 true なので `2.0.0-alpha.*` は無視される
+
 ### MCP
 
 `.mcp.json` に **chrome-devtools-mcp**(Chrome DevTools チーム公式、Apache-2.0)を入れてある。ブラウザ操作・コンソール・ネットワーク・パフォーマンストレースに加えて `lighthouse_audit` を持つので、a11y と Lighthouse はこれ 1 つで足りる。Google への使用統計送信は既定で有効なため `--no-usage-statistics` で切ってある。
