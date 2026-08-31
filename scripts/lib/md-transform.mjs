@@ -44,6 +44,8 @@ export function expandTermDemo(text) {
  */
 export function expandContainers(text) {
   const LABELS = { tip: 'ヒント', warning: '注意', info: '補足', danger: '警告' }
+  // config.mts の container_info_open と同じマーカー。両方を直すこと
+  const COLUMN_MARK = 'コラム|'
   let out = text
   for (const fence of ['::::', ':::']) {
     // 空白は [ \t]* に限定する。\s* だと改行を跨いで次行の本文まで
@@ -51,8 +53,15 @@ export function expandContainers(text) {
     const open = new RegExp(`^${fence}[ \\t]*(tip|warning|info|danger)[ \\t]*(.*)$`, 'gm')
     out = out
       .replace(open, (_, kind, title) => {
-        const label = LABELS[kind] ?? kind
-        const heading = title.trim() ? `[${label}] ${title.trim()}` : `[${label}]`
+        let text = title.trim()
+        let label = LABELS[kind] ?? kind
+        // ::: info コラム|見出し は読み物コラム。マーカーはページ側では
+        // CSS のフックにしか使わないので、貼り付け用では [コラム] に開く
+        if (text.startsWith(COLUMN_MARK)) {
+          label = 'コラム'
+          text = text.slice(COLUMN_MARK.length).trim()
+        }
+        const heading = text ? `[${label}] ${text}` : `[${label}]`
         return `**${heading}**\n`
       })
       // 開きを処理した後に残る閉じフェンスだけを消す
@@ -67,7 +76,9 @@ export function expandContainers(text) {
  * 画像そのものは貼り付け先で見えないが、図があった事実は残したい。
  */
 export function collapseFigures(text) {
-  return text.replace(/<figure>[\s\S]*?<\/figure>/g, (block) => {
+  // class 付き(<figure class="fig-photo">)も畳む。属性なしだけを見ていると
+  // 写真の figure が生の HTML のまま貼り付け先に流れる
+  return text.replace(/<figure(?:\s[^>]*)?>[\s\S]*?<\/figure>/g, (block) => {
     const caption = block.match(/<figcaption>([\s\S]*?)<\/figcaption>/)?.[1] ?? ''
     const plain = caption
       .replace(/<[^>]+>/g, '') // fig-num の span を落とす

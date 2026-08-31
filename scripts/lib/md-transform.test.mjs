@@ -69,6 +69,16 @@ describe('expandContainers', () => {
     expect(expandContainers(input).trim()).toBe('**[補足] なぜ既定が `^` なのか**\n\n説明')
   })
 
+  it('コラム|マーカーを [コラム] に開き、マーカーは残さない', () => {
+    const input = '::: info コラム|濃度盛汁流・初代大将\n本文\n:::'
+    expect(expandContainers(input).trim()).toBe('**[コラム] 濃度盛汁流・初代大将**\n\n本文')
+  })
+
+  it('コラムでない info は [補足] のままにする', () => {
+    const input = '::: info コラムの書き方\n本文\n:::'
+    expect(expandContainers(input).trim()).toBe('**[補足] コラムの書き方**\n\n本文')
+  })
+
   it('4 種のラベルを日本語にする', () => {
     const out = expandContainers(
       '::: tip A\n:::\n::: warning B\n:::\n::: info C\n:::\n::: danger D\n:::',
@@ -96,6 +106,13 @@ describe('collapseFigures', () => {
 
   it('caption がなければ丸ごと消す', () => {
     expect(collapseFigures('<figure><img src="/a.png"></figure>')).toBe('')
+  })
+
+  it('class 付きの figure も畳む', () => {
+    const input =
+      '<figure class="fig-photo">\n  <img src="/images/ramen-noudo.png" alt="ラーメン">\n  <figcaption>名物　依存地獄らぁめん</figcaption>\n</figure>'
+    // 全角スペースも \s なので半角に正規化される(既存の挙動どおり)
+    expect(collapseFigures(input)).toBe('[名物 依存地獄らぁめん]')
   })
 })
 

@@ -312,3 +312,78 @@ body {
     transition-duration: 150ms !important;
   }
 }
+
+/* --------------------------------------------------------------------------
+   コラム(読み物ボックス)
+   本筋の補足である info/tip とは別に、脇道の読み物であることを示す枠。
+   ::: info コラム|見出し  と書くと、この見た目になる。
+   design.md の流儀に従い、塗りボックスではなく上下 1px ヘアラインで囲み、
+   ラベルはモノスペースの大文字トラッキングで小さく置く。
+   -------------------------------------------------------------------------- */
+.vp-doc .custom-block.info:has(.custom-block-title.is-column) {
+  /* 四辺を 1px ヘアラインで囲む。塗り・影・角丸は使わないので
+     design.md の「カードボックス禁止」とは両立する(罫線の枠) */
+  background: transparent;
+  border: 1px solid var(--color-rule);
+  border-radius: 0;
+  padding: 20px 24px 18px;
+  margin: 32px 0;
+}
+
+/* ラベル(「コラム」)と見出しを 1 行にまとめる */
+.vp-doc .custom-block-title.is-column {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin: 0 0 12px;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.vp-doc .custom-block-title.is-column::before {
+  content: 'COLUMN';
+  flex: none;
+  font-family: var(--font-mono-tokens);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  color: var(--color-ink-3);
+  /* ベースラインを見出しに合わせるための微調整 */
+  transform: translateY(-1px);
+}
+
+/* 本文よりわずかに小さくして「本筋ではない」ことを示す(本文は 16px)。
+   箇条書きも入るので p だけでなく li にも同じサイズを当てる */
+.vp-doc .custom-block.info:has(.custom-block-title.is-column) :is(p, li):not(.custom-block-title) {
+  color: var(--color-ink-2);
+  font-size: 14.5px;
+  line-height: 1.78;
+}
+
+.vp-doc .custom-block.info:has(.custom-block-title.is-column) .custom-block-title.is-column {
+  font-size: 15px;
+}
+
+.vp-doc .custom-block.info:has(.custom-block-title.is-column) p:last-child {
+  margin-bottom: 0;
+}
+
+/* 写真の figure(技術図版ではない挿絵)。
+   図版は白背景のベクター図なので地の色に溶けるが、写真は輪郭が立つ。
+   幅を抑えて中央に置き、キャプションも中央に寄せて「挿絵」として扱う。 */
+.vp-doc figure.fig-photo {
+  margin: 24px auto;
+  max-width: 420px;
+}
+
+.vp-doc figure.fig-photo img {
+  width: 100%;
+}
+
+.vp-doc figure.fig-photo figcaption {
+  text-align: center;
+  font-family: var(--font-mono-tokens);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--color-ink-3);
+}

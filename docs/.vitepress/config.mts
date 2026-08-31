@@ -159,6 +159,25 @@ export default withMermaid(defineConfig({
         const html = defaultRender(tokens, idx, options, env, self)
         return tokens[idx].tag === 'h1' ? `${html}\n<CopyMarkdown />` : html
       }
+
+      // ::: info コラム|見出し を「コラム」枠にする。
+      // markdown-it-container を直に足すと依存が増えるので、VitePress 標準の
+      // info ブロックが吐くタイトル要素に、描画時にクラスを付けるだけにする。
+      // 見た目の実体は custom.css の .custom-block-title.is-column 側。
+      const COLUMN_MARK = 'コラム|'
+      const defaultOpen =
+        md.renderer.rules.container_info_open ??
+        ((tokens, idx, options, _env, self) => self.renderToken(tokens, idx, options))
+
+      md.renderer.rules.container_info_open = (tokens, idx, options, env, self) => {
+        const info = tokens[idx].info ?? ''
+        const at = info.indexOf(COLUMN_MARK)
+        if (at === -1) return defaultOpen(tokens, idx, options, env, self)
+        const title = info.slice(at + COLUMN_MARK.length).trim()
+        return `<div class="info custom-block"><p class="custom-block-title is-column">${md.utils.escapeHtml(
+          title,
+        )}</p>\n`
+      }
     },
   },
   vite: {
