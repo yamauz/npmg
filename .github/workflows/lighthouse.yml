@@ -1,0 +1,126 @@
+name: Lighthouse
+
+on:
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: lighthouse-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    name: preview を監査
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v7
+
+      # Cloudflare Workers Builds がブランチごとに出すプレビュー URL。
+      # 規則は「ブランチ名の / と _ を - にして <branch>-npmg.yamauz.workers.dev」。
+      - name: プレビュー URL を組み立てる
+        id: url
+        run: |
+          slug=$(echo "${{ github.head_ref }}" | tr '/_' '--' | tr '[:upper:]' '[:lower:]')
+          echo "url=https://${slug}-npmg.yamauz.workers.dev" >> "$GITHUB_OUTPUT"
+          echo "プレビュー: https://${slug}-npmg.yamauz.workers.dev"
+
+      # Cloudflare のビルドは GitHub Actions と並行して走るので、
+      # 出来上がるまで待つ。待たずに測ると 1 つ前のデプロイを見てしまう。
+      - name: デプロイを待つ
+        run: |
+          url="${{ steps.url.outputs.url }}"
+          sha="${{ github.event.pull_request.head.sha }}"
+          for i in $(seq 1 40); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "$url/" || echo 000)
+            if [ "$code" = "200" ]; then
+              echo "デプロイ確認 ($i 回目)"
+              exit 0
+            fi
+            echo "待機中... ($i/40, HTTP $code)"
+            sleep 15
+          done
+          echo "::error::プレビュー $url が 10 分以内に応答しなかった"
+          exit 1
+
+      # キャッシュを温める。Cloudflare のコールドスタートは 400ms 以上あり、
+      # 冷えたまま測ると Performance が 10 点以上ぶれる。
+      - name: キャッシュを温める
+        run: |
+          for i in 1 2 3; do
+            curl -s -o /dev/null "${{ steps.url.outputs.url }}/"
+            sleep 2
+          done
+
+      - name: Lighthouse
+        id: lh
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          urls: |
+            ${{ steps.url.outputs.url }}/
+            ${{ steps.url.outputs.url }}/basics/03-node-modules
+          configPath: ./lighthouserc.json
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+
+      # スコアを PR に貼る。Performance は測るたびに 10 点近く揺れるので
+      # 閾値では締めず (lighthouserc.json 参照)、数字を出して人が見る。
+      - name: スコアを PR にコメント
+        if: always() && steps.lh.outputs.resultsPath != ''
+        uses: actions/github-script@v9
+        env:
+          RESULTS_PATH: ${{ steps.lh.outputs.resultsPath }}
+          LINKS: ${{ steps.lh.outputs.links }}
+          PREVIEW_URL: ${{ steps.url.outputs.url }}
+        with:
+          script: |
+            const fs = require('fs')
+            const path = require('path')
+
+            const manifest = JSON.parse(
+              fs.readFileSync(path.join(process.env.RESULTS_PATH, 'manifest.json'), 'utf8')
+            )
+            const links = JSON.parse(process.env.LINKS || '{}')
+            const pct = (n) => Math.round(n * 100)
+
+            // numberOfRuns 回まわしているので、URL ごとに代表実行だけ拾う
+            const byUrl = new Map()
+            for (const m of manifest) {
+              if (m.isRepresentativeRun || !byUrl.has(m.url)) byUrl.set(m.url, m)
+            }
+
+            const rows = [...byUrl.values()].map((m) => {
+              const s = m.summary
+              const p = new URL(m.url).pathname
+              const report = links[m.url]
+              return `| \`${p}\` | ${pct(s.performance)} | ${pct(s.accessibility)} | ${pct(s['best-practices'])} | ${pct(s.seo)} | ${report ? `[レポート](${report})` : '—'} |`
+            })
+
+            const body = [
+              '## Lighthouse (preview)',
+              '',
+              `対象: ${process.env.PREVIEW_URL}`,
+              '',
+              '| ページ | Perf | A11y | Best Practices | SEO | |',
+              '| --- | --- | --- | --- | --- | --- |',
+              ...rows,
+              '',
+              '<sub>Performance は計測ごとに揺れる (Cloudflare のコールドスタート次第で 10 点程度)。傾向を見る用で閾値では締めていない。A11y / Best Practices / SEO は 100 未満で CI が落ちる。</sub>',
+            ].join('\n')
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            })
+            const mine = comments.find(
+              (c) => c.user.type === 'Bot' && c.body.startsWith('## Lighthouse (preview)')
+            )
+
+            const params = { owner: context.repo.owner, repo: context.repo.repo, body }
+            if (mine) {
+              await github.rest.issues.updateComment({ ...params, comment_id: mine.id })
+            } else {
+              await github.rest.issues.createComment({ ...params, issue_number: context.issue.number })
+            }

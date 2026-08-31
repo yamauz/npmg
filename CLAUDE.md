@@ -69,7 +69,15 @@ PR には CI が走り、以下 2 つが必須チェック(緑にならないと
 
 ### Lighthouse
 
-`chrome-devtools-mcp` の `lighthouse_audit` で測れる(`.mcp.json` に設定済み。performance は `performance_start_trace` 側)。
+**PR ごとに自動で走る**(`.github/workflows/lighthouse.yml`)。Cloudflare が出すプレビュー URL を待って監査し、スコアを PR にコメントする。手元で見たいときは `chrome-devtools-mcp` の `lighthouse_audit`(`.mcp.json` に設定済み。performance は `performance_start_trace` 側)。
+
+閾値(`lighthouserc.json`):
+
+- **A11y / Best Practices / SEO は 100 未満で落ちる**
+- **TBT・CLS も閾値あり**(200ms / 0.1)
+- **Performance と LCP は閾値を置いていない。** 計測ごとに 10 点近く揺れる(実測 88〜97)ため。Cloudflare のコールドスタートが 400ms 以上あり、これが LCP の半分近くを占める。数字はコメントに出るので人が見る
+
+**Performance を測るときは 1 回の数字で判断しない。** ウォームアップしてから 3〜5 回測る。
 
 2026-08-31 時点(desktop プリセット):
 
