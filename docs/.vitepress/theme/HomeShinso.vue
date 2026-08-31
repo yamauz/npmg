@@ -19,7 +19,11 @@ function scrollToToc(e) {
 }
 
 const chapters = [
-  { num: '01', title: 'パッケージマネージャーとは何か', link: '/basics/01-what-is-a-package-manager' },
+  {
+    num: '01',
+    title: 'パッケージマネージャーとは何か',
+    link: '/basics/01-what-is-a-package-manager',
+  },
   { num: '02', title: 'package.json とバージョン範囲', link: '/basics/02-package-json-and-semver' },
   { num: '03', title: 'node_modules の構造', link: '/basics/03-node-modules' },
   { num: '04', title: 'ロックファイルの役割', link: '/basics/04-lockfiles' },
@@ -111,7 +115,6 @@ const appendices = [
   overflow-x: clip;
 }
 
-
 /* ボタン(a / button 両対応) */
 .btn {
   display: inline-block;
@@ -123,7 +126,9 @@ const appendices = [
   font-weight: 600;
   line-height: 1;
   text-decoration: none;
-  transition: background-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out),
+  transition:
+    background-color var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out),
     border-color var(--dur-base) var(--ease-out);
 }
 

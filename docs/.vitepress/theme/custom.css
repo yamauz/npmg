@@ -263,10 +263,14 @@ body {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   background:
-    linear-gradient(to right, var(--vp-c-bg) 30%, rgba(0, 0, 0, 0)) left center / 24px 100% no-repeat local,
-    linear-gradient(to left, var(--vp-c-bg) 30%, rgba(0, 0, 0, 0)) right center / 24px 100% no-repeat local,
-    linear-gradient(to right, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0)) left center / 12px 100% no-repeat scroll,
-    linear-gradient(to left, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0)) right center / 12px 100% no-repeat scroll;
+    linear-gradient(to right, var(--vp-c-bg) 30%, rgba(0, 0, 0, 0)) left center / 24px 100%
+      no-repeat local,
+    linear-gradient(to left, var(--vp-c-bg) 30%, rgba(0, 0, 0, 0)) right center / 24px 100%
+      no-repeat local,
+    linear-gradient(to right, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0)) left center / 12px 100%
+      no-repeat scroll,
+    linear-gradient(to left, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0)) right center / 12px 100%
+      no-repeat scroll;
 }
 
 /* コマンドや識別子は折り返さない。表の主役はこれ */

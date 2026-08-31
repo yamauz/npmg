@@ -1,0 +1,11 @@
+{
+  "semi": false,
+  "singleQuote": true,
+  "ignorePatterns": [
+    "docs/.vitepress/cache/**",
+    "docs/.vitepress/dist/**",
+    "docs/public/**",
+    "**/*.md",
+    "research/**"
+  ]
+}

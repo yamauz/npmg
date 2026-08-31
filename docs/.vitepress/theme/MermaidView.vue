@@ -94,7 +94,10 @@ async function draw() {
   try {
     // 再レンダリングごとに一意な id を使う(同一 id の再利用は mermaid が失敗する)
     renderCount += 1
-    const { svg: code } = await mermaid.render(`${props.id}-r${renderCount}`, decodeURIComponent(props.graph))
+    const { svg: code } = await mermaid.render(
+      `${props.id}-r${renderCount}`,
+      decodeURIComponent(props.graph),
+    )
     svg.value = code
   } catch {
     // 構文エラー時はソースをそのまま見せる(執筆時に気づけるように)

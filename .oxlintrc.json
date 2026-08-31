@@ -1,0 +1,12 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["vue", "unicorn", "oxc"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "error"
+  },
+  "rules": {
+    "unicorn/no-array-sort": "off"
+  },
+  "ignorePatterns": ["docs/.vitepress/cache/**", "docs/.vitepress/dist/**", "docs/public/**"]
+}

@@ -25,12 +25,10 @@ describe('expandTermDemo', () => {
     expect(expandTermDemo(input)).toBe('```sh\n$ ls\na b\n```')
   })
 
-  it("エスケープされたシングルクォートを元に戻す", () => {
+  it('エスケープされたシングルクォートを元に戻す', () => {
     // 実データ(9章)にある形。\' をそのまま出すと貼り付け先で壊れる
     const input = String.raw`<TermDemo :lines="[{ out: 'Error: Cannot find module \'body-parser\'' }]" />`
-    expect(expandTermDemo(input)).toBe(
-      "```sh\nError: Cannot find module 'body-parser'\n```",
-    )
+    expect(expandTermDemo(input)).toBe("```sh\nError: Cannot find module 'body-parser'\n```")
   })
 
   it('同一ファイル内の複数の TermDemo をそれぞれ展開する', () => {
@@ -177,7 +175,8 @@ Flat 2D vector infographic. Pure white background (#FFFFFF).
   })
 
   it('通常の Markdown は壊さない', () => {
-    const input = '# 章\n\n- 箇条書き\n- `コード`\n\n```js\nconst a = 1\n```\n\n| A | B |\n| - | - |\n| 1 | 2 |'
+    const input =
+      '# 章\n\n- 箇条書き\n- `コード`\n\n```js\nconst a = 1\n```\n\n| A | B |\n| - | - |\n| 1 | 2 |'
     const out = toPlainMarkdown(input)
     expect(out).toContain('- 箇条書き')
     expect(out).toContain('const a = 1')

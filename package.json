@@ -1,21 +1,32 @@
 {
   "name": "package-manager-guide",
-  "private": true,
   "version": "0.0.0",
-  "packageManager": "pnpm@11.23.0",
+  "private": true,
   "type": "module",
   "scripts": {
     "dev": "vitepress dev docs",
     "llms": "node scripts/llms-txt.mjs",
-  "images": "node scripts/optimize-images.mjs",
+    "images": "node scripts/optimize-images.mjs",
     "test": "vitest run",
+    "lint": "oxlint",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
+    "e2e": "playwright test",
+    "e2e:ui": "playwright test --ui",
     "build": "vitepress build docs",
     "preview": "vitepress preview docs",
     "deploy": "pnpm run build && wrangler deploy"
   },
+  "dependencies": {
+    "@vgpu/wgsl": "^0.3.1",
+    "vgpu": "^0.3.1"
+  },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@webgpu/types": "^0.1.72",
     "mermaid": "^11.17.2",
+    "oxfmt": "^0.65.0",
+    "oxlint": "^1.80.0",
     "playwright-core": "^1.62.1",
     "pngjs": "^7.0.0",
     "sharp": "^0.35.4",
@@ -24,8 +35,5 @@
     "vitest": "^4.1.11",
     "wrangler": "^4.127.1"
   },
-  "dependencies": {
-    "@vgpu/wgsl": "^0.3.1",
-    "vgpu": "^0.3.1"
-  }
+  "packageManager": "pnpm@11.23.0"
 }
