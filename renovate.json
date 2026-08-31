@@ -1,0 +1,98 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", ":semanticCommitsDisabled"],
+  "timezone": "Asia/Tokyo",
+  "schedule": ["before 9am on monday"],
+  "prConcurrentLimit": 3,
+  "prHourlyLimit": 2,
+  "labels": ["dependencies"],
+  "platformAutomerge": true,
+  "commitMessageTopic": "{{depName}}",
+  "commitMessageAction": "更新",
+  "commitMessageExtra": "{{currentVersion}} → {{newVersion}}",
+  "prHeader": "Renovate による依存更新。CI(`lint / format / unit` と `build / e2e`)が緑なら中身は動いている。",
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 9am on the first day of the month"]
+  },
+  "dependencyDashboard": true,
+  "dependencyDashboardTitle": "Renovate: 依存更新ダッシュボード",
+  "packageRules": [
+    {
+      "description": "devDependencies の patch / minor は CI が緑なら自動マージ",
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["patch", "minor"],
+      "automerge": true,
+      "automergeType": "pr"
+    },
+    {
+      "description": "GitHub Actions は patch / minor を自動マージ。digest 固定はしていないのでタグ追従で足りる",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["patch", "minor"],
+      "automerge": true,
+      "automergeType": "pr"
+    },
+    {
+      "description": "vgpu はヒーローシェーダーの実行基盤。壊れても CI では見えない(WebGPU は E2E で描いていない)ので必ず人が見る",
+      "matchPackageNames": ["vgpu", "@vgpu/wgsl", "@vgpu/adapter-node"],
+      "automerge": false,
+      "addLabels": ["要目視確認"],
+      "prBodyNotes": [
+        "⚠️ ヒーローの WebGPU シェーダーに関わる。マージ前に `pnpm dev` で星座が描かれるか目視する(E2E は WebGPU を検査していない)。"
+      ]
+    },
+    {
+      "description": ".node-version は CI と Cloudflare の実行環境そのもの。major/minor は挙動が変わるので人が見る",
+      "matchManagers": ["nodenv"],
+      "automerge": false,
+      "addLabels": ["要目視確認"],
+      "prBodyNotes": [
+        "⚠️ Node のバージョンを上げる。Cloudflare Workers Builds 側の Node バージョンとも揃っているか確認する。"
+      ]
+    },
+    {
+      "description": "runs-on は ubuntu-latest 固定で運用する。バージョン固定の PR は出さない",
+      "matchDepTypes": ["github-runner"],
+      "enabled": false
+    },
+    {
+      "description": "major はすべて手動。Playwright / VitePress / Mermaid は上げると挙動が変わる",
+      "matchUpdateTypes": ["major"],
+      "automerge": false,
+      "addLabels": ["major"]
+    },
+    {
+      "description": "playwright と playwright-core、axe-core と @axe-core/playwright はバージョンを揃える",
+      "matchPackageNames": ["@playwright/test", "playwright-core"],
+      "groupName": "playwright"
+    },
+    {
+      "matchPackageNames": ["axe-core", "@axe-core/playwright"],
+      "groupName": "axe-core"
+    },
+    {
+      "description": "oxlint と oxfmt は同じ oxc 系。まとめて上げる",
+      "matchPackageNames": ["oxlint", "oxfmt"],
+      "groupName": "oxc"
+    },
+    {
+      "description": "wrangler は Cloudflare のデプロイに直結する。自動マージせず人が見る",
+      "matchPackageNames": ["wrangler"],
+      "automerge": false
+    },
+    {
+      "description": "pnpm 自体(packageManager フィールド)は Cloudflare のビルド設定と揃える必要がある。手動",
+      "matchDepTypes": ["packageManager"],
+      "automerge": false,
+      "addLabels": ["要目視確認"],
+      "prBodyNotes": [
+        "⚠️ Cloudflare ダッシュボードのビルド設定と pnpm のバージョンが乖離しないか確認する。"
+      ]
+    }
+  ],
+  "vulnerabilityAlerts": {
+    "labels": ["security"],
+    "schedule": ["at any time"],
+    "automerge": false
+  }
+}

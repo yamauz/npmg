@@ -11,6 +11,10 @@ concurrency:
 jobs:
   audit:
     name: preview を監査
+    # Renovate の依存更新には回さない。プレビューの生成待ちに 10 分使うのに対して
+    # 得られるのはバンドルサイズの間接的な確認だけで、割に合わない。
+    # 依存を上げてパフォーマンスを見たいときは手で ci/ ブランチを切る。
+    if: ${{ !startsWith(github.head_ref, 'renovate/') }}
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
