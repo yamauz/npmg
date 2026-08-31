@@ -71,9 +71,16 @@ PR には CI が走り、以下 2 つが必須チェック(緑にならないと
 
 `chrome-devtools-mcp` の `lighthouse_audit` で測れる(`.mcp.json` に設定済み。performance は `performance_start_trace` 側)。
 
-2026-08-31 時点、ローカルの preview で **Performance 98 / Accessibility 100 / Best Practices 100 / SEO 100 / Agentic Browsing 100**。
+2026-08-31 時点(desktop プリセット):
 
-公開サイトだと Performance が 79 まで落ちるが、これは**コードではなくネットワーク要因**。Google Fonts が `fonts.googleapis.com` → `fonts.gstatic.com` の 2 段になり、CSS だけで 343KB・`@font-face` 390 個を読む(FCP 2.0s / LCP 2.1s)。TBT 0ms・CLS 0 は満点なので、これ以上詰めるならフォントの自己ホスティングが次の一手。
+| | Perf | A11y | Best Practices | SEO | Agentic |
+| --- | --- | --- | --- | --- | --- |
+| ローカル preview | 98 | 100 | 100 | 100 | 100 |
+| 公開サイト | 94〜97 | 100 | 100 | 100 | 100 |
+
+**公開サイトの Performance は測るたびに 94〜97 で揺れる**ので、1 回の数字で判断しない。落ちているのは FCP / LCP だけで、TBT 0ms・CLS 0 は常に満点。
+
+残っているボトルネックは Google Fonts。`fonts.googleapis.com` → `fonts.gstatic.com` の 2 段アクセスになり、CSS だけで 343KB・`@font-face` 390 個を読む(未使用 CSS の指摘 109KB のうち 92KB がこれ)。これ以上詰めるならフォントの自己ホスティングが次の一手だが、全書体に関わるので design.md 側の判断が要る。
 
 ### MCP
 
