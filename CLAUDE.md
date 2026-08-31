@@ -69,7 +69,23 @@ PR には CI が走り、以下 2 つが必須チェック(緑にならないと
 
 ### Lighthouse
 
-`chrome-devtools-mcp` の `lighthouse_audit` で測れる(`.mcp.json` に設定済み。performance は `performance_start_trace` 側)。
+**PR ごとに自動で走る**(`.github/workflows/lighthouse.yml`)。Cloudflare が出すプレビュー URL を待って監査し、スコアを PR にコメントする。手元で見たいときは `chrome-devtools-mcp` の `lighthouse_audit`(`.mcp.json` に設定済み。performance は `performance_start_trace` 側)。
+
+閾値(`lighthouserc.json`):
+
+**落ちるのは A11y と Best Practices と TBT だけ。** それ以外は数字をコメントに出して人が見る。理由は環境差が大きすぎて閾値として機能しないため:
+
+| 指標 | 本番の実測 | CI (プレビュー + Linux ランナー) |
+| --- | --- | --- |
+| Performance | 94〜98 | 78〜93 |
+| CLS | 0.024〜0.082 | 0.23〜0.35 |
+| SEO | 100 | **必ず 66** |
+
+- **SEO 66 は誤検出。** Cloudflare がプレビューに `x-robots-tag: noindex` を付けるため、原理的にプレビューでは検査できない
+- **Performance の揺れ**は Cloudflare のコールドスタート(400ms 超)が LCP の半分近くを占めるため。**1 回の数字で判断しない。** ウォームアップしてから 3〜5 回測る
+- **CLS が CI で跳ねる**のは、ランナーに Hiragino も Yu Gothic もなく `sans-serif` に落ちるため。Web フォント適用前後で本文の行送りが変わる
+
+既知の劣化: **本番の CLS が 0.014 → 0.024〜0.082 に悪化している**(2026-08-31、Inter を外してフォント読み込みの順序が変わった副作用)。Lighthouse が指す発生源は本文の `<p>` とヘッダーの `.container` で、原因はいずれも「Web font loaded」。「good」の範囲(0.1 未満)には収まっているので今回は許容した。詰めるならフォールバックの指標合わせ(`size-adjust` / `ascent-override` を持つローカルフォント定義)が次の一手。**Mermaid の遅延読み込みは無関係**(`min-height` も Suspense の `#fallback` に枠を置くのも効果がないことを実測で確認済み)。
 
 2026-08-31 時点(desktop プリセット):
 
