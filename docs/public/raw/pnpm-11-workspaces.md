@@ -57,7 +57,7 @@ flowchart TD
 
 つまり pnpm の既定では、**`workspace:` を明示的に書いたときにリンクされる**と考えておけば実務上は困りません。「同じワークスペースに置いたのに import できない」と悩んだら、まず依存の宣言を確認してください。暗黙の魔法に頼らない、pnpm らしい既定値です。
 
-[図 11-1 モノレポの全体構造(apps/packages と共有 lockfile)(未配置)]
+[図 11-1 モノレポの全体構造(apps/packages と共有 lockfile)]
 
 ## workspace: プロトコル — 「隣の部屋」への確実なリンク
 
@@ -95,7 +95,7 @@ flowchart TD
 
 一方、publish 時には `workspace:^` が `^1.5.0` のような**実バージョンに自動置換**されます。利用者のもとに `workspace:` という内部事情が漏れることはありません。[2章](https://npmg.yamauz.workers.dev/basics/02-package-json-and-semver)で学んだ `^` と `~` の意味の違いが、そのままここに現れます。なお、`pnpm add` でワークスペース内パッケージを追加したときにどんな記法で保存するかは `saveWorkspaceProtocol` 設定(デフォルト `rolling`)で制御できます。
 
-[図 11-2 workspace: プロトコルのリンクと publish 時の置換(未配置)]
+[図 11-2 workspace: プロトコルのリンクと publish 時の置換]
 
 ## --filter と -r — 対象を絞って実行
 
@@ -129,7 +129,7 @@ $ pnpm -r run build
 
 ## 共有 lockfile — 台帳は 1 冊
 
-[4章](https://npmg.yamauz.workers.dev/basics/04-lockfiles)で、lockfile は「買い物リストの控え」だと説明しました。モノレポで pnpm を使うと、この控えはリポジトリ全体で 1 冊になります。`sharedWorkspaceLockfile` 設定(デフォルト `true`)により、ルートの `pnpm-lock.yaml` にすべてのワークスペースパッケージの解決結果が記録されるのです。
+[4章](https://npmg.yamauz.workers.dev/basics/04-lockfiles)で、lockfile は「仕入れ伝票」だと説明しました。モノレポで pnpm を使うと、この伝票はリポジトリ全体で 1 冊になります。`sharedWorkspaceLockfile` 設定(デフォルト `true`)により、ルートの `pnpm-lock.yaml` にすべてのワークスペースパッケージの解決結果が記録されるのです。
 
 利点は 3 つあります。第一に、**インストールが 1 回で済む**こと。ルートで `pnpm install` すれば全パッケージの依存が揃います。第二に、**バージョン解決が全体で一貫する**こと。同じ範囲なら同じバージョンに解決されやすく、重複が減ります。第三に、**CI やレビューで見るファイルが 1 つ**であること。lockfile の差分レビューも 1 箇所を見れば済みます。
 
@@ -179,7 +179,7 @@ package.json 側はバージョンを書かず、カタログを指します。
 
 関連設定として `catalogMode` があり、`manual`(既定)/ `strict` / `prefer` の 3 値で「`pnpm add` したときにカタログをどう使うか」を制御できます。`strict` にすると、カタログに載っているパッケージはカタログ経由でしか追加できなくなり、バージョンの一元管理を強制できます。
 
-[図 11-3 catalog による一元管理(未配置)]
+[図 11-3 catalog による一元管理]
 
 ## 設定ファイルとしての pnpm-workspace.yaml
 

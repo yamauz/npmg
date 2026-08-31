@@ -28,7 +28,7 @@ flowchart LR
 
 図書館に例えると、ストアは**閉架書庫**です。本(ファイル)の実体は書庫に 1 冊だけあります。`.pnpm` は各プロジェクトの**閲覧室**で、そこに置かれているのは本のコピーではなく「同じ本そのものを指す索引カード」(ハードリンクまたはクローン)。そしてルートの node_modules は閲覧室の入口にある**案内板**(シンボリックリンク)で、あなたが借りると申告した本のカードだけが載っています。
 
-[図 9-1 store → hardlink → symlink の 3 層全体図(未配置)]
+[図 9-1 store → hardlink → symlink の 3 層全体図]
 
 ## 第 1 層: content-addressable store
 
@@ -52,7 +52,7 @@ Packages are cloned from the content-addressable store to the virtual store.
 
 「本当に節約されているのか」を `du -sh node_modules` で確かめようとすると、混乱します。pnpm のプロジェクトでも npm とほぼ同じ 3.7M と表示されるからです。しかし **du が数えるのは論理サイズ**で、クローンやハードリンクが共有している物理ブロックの重複までは見抜けません。実際には各プロジェクトの node_modules はストアと同じブロックを指しており、2 つ目のプロジェクトを作っても物理的な消費はほとんど増えません。「du の数字が同じ=節約されていない」ではないのです。同様に、macOS では `ls -l` のリンク数も 1 のままです(ハードリンクではなくクローンだから)。数字の読み方は章末の実験で確かめます。
 
-[図 9-4 複数プロジェクトが 1 つの store を共有する図(未配置)]
+[図 9-4 複数プロジェクトが 1 つの store を共有する図]
 
 ## 第 2 層: virtual store `.pnpm` のレイアウト
 
@@ -84,7 +84,7 @@ node_modules
 node_modules/.pnpm/<pkg>@<version>/node_modules/<pkg>
 ```
 
-[図 9-2 .pnpm 内のレイアウト詳細(未配置)]
+[図 9-2 .pnpm 内のレイアウト詳細]
 
 **[補足] なぜ `foo@1.0.0` の直下ではなく、さらに `node_modules/foo` と一段深いのか**
 
@@ -156,7 +156,7 @@ pnpm のルート node_modules に並ぶシンボリックリンクは、**packa
 
 正確には、pnpm のデフォルトは「semi-strict(準厳格)」です。すべての依存は `.pnpm/node_modules` という隠れた場所に hoist されており、**依存パッケージ同士**は Node.js の親ディレクトリ探索でそこに届きます。つまり「行儀の悪いライブラリが未宣言の依存を require している」ケースは動いてしまいます(壊さないための互換措置です)。一方、**アプリコードからは届かない**ため、あなたのコードに幽霊依存が混入することはありません。この hoist は `hoist` 設定で無効化でき、完全に厳格な構造にもできます。
 
-[図 9-3 npm の flat な node_modules と pnpm の strict な node_modules の対比(未配置)]
+[図 9-3 npm の flat な node_modules と pnpm の strict な node_modules の対比]
 
 ## 副産物: ネストの深さが一定になる
 
