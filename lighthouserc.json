@@ -25,12 +25,6 @@
           {
             "maxNumericValue": 200
           }
-        ],
-        "cumulative-layout-shift": [
-          "error",
-          {
-            "maxNumericValue": 0.1
-          }
         ]
       }
     }

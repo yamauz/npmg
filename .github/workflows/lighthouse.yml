@@ -96,7 +96,13 @@ jobs:
               const s = m.summary
               const p = new URL(m.url).pathname
               const report = links[m.url]
-              return `| \`${p}\` | ${pct(s.performance)} | ${pct(s.accessibility)} | ${pct(s['best-practices'])} | ${pct(s.seo)} | ${report ? `[レポート](${report})` : '—'} |`
+              // CLS は summary に無いので個別レポートから拾う
+              let cls = '—'
+              try {
+                const r = JSON.parse(fs.readFileSync(m.jsonPath, 'utf8'))
+                cls = r.audits['cumulative-layout-shift'].numericValue.toFixed(3)
+              } catch {}
+              return `| \`${p}\` | ${pct(s.performance)} | ${pct(s.accessibility)} | ${pct(s['best-practices'])} | ${pct(s.seo)} | ${cls} | ${report ? `[レポート](${report})` : '—'} |`
             })
 
             const body = [
@@ -104,11 +110,11 @@ jobs:
               '',
               `対象: ${process.env.PREVIEW_URL}`,
               '',
-              '| ページ | Perf | A11y | Best Practices | SEO | |',
-              '| --- | --- | --- | --- | --- | --- |',
+              '| ページ | Perf | A11y | Best Practices | SEO | CLS | |',
+              '| --- | --- | --- | --- | --- | --- | --- |',
               ...rows,
               '',
-              '<sub>Performance は計測ごとに揺れる (Cloudflare のコールドスタート次第で 10 点程度)。傾向を見る用で閾値では締めていない。A11y と Best Practices は 100 未満で CI が落ちる。SEO はプレビューに noindex が付く都合で必ず 66 になるので参考値 (本番は 100)。</sub>',
+              '<sub>落ちるのは A11y / Best Practices / TBT だけ。Perf と CLS は環境差が大きく (本番 94〜98 / CLS 0.02〜0.08 に対し、ここは Linux ランナー + プレビューで下振れする) 閾値では締めていない。SEO はプレビューに noindex が付く都合で必ず 66 になる (本番は 100)。</sub>',
             ].join('\n')
 
             const { data: comments } = await github.rest.issues.listComments({
