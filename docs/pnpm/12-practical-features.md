@@ -103,16 +103,16 @@ flowchart LR
 パッチは「当てた瞬間のバージョンのコード」に対する diff です。`lodash@4.17.21` のような完全一致で当てたパッチは、依存を更新した時点で対象から外れます。範囲や名前のみで当てていた場合も、新バージョンでコードが変わっていれば diff の適用に失敗し、インストールが止まります。依存の更新時は「このパッチはまだ必要か(upstream で直っていないか)」を確認し、必要なら `pnpm patch` からやり直してください。パッチはあくまで応急処置で、恒久対応は upstream への報告や PR です。
 :::
 
-<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-12-1.png に保存し、下の行のコメントを外してください -->
-<!-- ![図 12-1: patch のワークフロー(4 ステップ)](/images/fig-12-1.png) -->
-
-> **🖼️ 図 12-1|patch のワークフロー(4 ステップ)**(画像プレースホルダー)
-> 生成後は `docs/public/images/fig-12-1.png` に配置してください。
+<figure>
+  <img src="/images/fig-12-1.png" alt="patch のワークフロー(4 ステップ)">
+  <figcaption><span class="fig-num">図 12-1</span> patch のワークフロー(4 ステップ)</figcaption>
+</figure>
 
 <!-- 図 12-1 の生成プロンプト(採用版・ページには出しない)
 
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
-Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
+Flat 2D vector infographic in a minimal technical-illustration style. Wide landscape orientation
+(2:1 aspect ratio, e.g. 2560 x 1280).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
 blue #2563EB as the single primary accent, light gray #E2E8F0 for container boxes,
 orange #F59E0B for highlights only. Uniform medium-weight rounded strokes, simple geometric
@@ -123,9 +123,24 @@ Render every quoted label verbatim, exactly once, with no extra, invented, or du
 No text other than the labels listed below.
 
 DIAGRAM CONTENT:
-LAYOUT: Four rounded boxes arranged in a single horizontal row, connected by three plain arrows pointing right. Each box has a small blue circled number badge at its top-left.
-ELEMENTS: First box labeled "pnpm patch" with badge "1" and a folder icon. Second box labeled "edit copy" with badge "2" and a pencil icon. Third box labeled "pnpm patch-commit" with badge "3" and a file icon carrying an orange tag reading "patches/*.patch". Fourth box labeled "auto apply" with badge "4" and a checkmark icon.
-ARROWS: Three unlabeled arrows connecting the four boxes from left to right.
+LAYOUT: A single horizontal pipeline arranged as one straight row, all items vertically centered
+on the same horizontal axis and spanning the full width of the canvas with even margins on the
+left and right. Four equally sized rounded boxes are evenly spaced, connected left to right by
+three arrows. Each box has one small icon above its text.
+ICON STYLE: every icon is a simple line-art outline drawing, drawn with the same uniform dark
+stroke as the boxes, with no fill, no color, no gradient, and no 3D shading. Icons must look
+like monochrome outline pictograms, not illustrations.
+ELEMENTS:
+- Box 1: white with a thin dark outline, an outline icon of a folder, with two lines of text:
+  "1" then "pnpm patch"
+- Box 2: white with a thin dark outline, an outline icon of a pencil, with two lines of text:
+  "2" then "edit copy"
+- Box 3: white with a thin dark outline, an outline icon of a document, with two lines of text:
+  "3" then "patch-commit"
+- Box 4: white with a thick blue outline, an outline icon of a checkmark, with two lines of
+  text: "4" then "auto apply"
+ARROWS: exactly three plain dark arrows, one between each adjacent pair of boxes, all pointing
+right. No arrow labels. No other lines or connectors anywhere in the diagram.
 -->
 
 ## pnpm audit — 脆弱性の検知から封じ込めまで
