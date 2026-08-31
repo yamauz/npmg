@@ -53,7 +53,7 @@ overrides:
 yarn を使ってきた読者なら「`resolutions` と同じでは?」と気づいたはずです。そのとおりで、**overrides は yarn v1 の `resolutions` に相当します**。yarn から乗り換える場合も、`resolutions` の内容をこの overrides に書き写せばほぼそのまま機能します。
 
 <figure>
-  <img src="/images/fig-12-3.png" alt="overrides が依存グラフを書き換える図">
+  <img src="/images/fig-12-3.webp" alt="overrides が依存グラフを書き換える図">
   <figcaption><span class="fig-num">図 12-3</span> overrides が依存グラフを書き換える図</figcaption>
 </figure>
 
@@ -115,7 +115,7 @@ flowchart LR
 :::
 
 <figure>
-  <img src="/images/fig-12-1.png" alt="patch のワークフロー(4 ステップ)">
+  <img src="/images/fig-12-1.webp" alt="patch のワークフロー(4 ステップ)">
   <figcaption><span class="fig-num">図 12-1</span> patch のワークフロー(4 ステップ)</figcaption>
 </figure>
 
@@ -213,7 +213,7 @@ minimumReleaseAgeExclude:
 重要なのは、この防御が後述の `pnpm dlx` にも効くことです。「X(旧 Twitter)で話題の CLI を `dlx` で即実行したら公開 2 時間のマルウェアだった」という最悪のシナリオを、設定 1 行で塞げます。
 
 <figure>
-  <img src="/images/fig-12-2.png" alt="サプライチェーン攻撃の侵入経路と pnpm の防御ポイント">
+  <img src="/images/fig-12-2.webp" alt="サプライチェーン攻撃の侵入経路と pnpm の防御ポイント">
   <figcaption><span class="fig-num">図 12-2</span> サプライチェーン攻撃の侵入経路と pnpm の防御ポイント</figcaption>
 </figure>
 

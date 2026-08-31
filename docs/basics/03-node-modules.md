@@ -31,7 +31,7 @@ Node.js 側のルールも確認しておきます。`require('foo')` が実行�
 - **深すぎるパス**。依存の依存の依存…とネストが続くと、パスはどこまでも深くなります。特に当時の Windows には約 260 文字のパス長制限があり、「深すぎてファイルを削除できない」という悲劇まで起きました。
 
 <figure>
-  <img src="/images/fig-03-1.png" alt="npm v2 のネスト構造と npm v3 のフラット構造の対比">
+  <img src="/images/fig-03-1.webp" alt="npm v2 のネスト構造と npm v3 のフラット構造の対比">
   <figcaption><span class="fig-num">図 3-1</span> npm v2 のネスト構造と npm v3 のフラット構造の対比</figcaption>
 </figure>
 
@@ -112,7 +112,7 @@ flowchart TD
 ポイントは 2 つあります。第一に、この配置で A も B も正しく動きます。A は上へ遡ってルートの C v1 を見つけ、B はまず自分の中を見て C v2 を見つける——冒頭の探索ルールどおりです。第二に、「どちらのバージョンを hoist するか」は**先に処理された者勝ち**で、グラフの形からは一意に決まりません。この「先着順」が、あとで副作用②として牙をむきます。
 
 <figure>
-  <img src="/images/fig-03-2.png" alt="hoisting とバージョン衝突時のネスト">
+  <img src="/images/fig-03-2.webp" alt="hoisting とバージョン衝突時のネスト">
   <figcaption><span class="fig-num">図 3-2</span> hoisting とバージョン衝突時のネスト</figcaption>
 </figure>
 
@@ -156,7 +156,7 @@ ARROWS: none. No other lines or connectors anywhere in the diagram.
 フラット化により、node_modules の最上位には**あなたが宣言していないパッケージ**が大量に並ぶことになりました。そして Node.js の探索ルールは「最上位にあれば見つけてしまう」——つまり、**package.json に書いていないパッケージが `import` できてしまう**のです。これを**幽霊依存(phantom dependency)**と呼びます。
 
 <figure>
-  <img src="/images/fig-03-3.png" alt="phantom dependency — 宣言していないのに import できてしまう">
+  <img src="/images/fig-03-3.webp" alt="phantom dependency — 宣言していないのに import できてしまう">
   <figcaption><span class="fig-num">図 3-3</span> phantom dependency — 宣言していないのに import できてしまう</figcaption>
 </figure>
 

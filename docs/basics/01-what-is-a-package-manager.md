@@ -26,7 +26,7 @@
 パッケージマネージャーを取り巻く登場人物は、突き詰めると 4 つしかいません。①コマンドを打つ**開発者**、②npm や pnpm などの **CLI ツール本体**、③パッケージの置き場である**レジストリ(registry)**、④手元の置き場である **node_modules** です。
 
 <figure>
-  <img src="/images/fig-01-1.png" alt="パッケージマネージャーを取り巻く 4 つの登場人物">
+  <img src="/images/fig-01-1.webp" alt="パッケージマネージャーを取り巻く 4 つの登場人物">
   <figcaption><span class="fig-num">図 1-1</span> パッケージマネージャーを取り巻く 4 つの登場人物</figcaption>
 </figure>
 
@@ -65,7 +65,7 @@ ARROWS:
 `npm install` の数秒間を分解すると、大きく 4 つの仕事に整理できます。これは npm や pnpm が公式にそう定義しているわけではなく、**本書が理解しやすさのために採用する整理**ですが、どのツールの動きもこの枠で読み解けます。
 
 <figure>
-  <img src="/images/fig-01-2.png" alt="パッケージマネージャーの 4 つの仕事のパイプライン">
+  <img src="/images/fig-01-2.webp" alt="パッケージマネージャーの 4 つの仕事のパイプライン">
   <figcaption><span class="fig-num">図 1-2</span> パッケージマネージャーの 4 つの仕事のパイプライン</figcaption>
 </figure>
 
@@ -123,7 +123,7 @@ flowchart LR
 4 つの仕事は、言葉だけ並べるとどうしても手触りがありません。ここで、本書に何度か顔を出すことになる一軒のラーメン屋に登場してもらいます。屋号は **らぁめん濃度盛汁流**。
 
 <figure class="fig-photo">
-  <img src="/images/ramen-noudo.png" alt="丼の中央で麺が渦を巻き、底が見えない穴になっているラーメン">
+  <img src="/images/ramen-noudo.webp" alt="丼の中央で麺が渦を巻き、底が見えない穴になっているラーメン">
   <figcaption>名物　依存地獄らぁめん</figcaption>
 </figure>
 
@@ -144,7 +144,7 @@ flowchart LR
 あなたが package.json に書くのは `express` の 1 行だけでも、express 自身が `body-parser` や `debug` に依存し、`debug` はさらに `ms` に依存し…と連鎖します。1 行の宣言が、実際には数十個のパッケージのインストールを意味するのです。
 
 <figure>
-  <img src="/images/fig-01-3.png" alt="1 つの宣言から依存の依存がツリーに広がる">
+  <img src="/images/fig-01-3.webp" alt="1 つの宣言から依存の依存がツリーに広がる">
   <figcaption><span class="fig-num">図 1-3</span> 1 つの宣言から依存の依存がツリーに広がる</figcaption>
 </figure>
 

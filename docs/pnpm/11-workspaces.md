@@ -56,7 +56,7 @@ flowchart TD
 :::
 
 <figure>
-  <img src="/images/fig-11-1.png" alt="モノレポの全体構造(apps/packages と共有 lockfile)">
+  <img src="/images/fig-11-1.webp" alt="モノレポの全体構造(apps/packages と共有 lockfile)">
   <figcaption><span class="fig-num">図 11-1</span> モノレポの全体構造(apps/packages と共有 lockfile)</figcaption>
 </figure>
 
@@ -134,7 +134,7 @@ flowchart TD
 一方、publish 時には `workspace:^` が `^1.5.0` のような**実バージョンに自動置換**されます。利用者のもとに `workspace:` という内部事情が漏れることはありません。[2章](/basics/02-package-json-and-semver)で学んだ `^` と `~` の意味の違いが、そのままここに現れます。なお、`pnpm add` でワークスペース内パッケージを追加したときにどんな記法で保存するかは `saveWorkspaceProtocol` 設定(デフォルト `rolling`)で制御できます。
 
 <figure>
-  <img src="/images/fig-11-2.png" alt="workspace: プロトコルのリンクと publish 時の置換">
+  <img src="/images/fig-11-2.webp" alt="workspace: プロトコルのリンクと publish 時の置換">
   <figcaption><span class="fig-num">図 11-2</span> <code>workspace:</code> プロトコルのリンクと publish 時の置換</figcaption>
 </figure>
 
@@ -255,7 +255,7 @@ package.json 側はバージョンを書かず、カタログを指します。
 関連設定として `catalogMode` があり、`manual`(既定)/ `strict` / `prefer` の 3 値で「`pnpm add` したときにカタログをどう使うか」を制御できます。`strict` にすると、カタログに載っているパッケージはカタログ経由でしか追加できなくなり、バージョンの一元管理を強制できます。
 
 <figure>
-  <img src="/images/fig-11-3.png" alt="catalog による一元管理">
+  <img src="/images/fig-11-3.webp" alt="catalog による一元管理">
   <figcaption><span class="fig-num">図 11-3</span> catalog による一元管理</figcaption>
 </figure>
 

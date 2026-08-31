@@ -50,7 +50,7 @@ Done in 413ms
 :::
 
 <figure>
-  <img src="/images/fig-10-1.png" alt="store 共有によるディスク節約">
+  <img src="/images/fig-10-1.webp" alt="store 共有によるディスク節約">
   <figcaption><span class="fig-num">図 10-1</span> store 共有によるディスク節約</figcaption>
 </figure>
 
@@ -154,7 +154,7 @@ npm エコシステムへの攻撃が現実の脅威になった 2020 年代後�
 - **`pnpm sbom`(v11)**: SBOM(ソフトウェア部品表)を生成し、監査・コンプライアンス要求に応えます
 
 <figure>
-  <img src="/images/fig-10-2.png" alt="pnpm のセキュリティ多層防御">
+  <img src="/images/fig-10-2.webp" alt="pnpm のセキュリティ多層防御">
   <figcaption><span class="fig-num">図 10-2</span> pnpm のセキュリティ多層防御</figcaption>
 </figure>
 
@@ -204,7 +204,7 @@ yarn 2(Berry)が PnP への方向転換でエコシステムを分断したの�
 なお、ダウンロード数は CI の実行回数などにも左右される指標で、実利用者数とは一致しません。retention も回答者の偏りがあります。ここでの数字は「傾向をつかむ材料」として読んでください。
 
 <figure>
-  <img src="/images/fig-10-3.png" alt="7 つのアドバンテージの俯瞰マップ">
+  <img src="/images/fig-10-3.webp" alt="7 つのアドバンテージの俯瞰マップ">
   <figcaption><span class="fig-num">図 10-3</span> 7 つのアドバンテージの俯瞰マップ</figcaption>
 </figure>
 

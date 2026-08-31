@@ -36,7 +36,7 @@ flowchart TD
 3 つめは**オフラインへの弱さ**です。一度インストールしたパッケージでも、ネットワークが不調ならインストールは失敗します。レジストリの障害が、そのまま全世界の開発停止につながる構造は left-pad 事件でも明らかになったとおりです。
 
 <figure>
-  <img src="/images/fig-06-1.png" alt="yarn v1 が解決した 3 つの課題">
+  <img src="/images/fig-06-1.webp" alt="yarn v1 が解決した 3 つの課題">
   <figcaption><span class="fig-num">図 6-1</span> yarn v1 が解決した 3 つの課題</figcaption>
 </figure>
 
@@ -119,7 +119,7 @@ flowchart TD
 ```
 
 <figure>
-  <img src="/images/fig-06-2.png" alt="yarn v1 と Berry の分岐年表">
+  <img src="/images/fig-06-2.webp" alt="yarn v1 と Berry の分岐年表">
   <figcaption><span class="fig-num">図 6-2</span> yarn v1 と Berry の分岐年表</figcaption>
 </figure>
 

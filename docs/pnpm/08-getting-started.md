@@ -42,7 +42,7 @@ flowchart TD
 ```
 
 <figure>
-  <img src="/images/fig-08-1.png" alt="pnpm の導入ルート 3 種">
+  <img src="/images/fig-08-1.webp" alt="pnpm の導入ルート 3 種">
   <figcaption><span class="fig-num">図 8-1</span> pnpm の導入ルート 3 種</figcaption>
 </figure>
 
@@ -177,7 +177,7 @@ Done in 1.4s using pnpm v11.24.0
 注目してほしいのは `Progress:` の行です。`resolved 66` は依存グラフとして解決したパッケージ数、`downloaded 15` はレジストリから実際に取得した数、そして `reused 51` は**このマシンで過去に一度使ったファイルを再利用した数**です(まっさらなマシンでの初実行なら `reused 0` になります)。npm の `added 68 packages` という素っ気ない報告と違い、pnpm は「どれだけ取得せずに済んだか」を毎回教えてくれます。では、どこから再利用しているのか — `Packages are cloned from the content-addressable store` という 1 行がその答えなのですが、「内容アドレスストア」とは何なのかは次章でじっくり解き明かします。
 
 <figure>
-  <img src="/images/fig-08-2.png" alt="pnpm コマンド体系マップ">
+  <img src="/images/fig-08-2.webp" alt="pnpm コマンド体系マップ">
   <figcaption><span class="fig-num">図 8-2</span> pnpm コマンド体系マップ</figcaption>
 </figure>
 

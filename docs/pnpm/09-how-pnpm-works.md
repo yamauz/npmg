@@ -27,7 +27,7 @@ flowchart LR
 図書館に例えると、ストアは**閉架書庫**です。本(ファイル)の実体は書庫に 1 冊だけあります。`.pnpm` は各プロジェクトの**閲覧室**で、そこに置かれているのは本のコピーではなく「同じ本そのものを指す索引カード」(ハードリンクまたはクローン)。そしてルートの node_modules は閲覧室の入口にある**案内板**(シンボリックリンク)で、あなたが借りると申告した本のカードだけが載っています。
 
 <figure>
-  <img src="/images/fig-09-1.png" alt="store → hardlink → symlink の 3 層全体図">
+  <img src="/images/fig-09-1.webp" alt="store → hardlink → symlink の 3 層全体図">
   <figcaption><span class="fig-num">図 9-1</span> store → hardlink → symlink の 3 層全体図</figcaption>
 </figure>
 
@@ -87,7 +87,7 @@ Packages are cloned from the content-addressable store to the virtual store.
 :::
 
 <figure>
-  <img src="/images/fig-09-4.png" alt="複数プロジェクトが 1 つの store を共有する図">
+  <img src="/images/fig-09-4.webp" alt="複数プロジェクトが 1 つの store を共有する図">
   <figcaption><span class="fig-num">図 9-4</span> 複数プロジェクトが 1 つの store を共有する図</figcaption>
 </figure>
 
@@ -156,7 +156,7 @@ node_modules/.pnpm/<pkg>@<version>/node_modules/<pkg>
 ```
 
 <figure>
-  <img src="/images/fig-09-2.png" alt=".pnpm 内のレイアウト詳細">
+  <img src="/images/fig-09-2.webp" alt=".pnpm 内のレイアウト詳細">
   <figcaption><span class="fig-num">図 9-2</span> <code>.pnpm</code> 内のレイアウト詳細</figcaption>
 </figure>
 
@@ -268,7 +268,7 @@ pnpm のルート node_modules に並ぶシンボリックリンクは、**packa
 正確には、pnpm のデフォルトは「semi-strict(準厳格)」です。すべての依存は `.pnpm/node_modules` という隠れた場所に hoist されており、**依存パッケージ同士**は Node.js の親ディレクトリ探索でそこに届きます。つまり「行儀の悪いライブラリが未宣言の依存を require している」ケースは動いてしまいます(壊さないための互換措置です)。一方、**アプリコードからは届かない**ため、あなたのコードに幽霊依存が混入することはありません。この hoist は `hoist` 設定で無効化でき、完全に厳格な構造にもできます。
 
 <figure>
-  <img src="/images/fig-09-3.png" alt="npm の flat な node_modules と pnpm の strict な node_modules の対比">
+  <img src="/images/fig-09-3.webp" alt="npm の flat な node_modules と pnpm の strict な node_modules の対比">
   <figcaption><span class="fig-num">図 9-3</span> npm の flat な node_modules と pnpm の strict な node_modules の対比</figcaption>
 </figure>
 

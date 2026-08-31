@@ -63,7 +63,7 @@ flowchart LR
 **Deno** は、Node.js の原作者 Ryan Dahl 氏が Node の設計上の後悔を踏まえて作り直したランタイムです。パーミッションによるセキュリティモデルや標準ライブラリの充実など思想面の影響力は大きいものの、npm エコシステムとの互換性という点では独自路線であり、本書の主戦場(既存 Node.js プロジェクトのパッケージ管理)とはやや別の地図にいます。
 
 <figure>
-  <img src="/images/fig-07-1.png" alt="npm/yarn/pnpm/Bun の系譜図(2010〜2026)">
+  <img src="/images/fig-07-1.webp" alt="npm/yarn/pnpm/Bun の系譜図(2010〜2026)">
   <figcaption><span class="fig-num">図 7-1</span> npm/yarn/pnpm/Bun の系譜図(2010〜2026)</figcaption>
 </figure>
 
@@ -147,7 +147,7 @@ flowchart LR
 4 つのツールを、2 つの軸で整理してみます。横軸は「node_modules の作り方が従来型か、新方式か」、縦軸は「パッケージマネージャー専業か、ランタイム込みか」です。
 
 <figure>
-  <img src="/images/fig-07-2.png" alt="4 ツールのポジショニングマップ">
+  <img src="/images/fig-07-2.webp" alt="4 ツールのポジショニングマップ">
   <figcaption><span class="fig-num">図 7-2</span> 4 ツールのポジショニングマップ</figcaption>
 </figure>
 

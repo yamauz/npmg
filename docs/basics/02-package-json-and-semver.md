@@ -49,7 +49,7 @@ package.json は、プロジェクトの**マニフェスト(積荷目録)** で
 npm の世界のバージョン番号は、**セマンティックバージョニング(Semantic Versioning、通称 semver)**という規約に従います。`MAJOR.MINOR.PATCH` の 3 つの数字で、それぞれ上げる条件が決まっています。
 
 <figure>
-  <img src="/images/fig-02-1.png" alt="semver の 3 つの数字の意味">
+  <img src="/images/fig-02-1.webp" alt="semver の 3 つの数字の意味">
   <figcaption><span class="fig-num">図 2-1</span> semver の 3 つの数字の意味</figcaption>
 </figure>
 
@@ -94,7 +94,7 @@ straight down to the box directly beneath it. No other lines or connectors anywh
 では、1 章のインストールで自動追記された `^1.3.0` の `^` は、正確にはどこまでの更新を許すのでしょうか。semver の約束を前提に、package.json では「どこまでの更新を自動で受け入れるか」を記号で指定します。代表は `^`(キャレット)と `~`(チルダ)の 2 つです。
 
 <figure>
-  <img src="/images/fig-02-2.png" alt="^1.2.3 と ~1.2.3 が許す範囲の数直線">
+  <img src="/images/fig-02-2.webp" alt="^1.2.3 と ~1.2.3 が許す範囲の数直線">
   <figcaption><span class="fig-num">図 2-2</span> <code>^1.2.3</code> と <code>~1.2.3</code> が許す範囲の数直線</figcaption>
 </figure>
 
@@ -191,7 +191,7 @@ MAJOR が 0 のバージョン(`0.x.y`)は「まだ何が壊れるかわから�
 dependencies 系のフィールドは 4 種類あります。どれに書くかで「いつ・誰の環境にインストールされるか」が変わります。
 
 <figure>
-  <img src="/images/fig-02-3.png" alt="dependencies の種類マップ">
+  <img src="/images/fig-02-3.webp" alt="dependencies の種類マップ">
   <figcaption><span class="fig-num">図 2-3</span> dependencies の種類マップ</figcaption>
 </figure>
 

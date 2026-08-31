@@ -20,7 +20,7 @@ npm は 2010 年 1 月、Isaac Schlueter 氏によって公開されました。
 この「同梱による標準化」は、本章以降のすべての話の前提になります。yarn も pnpm も、パッケージの取得先は基本的に同じ npm レジストリです。競争が起きたのはあくまで「クライアント側のツール」であって、レジストリという水道網そのものは、今日まで npm が一手に担い続けています。
 
 <figure>
-  <img src="/images/fig-05-1.png" alt="npm の年表(2010〜現在の主要イベント)">
+  <img src="/images/fig-05-1.webp" alt="npm の年表(2010〜現在の主要イベント)">
   <figcaption><span class="fig-num">図 5-1</span> npm の年表(2010〜現在の主要イベント)</figcaption>
 </figure>
 
@@ -112,7 +112,7 @@ flowchart TD
 注目すべきは、この連鎖の当事者のほぼ全員が left-pad を**直接は使っていない**ことです。本章冒頭の水道網の比喩でいえば、浄水場の小さなバルブが 1 つ閉じただけで、蛇口しか知らない全世帯が断水した——依存グラフの「深さ」が、そのまま被害の「広さ」に変換されたのです。
 
 <figure>
-  <img src="/images/fig-05-2.png" alt="left-pad 事件 — 小さな 1 ブロックを抜くと崩れるタワー">
+  <img src="/images/fig-05-2.webp" alt="left-pad 事件 — 小さな 1 ブロックを抜くと崩れるタワー">
   <figcaption><span class="fig-num">図 5-2</span> left-pad 事件 — 小さな 1 ブロックを抜くと崩れるタワー</figcaption>
 </figure>
 

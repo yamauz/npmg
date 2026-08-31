@@ -24,7 +24,7 @@ semver の約束が完璧なら困らないはずですが、現実には MINOR 
 :::
 
 <figure>
-  <img src="/images/fig-04-1.png" alt="lockfile がないチームで起きるバージョンのズレ">
+  <img src="/images/fig-04-1.webp" alt="lockfile がないチームで起きるバージョンのズレ">
   <figcaption><span class="fig-num">図 4-1</span> lockfile がないチームで起きるバージョンのズレ</figcaption>
 </figure>
 
@@ -128,7 +128,7 @@ package.json とロックファイルの関係は、**品書きと仕入れ伝�
 :::
 
 <figure>
-  <img src="/images/fig-04-2.png" alt="lockfile を介した再現可能なインストールフロー">
+  <img src="/images/fig-04-2.webp" alt="lockfile を介した再現可能なインストールフロー">
   <figcaption><span class="fig-num">図 4-2</span> lockfile を介した再現可能なインストールフロー</figcaption>
 </figure>
 
