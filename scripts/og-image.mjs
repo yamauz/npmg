@@ -150,15 +150,24 @@ function collectChapters() {
   const dirs = ['basics', 'history', 'pnpm', 'appendix']
   const items = [{ file: 'docs/introduction.md', slug: 'introduction' }]
   for (const d of dirs) {
-    for (const f of readdirSync(`docs/${d}`).filter((f) => f.endsWith('.md')).sort()) {
-      items.push({ file: `docs/${d}/${f}`, slug: `${d}-${f.replace(/\.md$/, '')}` })
+    for (const name of readdirSync(`docs/${d}`)
+      .filter((entry) => entry.endsWith('.md'))
+      .sort()) {
+      items.push({ file: `docs/${d}/${name}`, slug: `${d}-${name.replace(/\.md$/, '')}` })
     }
   }
   return items.map(({ file, slug }) => {
-    const h1 = readFileSync(file, 'utf8').match(/^#\s+(.+)$/m)?.[1].trim() ?? ''
+    const h1 =
+      readFileSync(file, 'utf8')
+        .match(/^#\s+(.+)$/m)?.[1]
+        .trim() ?? ''
     // 「1. パッケージ…」「付録A. コマンド…」を番号と表題に割る
     const m = h1.match(/^(付録[A-Z]|\d+)\.\s*(.+)$/)
-    const eyebrow = m ? (m[1].startsWith('付録') ? `APPENDIX ${m[1].slice(2)}` : `CHAPTER ${m[1]}`) : ''
+    const eyebrow = m
+      ? m[1].startsWith('付録')
+        ? `APPENDIX ${m[1].slice(2)}`
+        : `CHAPTER ${m[1]}`
+      : ''
     return { slug, eyebrow, title: m ? m[2] : h1 }
   })
 }
@@ -194,7 +203,10 @@ async function shoot(html, out) {
     let fitted = false
     for (let size = 68; size >= 34; size -= 2) {
       el.style.fontSize = `${size}px`
-      if (lineCount() <= 1) { fitted = true; break }
+      if (lineCount() <= 1) {
+        fitted = true
+        break
+      }
     }
     if (!fitted) {
       for (let size = 60; size >= 30; size -= 2) {

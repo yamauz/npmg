@@ -6,6 +6,6 @@
   "assets": {
     "directory": "./docs/.vitepress/dist",
     // VitePress が生成する 404.html をそのまま 404 ページとして使う
-    "not_found_handling": "404-page"
-  }
+    "not_found_handling": "404-page",
+  },
 }

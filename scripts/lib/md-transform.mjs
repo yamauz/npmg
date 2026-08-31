@@ -53,15 +53,15 @@ export function expandContainers(text) {
     const open = new RegExp(`^${fence}[ \\t]*(tip|warning|info|danger)[ \\t]*(.*)$`, 'gm')
     out = out
       .replace(open, (_, kind, title) => {
-        let text = title.trim()
+        let titleText = title.trim()
         let label = LABELS[kind] ?? kind
         // ::: info コラム|見出し は読み物コラム。マーカーはページ側では
         // CSS のフックにしか使わないので、貼り付け用では [コラム] に開く
-        if (text.startsWith(COLUMN_MARK)) {
+        if (titleText.startsWith(COLUMN_MARK)) {
           label = 'コラム'
-          text = text.slice(COLUMN_MARK.length).trim()
+          titleText = titleText.slice(COLUMN_MARK.length).trim()
         }
-        const heading = text ? `[${label}] ${text}` : `[${label}]`
+        const heading = titleText ? `[${label}] ${titleText}` : `[${label}]`
         return `**${heading}**\n`
       })
       // 開きを処理した後に残る閉じフェンスだけを消す
