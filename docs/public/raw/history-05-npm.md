@@ -1,4 +1,4 @@
-> 出典: Node.js Package Manager Guide(npmg) — https://npmg.yamauz.workers.dev/history/05-npm.html
+> 出典: Node.js Package Manager Guide(npmg) — https://npmg.yamauz.workers.dev/history/05-npm
 
 # 5. npm の誕生と進化
 

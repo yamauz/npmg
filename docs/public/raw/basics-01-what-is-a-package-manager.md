@@ -1,4 +1,4 @@
-> 出典: Node.js Package Manager Guide(npmg) — https://npmg.yamauz.workers.dev/basics/01-what-is-a-package-manager.html
+> 出典: Node.js Package Manager Guide(npmg) — https://npmg.yamauz.workers.dev/basics/01-what-is-a-package-manager
 
 # 1. パッケージマネージャーとは何か
 

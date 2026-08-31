@@ -1,4 +1,4 @@
-> 出典: Node.js Package Manager Guide(npmg) — https://npmg.yamauz.workers.dev/basics/04-lockfiles.html
+> 出典: Node.js Package Manager Guide(npmg) — https://npmg.yamauz.workers.dev/basics/04-lockfiles
 
 # 4. ロックファイルの役割
 

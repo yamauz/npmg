@@ -55,7 +55,7 @@ PR には CI が走り、以下 2 つが必須チェック(緑にならないと
 
 ページを追加・リネームしたら **`e2e/pages.ts` の `DOCS` にも足す**。ここが全 E2E の単一の情報源になっている(スラッグ規則は OGP・llms.txt と同一)。
 
-そのほか見ているもの: 全ページ遷移とコンソールエラー、サイドバー全リンクの到達性、Mermaid の SVG 描画、TermDemo の再生、Markdown コピーの実動作、ダーク切替。
+そのほか見ているもの: 全ページ遷移とコンソールエラー、サイドバー全リンクの到達性、Mermaid の SVG 描画、TermDemo の再生、Markdown コピーの実動作、ダーク切替、sitemap の URL 形状(下記)。
 
 ### アクセシビリティ(axe)
 
@@ -184,6 +184,20 @@ axe には Deque 公式の MCP(`axe-mcp-server`)もあるが、**有効なライ
 ⚠️ **パッケージマネージャーは pnpm**。Cloudflare のビルド設定はダッシュボード側にあるため、リポジトリからは変更できない。ビルドコマンド/インストールコマンドが `npm` のままだと失敗するので、Cloudflare ダッシュボードの Build settings も pnpm に合わせること(`pnpm install` / `pnpm build`)。
 
 `pnpm deploy` は手元からの手動デプロイ用に残してある。Cloudflare 側のビルドが落ちたときの逃げ道。
+
+## sitemap / robots.txt
+
+**sitemap.xml は VitePress の組み込み機能で、ビルドのたびに自動生成される**(`config.mts` の `sitemap.hostname`)。OGP や raw md と違い**ページを追加しても手作業は要らない**。`docs/public/robots.txt` から参照している。
+
+URL の形が 3 箇所(sitemap の `loc` / `og:url` / llms.txt の出典)で食い違いやすいので、触るときは以下に注意する:
+
+- **`cleanUrls: true` は外さない。** Cloudflare の静的アセット配信は `html_handling` の既定により **`/x.html` を `/x` へ 307 でリダイレクトする**(実測)。これを外すと sitemap の loc も og:url も全件リダイレクト先を指すことになる
+- **`srcExclude: ['public/raw/*.md']` を外さない。** `docs/public/raw/` は `public/` 配下だが `srcDir` の一部なので、除外しないと VitePress がページとして拾い、**実在しない `/public/raw/*` が 15 件 sitemap に並ぶ**(導入時に踏んだ)。除外してもファイル自体は静的アセットとして配信されるので、Markdown コピーの fetch 先は無事
+- URL を組み立てているのは `config.mts` の `transformPageData`(og:url)と `scripts/llms-txt.mjs` の `urlFor`。**片方だけ直すと形がずれる**
+
+`e2e/sitemap.spec.ts` が件数・重複・`.html` 混入・`public/` 混入・og:url との一致・robots.txt を検査しているので、上記が外れると CI で落ちる。
+
+**`lastUpdated: true` は sitemap の `lastmod` のために入れている**(git のコミット日時から引く)。副作用でページ下部に「最終更新」が出る。日付は `forceLocale: true` がないと閲覧者のブラウザロケールで整形され、日本語サイトでも `Aug 31, 2026` になる。
 
 ## OGP(ページを追加・編集したら必ず読む)
 

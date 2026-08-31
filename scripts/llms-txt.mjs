@@ -38,7 +38,7 @@ async function collectMarkdown(dir) {
 }
 
 const slugFor = (rel) => rel.replace(/\.md$/, '').replace(/\//g, '-')
-const urlFor = (rel) => `${SITE_URL}/${rel.replace(/\.md$/, '.html')}`
+const urlFor = (rel) => `${SITE_URL}/${rel.replace(/\.md$/, '')}`
 
 async function main() {
   const files = await collectMarkdown(DOCS)

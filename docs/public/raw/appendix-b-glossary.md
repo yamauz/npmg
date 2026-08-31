@@ -1,4 +1,4 @@
-> 出典: Node.js Package Manager Guide(npmg) — https://npmg.yamauz.workers.dev/appendix/b-glossary.html
+> 出典: Node.js Package Manager Guide(npmg) — https://npmg.yamauz.workers.dev/appendix/b-glossary
 
 # 付録B. 用語集
 

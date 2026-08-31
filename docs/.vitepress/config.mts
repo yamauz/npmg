@@ -6,6 +6,19 @@ const SITE_TITLE = 'Node.js Package Manager Guide'
 export default defineConfig({
   lang: 'ja-JP',
   title: 'Node.js Package Manager Guide',
+  // Cloudflare の静的アセット配信が拡張子付き URL を拡張子なしへ 307 で飛ばすため、
+  // 生成する URL 側も拡張子なしに揃える (og:url / sitemap の loc / llms.txt が
+  // リダイレクト先ではなく実体を指すようにする)。
+  cleanUrls: true,
+  // sitemap の lastmod を git のコミット日時から引くために必要。
+  lastUpdated: true,
+  // scripts/llms-txt.mjs が生成する貼り付け用 md。public/ 配下だが srcDir の
+  // 一部なので、除外しないと VitePress がページとして拾い sitemap に
+  // 実在しない URL (/public/raw/*) が 15 件並ぶ。
+  srcExclude: ['public/raw/*.md'],
+  sitemap: {
+    hostname: SITE_URL + '/',
+  },
   description:
     'npm / yarn / pnpm、その下にある構造。Node.js パッケージマネージャーの仕組みを、構造・歴史・最新世代の実装から図解で学ぶ教科書。',
   head: [
@@ -106,6 +119,13 @@ export default defineConfig({
     socialLinks: [{ icon: 'github', link: 'https://github.com/yamauz/npmg' }],
     outline: { label: 'このページの内容', level: [2, 3] },
     docFooter: { prev: '前の章', next: '次の章' },
+    // 既定は英語の "Last updated:" が出るので、他のラベルに合わせて日本語にする。
+    // 日付は forceLocale を立てないと閲覧者のブラウザロケールで整形され、
+    // 日本語サイトでも "Aug 31, 2026" になる (lang: 'ja-JP' は効かない)。
+    lastUpdated: {
+      text: '最終更新',
+      formatOptions: { dateStyle: 'long', forceLocale: true },
+    },
     returnToTopLabel: 'トップへ戻る',
     sidebarMenuLabel: '目次',
     darkModeSwitchLabel: 'ダークモード',
@@ -144,7 +164,7 @@ export default defineConfig({
     const slug = pageData.relativePath.replace(/\.md$/, '').replace(/\//g, '-')
     const title = pageData.title || pageData.frontmatter.title || SITE_TITLE
     const image = `${SITE_URL}/og/${slug}.png`
-    const url = `${SITE_URL}/${pageData.relativePath.replace(/\.md$/, '.html')}`
+    const url = `${SITE_URL}/${pageData.relativePath.replace(/\.md$/, '')}`
 
     pageData.frontmatter.head ??= []
     pageData.frontmatter.head.push(

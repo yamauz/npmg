@@ -1,4 +1,4 @@
-> 出典: Node.js Package Manager Guide(npmg) — https://npmg.yamauz.workers.dev/pnpm/09-how-pnpm-works.html
+> 出典: Node.js Package Manager Guide(npmg) — https://npmg.yamauz.workers.dev/pnpm/09-how-pnpm-works
 
 # 9. pnpm の仕組み — ストアとリンク
 

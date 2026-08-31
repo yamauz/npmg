@@ -1,4 +1,4 @@
-> 出典: Node.js Package Manager Guide(npmg) — https://npmg.yamauz.workers.dev/basics/02-package-json-and-semver.html
+> 出典: Node.js Package Manager Guide(npmg) — https://npmg.yamauz.workers.dev/basics/02-package-json-and-semver
 
 # 2. package.json — 依存の宣言とバージョン範囲
 

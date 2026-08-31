@@ -1,4 +1,4 @@
-> 出典: Node.js Package Manager Guide(npmg) — https://npmg.yamauz.workers.dev/appendix/a-command-cheatsheet.html
+> 出典: Node.js Package Manager Guide(npmg) — https://npmg.yamauz.workers.dev/appendix/a-command-cheatsheet
 
 # 付録A. コマンド対照表
 

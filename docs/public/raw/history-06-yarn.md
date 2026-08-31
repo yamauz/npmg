@@ -1,4 +1,4 @@
-> 出典: Node.js Package Manager Guide(npmg) — https://npmg.yamauz.workers.dev/history/06-yarn.html
+> 出典: Node.js Package Manager Guide(npmg) — https://npmg.yamauz.workers.dev/history/06-yarn
 
 # 6. yarn の登場と分岐
 
