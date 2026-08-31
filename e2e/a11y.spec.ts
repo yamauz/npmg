@@ -8,6 +8,13 @@ import { ALL_PATHS } from './pages'
 // なりやすく、目視では気づけないためテストで固定する。
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']
 
+// 配色には background-color 0.5s のトランジションが掛かっている。
+// 切り替え直後に測ると遷移途中の色を拾い、実際には AA を満たす箇所まで
+// 落ちる (300ms 時点では #1A202A が #3B4049 に見えた)。待ち時間を
+// 延ばして誤魔化すと CI の負荷次第で不安定になるので、測る前に止める。
+const NO_MOTION =
+  '*, *::before, *::after { transition: none !important; animation: none !important }'
+
 for (const path of ALL_PATHS) {
   test(`a11y (ライト): ${path}`, async ({ page }) => {
     await page.goto(path)
@@ -21,8 +28,7 @@ for (const path of ALL_PATHS) {
       document.documentElement.classList.add('dark')
       localStorage.setItem('vitepress-theme-appearance', 'dark')
     })
-    // クラス切り替え後、変数が解決されるまで待つ
-    await page.waitForTimeout(300)
+    await page.addStyleTag({ content: NO_MOTION })
     const { violations } = await new AxeBuilder({ page }).withTags(TAGS).analyze()
     expect(describe(violations)).toEqual([])
   })

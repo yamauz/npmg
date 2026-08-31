@@ -117,7 +117,12 @@ export default withMermaid(
         provider: 'local',
         options: {
           translations: {
-            button: { buttonText: '検索', buttonAriaLabel: '検索' },
+            // ボタンには「検索」とショートカットキーが見えている。aria-label が
+            // それを含まないと可視ラベルと読み上げ名が食い違う
+            // (label-content-name-mismatch)。axe は可視テキストを「検索K」と
+            // 連結して見るので、空白を挟まずここに合わせる。省略すると
+            // VitePress が英語の 'Search' を入れてしまうため外せない。
+            button: { buttonText: '検索', buttonAriaLabel: '検索K' },
             modal: {
               displayDetails: '詳細を表示',
               resetButtonTitle: 'リセット',
