@@ -98,6 +98,40 @@ PR には CI が走り、以下 2 つが必須チェック(緑にならないと
 
 残っているボトルネックは Google Fonts。`fonts.googleapis.com` → `fonts.gstatic.com` の 2 段アクセスになり、CSS だけで 343KB・`@font-face` 390 個を読む(未使用 CSS の指摘 109KB のうち 92KB がこれ)。これ以上詰めるならフォントの自己ホスティングが次の一手だが、全書体に関わるので design.md 側の判断が要る。
 
+### 依存更新(Renovate)
+
+**Renovate GitHub App が毎週月曜の朝に PR を出す**(設定は `renovate.json`、タイムゾーンは Asia/Tokyo)。Dependabot は使っていない。
+
+自動マージの線引き:
+
+| 対象 | patch / minor | major |
+| --- | --- | --- |
+| devDependencies | **自動マージ** | 手動 |
+| GitHub Actions | **自動マージ** | 手動 |
+| `vgpu` / `@vgpu/wgsl` | 手動 | 手動 |
+| `wrangler` | 手動 | 手動 |
+| `.node-version` | 手動 | 手動 |
+| `packageManager`(pnpm) | 手動 | 手動 |
+
+自動マージは **CI の 2 つの必須チェックが緑になってから** GitHub の Auto-merge 機能で入る(`platformAutomerge`)。この方式のためリポジトリ設定の **Allow auto-merge が有効になっている必要がある**(2026-08-31 に有効化済み。切ると Renovate が自前でポーリングしてマージする挙動に落ち、待ちが長くなる)。
+
+手動レビューに回すものの理由:
+
+- **`vgpu` / `@vgpu/wgsl`** — ヒーローの WebGPU シェーダーの実行基盤。**壊れても CI では検出できない**(E2E は WebGPU の描画結果を検査していない)。マージ前に `pnpm dev` で星座が描かれるか目視する
+- **`wrangler`** — デプロイに直結する
+- **`.node-version` / `packageManager`** — Cloudflare ダッシュボード側のビルド設定と揃っている必要があり、リポジトリだけでは完結しない
+
+グループ化してあるもの(バージョンを揃えないと壊れる): `@playwright/test` + `playwright-core`、`axe-core` + `@axe-core/playwright`、`oxlint` + `oxfmt`。
+
+そのほか:
+
+- **Lighthouse は Renovate の PR では走らない**(`lighthouse.yml` の `if: !startsWith(github.head_ref, 'renovate/')`)。プレビュー生成待ちに 10 分使う割に得るものが少ないため。`on.pull_request` の `branches` / `branches-ignore` は **base ブランチにしか効かない**ので、head で外すにはジョブ側の `if` が必要
+- `runs-on: ubuntu-latest` は Renovate の管理対象外にしてある(`github-runner` を `enabled: false`)。latest 追従で運用しているため
+- lockfile の refresh は毎月 1 日(`lockFileMaintenance`)
+- 脆弱性アラートだけはスケジュール外で即座に PR が出る(自動マージはしない)
+- 設定を変えたら **バリデータに通す**: `pnpm dlx --package renovate renovate-config-validator`(**引数なしで実行する**。ファイル名を渡すと global config として検証され、リポジトリ設定用のチェックが掛からない)。`packageRules` は**後のルールが前を上書きする**ので、順序を変えると自動マージの線引きが黙って変わる
+- `matchPackageNames` は `depName` ではなく **`packageName` に照合される**。npm では抽出時に `packageName` が空で、lookup 直前に `depName` から補完される(`fetch.ts` の `dep.packageName ??= dep.depName`)。設定を手元で試すスクリプトを書くときはこの補完を再現しないと、ルールがマッチせず「効いていない」と誤読する
+
 ### MCP
 
 `.mcp.json` に **chrome-devtools-mcp**(Chrome DevTools チーム公式、Apache-2.0)を入れてある。ブラウザ操作・コンソール・ネットワーク・パフォーマンストレースに加えて `lighthouse_audit` を持つので、a11y と Lighthouse はこれ 1 つで足りる。Google への使用統計送信は既定で有効なため `--no-usage-statistics` で切ってある。
