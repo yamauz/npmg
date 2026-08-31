@@ -391,3 +391,67 @@ body {
   letter-spacing: 0.08em;
   color: var(--color-ink-3);
 }
+
+/* --------------------------------------------------------------------------
+   コントラスト (WCAG 2.1 AA)
+   インラインコードはアクセントのブルーで組む。VitePress 既定の背景
+   (グレー 14%) だと本文上で 4.38:1 にしかならず AA (4.5:1) に届かない。
+   アクセント色は design.md の根幹なので動かさず、背景を薄くして稼ぐ。
+   e2e/a11y.spec.ts が axe で継続的に検証している。
+   -------------------------------------------------------------------------- */
+/* 半透明のままだと、地のある場所 (custom-block・表の縞・tip) で下地と
+   重なって背景が濃くなり、同じブルーでも 4.1〜4.3:1 まで落ちる。
+   重なりを断つために不透明色で固定する。 */
+:root {
+  --vp-code-bg: var(--color-paper-2);
+  --vp-c-default-soft: var(--color-paper-2);
+}
+
+.dark {
+  --vp-code-bg: var(--color-paper-3);
+  --vp-c-default-soft: var(--color-paper-3);
+}
+
+/* custom-block は自前の地色 (tip=青 7%・warning=黄 14%) を持ち、
+   その中の code は変数ではなくブロックの地を継ぐ。青地に青文字で
+   4.12:1 まで落ちるので、ここは地から切り離してベタで置く。 */
+.vp-doc .custom-block :not(pre) > code {
+  background-color: var(--color-paper);
+}
+
+/* コードブロック右上の言語ラベル。地が paper-2 なので ink-3 では 4.31:1
+   にしかならず、ここだけ一段濃い墨を当てる (5.04:1)。 */
+.vp-doc div[class*='language-'] > button.copy + span.lang,
+.vp-doc div[class*='language-'] > span.lang {
+  color: #61686f;
+}
+
+.dark .vp-doc div[class*='language-'] > button.copy + span.lang,
+.dark .vp-doc div[class*='language-'] > span.lang {
+  color: var(--color-ink-3);
+}
+
+/* Shiki (github-light/dark) のコメント色 #6A737D は、この本の
+   コードブロックの地では 4.3:1 (ライト) / 3.4:1 (ダーク) しかない。
+   コメントは本文の説明を兼ねているので、地に応じて締める。
+   色はインラインの CSS 変数で入るため、変数ごと上書きする。 */
+/* 変数はインライン style 側が勝つので、color を直接当てる。
+   ダーク側の地 (paper-3) では github-dark のままで AA を満たすため、
+   ライトで足りないトークンだけ締める。 */
+.vp-doc [class*='language-'] span[style*='#6A737D'] {
+  color: #5f6873;
+}
+
+.dark .vp-doc [class*='language-'] span[style*='#6A737D'] {
+  color: #828d9d;
+}
+
+/* キーワード (const/return など) 4.08:1 → 5.01:1 */
+html:not(.dark) .vp-doc [class*='language-'] span[style*='#D73A49'] {
+  color: #c82333;
+}
+
+/* 文字列・属性値 4.13:1 → 4.82:1 */
+html:not(.dark) .vp-doc [class*='language-'] span[style*='#22863A'] {
+  color: #1f7a34;
+}
