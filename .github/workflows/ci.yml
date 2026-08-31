@@ -1,0 +1,69 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: lint / format / unit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: format check
+        run: pnpm format:check
+
+      - name: lint
+        run: pnpm lint
+
+      - name: unit test
+        run: pnpm test
+
+  e2e:
+    name: build / e2e
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # リンク切れがあるとここで落ちる。ビルド自体が検証を兼ねている
+      - name: build
+        run: pnpm build
+
+      - name: install chromium
+        run: pnpm exec playwright install --with-deps chromium
+
+      # OGP / raw md の生成漏れはビルドでは検出できないので E2E で見る
+      - name: e2e
+        run: pnpm e2e
+
+      - if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: playwright-report
+          retention-days: 7
