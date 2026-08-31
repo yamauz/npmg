@@ -22,9 +22,49 @@ node scripts/og-image.mjs --chapters  # 章ごとの OGP → docs/public/og/<slu
 node scripts/og-image.mjs --all       # 両方
 pnpm llms        # 貼り付け用 Markdown + llms.txt を再生成
 pnpm test        # vitest。md 変換ロジック(scripts/lib/md-transform.mjs)のユニットテスト
+pnpm lint        # oxlint
+pnpm format      # oxfmt で整形。format:check は差分があると落ちる(CI が使う)
+pnpm e2e         # Playwright。ビルド成果物を preview で配信して叩く(e2e:ui で UI モード)
 ```
 
 変更は必ず `pnpm build` とスクリーンショット(ライト/ダーク両方)で確認してからデプロイする。
+
+## 開発フロー(main は保護されている)
+
+**main への直接 push は GitHub の Ruleset で禁止されている**(管理者も bypass 不可)。変更は必ず main からブランチを切って PR を出す。
+
+```sh
+git checkout -b <branch>
+# ... 変更 ...
+gh pr create
+```
+
+PR には CI が走り、以下 2 つが必須チェック(緑にならないとマージできない):
+
+| ジョブ | 中身 |
+| --- | --- |
+| `lint / format / unit` | `pnpm format:check` / `pnpm lint` / `pnpm test` |
+| `build / e2e` | `pnpm build` / `pnpm e2e`(Playwright 102 ケース) |
+
+ローカルでは `pnpm format` で整形してから出す(`format:check` は差分があると落ちる)。
+
+### E2E が守っているもの
+
+**OGP と raw md の生成漏れを捕まえるのが主目的。** 上の OGP / Markdown コピーの節にあるとおり、これらはビルドで生成されないので忘れると 404 のまま公開される。E2E はビルド成果物を `vitepress preview` で配信して叩くため、この抜けを検出できる。
+
+ページを追加・リネームしたら **`e2e/pages.ts` の `DOCS` にも足す**。ここが全 E2E の単一の情報源になっている(スラッグ規則は OGP・llms.txt と同一)。
+
+そのほか見ているもの: 全ページ遷移とコンソールエラー、サイドバー全リンクの到達性、Mermaid の SVG 描画、TermDemo の再生、Markdown コピーの実動作、ダーク切替。
+
+### フォーマッタ / linter
+
+**oxfmt**(整形)と **oxlint**(静的チェック)。設定は `.oxfmtrc.json` / `.oxlintrc.json`。
+
+- **本文の md と `research/` は整形対象外**(原稿を機械整形しない)。対象は `docs/.vitepress/` 配下の JS/TS/Vue/CSS、`scripts/`、`e2e/`、設定 JSON
+- スタイルは既存に合わせて **セミコロンなし・シングルクォート**
+- oxlint は `correctness` と `suspicious` のみ。`perf` は入れない(`no-await-in-loop` が TermDemo のタイピングなど逐次実行が意図の箇所を全部叩くため)
+
+`vitest.config.ts` は vitest の対象を `scripts/**/*.test.mjs` に絞っている。外すと vitest が `e2e/` を拾って落ちる。
 
 ## デプロイ
 
