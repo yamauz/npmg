@@ -212,16 +212,16 @@ minimumReleaseAgeExclude:
 
 重要なのは、この防御が後述の `pnpm dlx` にも効くことです。「X(旧 Twitter)で話題の CLI を `dlx` で即実行したら公開 2 時間のマルウェアだった」という最悪のシナリオを、設定 1 行で塞げます。
 
-<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-12-2.png に保存し、下の行のコメントを外してください -->
-<!-- ![図 12-2: サプライチェーン攻撃の侵入経路と pnpm の防御ポイント](/images/fig-12-2.png) -->
-
-> **🖼️ 図 12-2|サプライチェーン攻撃の侵入経路と pnpm の防御ポイント**(画像プレースホルダー)
-> 生成後は `docs/public/images/fig-12-2.png` に配置してください。
+<figure>
+  <img src="/images/fig-12-2.png" alt="サプライチェーン攻撃の侵入経路と pnpm の防御ポイント">
+  <figcaption><span class="fig-num">図 12-2</span> サプライチェーン攻撃の侵入経路と pnpm の防御ポイント</figcaption>
+</figure>
 
 <!-- 図 12-2 の生成プロンプト(採用版・ページには出しない)
 
 STYLE PRESET (apply exactly; keep consistent with all previous diagrams in this series):
-Flat 2D vector infographic in a minimal technical-illustration style. Landscape orientation (3:2).
+Flat 2D vector infographic in a minimal technical-illustration style. Wide landscape orientation
+(2:1 aspect ratio, e.g. 2560 x 1280).
 Pure white background (#FFFFFF). Limited palette: near-black ink #1C1E21 for text and outlines,
 blue #2563EB as the single primary accent, light gray #E2E8F0 for container boxes,
 orange #F59E0B for highlights only. Uniform medium-weight rounded strokes, simple geometric
@@ -232,9 +232,25 @@ Render every quoted label verbatim, exactly once, with no extra, invented, or du
 No text other than the labels listed below.
 
 DIAGRAM CONTENT:
-LAYOUT: A horizontal flow from left to right. On the far left a dark figure icon, then a container box, then two vertical gate-shaped barriers standing on the path, and on the far right a house-shaped box.
-ELEMENTS: A dark navy hooded-figure icon labeled "attacker". A light gray container with a cloud icon labeled "registry". A first blue gate labeled "minimumReleaseAge". A second blue gate labeled "build approval". A white house-shaped box labeled "your project". An orange cross mark labeled "blocked" placed on the path between the two gates.
-ARROWS: A labeled arrow reading "malicious update" pointing from "attacker" to "registry". An unlabeled arrow from "registry" toward "your project" passing through both gates, drawn as a dashed line after the first gate.
+LAYOUT: A single horizontal flow arranged as one straight row, all items vertically centered on
+the same horizontal axis and spanning the full width of the canvas with even margins on the left
+and right. From left to right: one rounded box, then a second rounded box, then two shield
+shapes side by side, then one final rounded box. Arrows connect them left to right along the row.
+ICON STYLE: every icon is a simple line-art outline drawing, drawn with the same uniform dark
+stroke as the boxes, with no fill, no color, no gradient, and no 3D shading. Icons must look
+like monochrome outline pictograms, not illustrations.
+ELEMENTS:
+- Far left: a white box with a thick orange outline, an outline icon of a hooded figure, labeled
+  "attacker"
+- Second: a white box with a thin dark outline, an outline icon of a cloud, labeled "registry"
+- Third: a shield shape with a thick blue outline and white fill, labeled "release age"
+- Fourth: a shield shape with a thick blue outline and white fill, labeled "build approval"
+- Far right: a white box with a thin dark outline, an outline icon of a folder, labeled
+  "your project"
+ARROWS: exactly two arrows. One plain dark arrow from the "attacker" box to the "registry" box,
+labeled "malicious update". One dashed orange line starting at the "registry" box and pointing
+right toward the first shield, ending in a small orange cross mark just before that shield,
+labeled "blocked". No arrow reaches "your project". No other lines or connectors anywhere.
 -->
 
 ## pnpm dlx と pnpm create — 一時実行の作法
