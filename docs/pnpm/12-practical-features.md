@@ -52,11 +52,10 @@ overrides:
 
 yarn を使ってきた読者なら「`resolutions` と同じでは?」と気づいたはずです。そのとおりで、**overrides は yarn v1 の `resolutions` に相当します**。yarn から乗り換える場合も、`resolutions` の内容をこの overrides に書き写せばほぼそのまま機能します。
 
-<!-- 🖼️ 画像プレースホルダー: 生成した画像を docs/public/images/fig-12-3.png に保存し、下の行のコメントを外してください -->
-<!-- ![図 12-3: overrides が依存グラフを書き換える図](/images/fig-12-3.png) -->
-
-> **🖼️ 図 12-3|overrides が依存グラフを書き換える図**(画像プレースホルダー)
-> 生成後は `docs/public/images/fig-12-3.png` に配置してください。
+<figure>
+  <img src="/images/fig-12-3.png" alt="overrides が依存グラフを書き換える図">
+  <figcaption><span class="fig-num">図 12-3</span> overrides が依存グラフを書き換える図</figcaption>
+</figure>
 
 <!-- 図 12-3 の生成プロンプト(採用版・ページには出しない)
 
@@ -72,9 +71,21 @@ Render every quoted label verbatim, exactly once, with no extra, invented, or du
 No text other than the labels listed below.
 
 DIAGRAM CONTENT:
-LAYOUT: A simple dependency chain runs from left to right across the middle: two white boxes, then a fork to two boxes on the right (one upper, one lower). A blue command box floats at the top center.
-ELEMENTS: A white box labeled "app", a white box labeled "lib", an upper-right box labeled "vulnerable" drawn with an orange dashed outline and a small orange cross mark, and a lower-right blue box labeled "safe version". At the top center, a blue rounded box labeled "overrides".
-ARROWS: An unlabeled arrow from "app" to "lib". A labeled arrow reading "requires" pointing from "lib" toward "vulnerable", drawn as a crossed-out dashed line. A labeled arrow reading "rewired" pointing from "lib" to "safe version". A labeled arrow reading "forces" pointing from "overrides" down to "safe version".
+LAYOUT: Two columns. The left column has two boxes side by side, horizontally centered on the
+vertical middle of the canvas. The right column has three boxes stacked vertically and evenly
+spaced: an upper box, a middle box, and a lower box. The left column connects to the right
+column's upper and lower boxes.
+ELEMENTS:
+- Left column, first box: white with a thin dark outline, labeled "app"
+- Left column, second box: white with a thin dark outline, labeled "lib"
+- Right column, upper box: white with a dashed orange outline, labeled "vulnerable"
+- Right column, middle box: white with a thick blue outline, labeled "overrides"
+- Right column, lower box: white with a thick blue outline, labeled "safe version"
+ARROWS: exactly four arrows. One plain dark arrow from "app" to "lib". One dashed orange line
+from "lib" to the "vulnerable" box that ends in a small orange cross mark instead of an
+arrowhead, labeled "blocked". One plain dark arrow from "lib" to the "safe version" box,
+labeled "rewired". One short blue arrow pointing straight down from the "overrides" box to the
+"safe version" box directly beneath it, labeled "forces". No other lines or connectors anywhere.
 -->
 
 ## pnpm patch — fork せずにその場で繕う
