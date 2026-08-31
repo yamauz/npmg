@@ -53,6 +53,8 @@ jobs:
             sleep 2
           done
 
+      # SEO はここでは見ない。Cloudflare がプレビューに x-robots-tag: noindex を
+      # 付けるため必ず 66 になる(本番は 100)。原理的に検査できない。
       - name: Lighthouse
         id: lh
         uses: treosh/lighthouse-ci-action@v12
@@ -106,7 +108,7 @@ jobs:
               '| --- | --- | --- | --- | --- | --- |',
               ...rows,
               '',
-              '<sub>Performance は計測ごとに揺れる (Cloudflare のコールドスタート次第で 10 点程度)。傾向を見る用で閾値では締めていない。A11y / Best Practices / SEO は 100 未満で CI が落ちる。</sub>',
+              '<sub>Performance は計測ごとに揺れる (Cloudflare のコールドスタート次第で 10 点程度)。傾向を見る用で閾値では締めていない。A11y と Best Practices は 100 未満で CI が落ちる。SEO はプレビューに noindex が付く都合で必ず 66 になるので参考値 (本番は 100)。</sub>',
             ].join('\n')
 
             const { data: comments } = await github.rest.issues.listComments({

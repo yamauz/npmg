@@ -20,12 +20,6 @@
             "minScore": 1
           }
         ],
-        "categories:seo": [
-          "error",
-          {
-            "minScore": 1
-          }
-        ],
         "total-blocking-time": [
           "error",
           {
