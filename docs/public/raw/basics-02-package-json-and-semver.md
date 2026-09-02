@@ -95,12 +95,6 @@ $ npx semver -r '^0.2.3' 0.2.4 0.3.0
 0.2.4
 ```
 
-```sh
-$ npx semver -r '^1.2.3' 1.2.4 1.3.0 1.9.9 2.0.0
-$ npx semver -r '~1.2.3' 1.2.4 1.3.0 1.9.9 2.0.0
-$ npx semver -r '^0.2.3' 0.2.4 0.3.0
-```
-
 (初回は `npx` がパッケージ取得の確認を求めることがあります。y で進めてください)
 
 最後の `^0.2.3` の結果に注目してください。表の規則(MAJOR だけ守る)なら 0.3.0 も通るはずなのに、**弾かれています**。
@@ -168,14 +162,6 @@ $ npm view react-dom peerDependencies
 { react: '^19.2.8' }
 ```
 
-```sh
-$ npm view react-dom peerDependencies
-```
-
-```
-{ react: '^19.2.8' }
-```
-
 dependencies ではなく **peerDependencies** に入っています。もしこれが dependencies だったら何が起きるか。3 章で詳しく見ますが、npm は依存が競合したとき「それぞれの中に別々のコピーを入れる」ことで解決します。つまり、あなたのアプリの react と、react-dom が抱え込んだ react の**2 つの React が同時に存在する**状態になりえます。
 
 もし dependencies だったら、react の実体が 2 つに分かれます。
@@ -226,20 +212,6 @@ peerDependencies はこれを防ぎます。「**私は react を使うが、実
 ```
 
 npm でインストールすると、**インストール自体が失敗**します。
-
-```sh
-$ npm install
-npm error code ERESOLVE
-npm error ERESOLVE unable to resolve dependency tree
-npm error
-npm error While resolving: peer-demo@1.0.0
-npm error Found: react@18.3.1
-npm error node_modules/react
-npm error   react@^18.3.1 from the root project
-npm error
-npm error Could not resolve dependency:
-npm error peer react@^19.2.8 from react-dom@19.2.8
-```
 
 ```sh
 $ npm install

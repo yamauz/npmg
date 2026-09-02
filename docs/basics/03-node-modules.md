@@ -331,7 +331,7 @@ console.log(typeof bp)
 
 これを実行すると──
 
-<TermDemo
+<TermBlocks
   title="zsh — 幽霊依存を require してみる(npm)"
   :lines="[
     { cmd: 'node phantom.js' },
@@ -339,14 +339,6 @@ console.log(typeof bp)
     { out: 'function' },
   ]"
 />
-
-```sh
-$ node phantom.js
-```
-
-```
-function
-```
 
 動いてしまいました。宣言していないパッケージが、エラーどころか普通の関数として手に入っています。この「動いてしまう」が、いつか誰かの深夜のデバッグになるわけです。そして [9章](/pnpm/09-how-pnpm-works)では、**まったく同じ phantom.js** が pnpm のプロジェクトでは `Cannot find module` で止まる瞬間を見ます。
 

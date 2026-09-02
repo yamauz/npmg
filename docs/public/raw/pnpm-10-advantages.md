@@ -20,14 +20,6 @@
 ```sh
 $ mkdir pnpm-demo2 && cd pnpm-demo2 && pnpm init
 $ pnpm add express
-Packages: +66
-Progress: resolved 66, reused 66, downloaded 0, added 66, done
-Done in 413ms
-```
-
-```sh
-$ mkdir pnpm-demo2 && cd pnpm-demo2 && pnpm init
-$ pnpm add express
 ```
 
 ```

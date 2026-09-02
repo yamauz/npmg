@@ -171,7 +171,7 @@ its box. No other lines or connectors anywhere in the diagram.
 
 「伝票のとおりに仕入れる。伝票と品書きが食い違っていたら、勝手に判断せず報告する」という動きです。この 3 つを実際に見てみましょう。[3章](/basics/03-node-modules)の flat-lab(express インストール済み)で `npm ci` を実行したあと、`npm pkg set` で package.json の要求だけを `^4.0.0` に書き換え、わざと矛盾を作ります。
 
-<TermDemo
+<TermBlocks
   title="zsh — npm ci の凍結と矛盾検出"
   :lines="[
     { cmd: 'npm ci' },
@@ -187,14 +187,7 @@ its box. No other lines or connectors anywhere in the diagram.
   ]"
 />
 
-手元で再現する場合はこちらです。
-
-```sh
-$ npm ci
-$ npm pkg set dependencies.express=^4.0.0   # わざと矛盾させる
-$ npm ci                                    # → エラーで停止する
-$ npm pkg set dependencies.express=^5.2.1   # 元に戻す
-```
+手元で再現する場合は、上のコマンド行を 1 行ずつコピーして実行してください。
 
 1 回目の `npm ci` は、既存の node_modules を黙って丸ごと削除してから作り直しています(メッセージには出ませんが、node_modules を観察していると消えて再生成されるのがわかります)。そして 2 回目のエラーの核心は `Invalid: lock file's express@5.2.1 does not satisfy express@^4.0.0` の 1 行です。伝票(lockfile)は 5.2.1 と言っているのに、品書き(package.json)は 4 系を求めている。`npm ci` はどちらが正しいかを自分で判断せず、人間に差し戻します。
 

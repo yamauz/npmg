@@ -6,14 +6,18 @@ import DefaultTheme from 'vitepress/theme-without-fonts'
 import CopyMarkdown from './CopyMarkdown.vue'
 import HomeShinso from './HomeShinso.vue'
 import { defineAsyncComponent } from 'vue'
-import TermDemo from './TermDemo.vue'
+import TermBlocks from './TermBlocks.vue'
+import TermFrame from './TermFrame.vue'
 import './custom.css'
 
 export default {
   extends: DefaultTheme,
   enhanceApp({ app }) {
     app.component('HomeShinso', HomeShinso)
-    app.component('TermDemo', TermDemo)
+    // ターミナル表示。md の <TermBlocks :lines="[{ cmd }, { out }]" /> を描く
+    app.component('TermBlocks', TermBlocks)
+    // 本文のコードブロックを包む枠(config.mts の markdown.config が差し込む)
+    app.component('TermFrame', TermFrame)
     // H1 の直後に markdown-it 側から差し込まれる(config.mts の markdown.config)
     app.component('CopyMarkdown', CopyMarkdown)
     // vitepress-plugin-mermaid が注入する Mermaid を上書きする

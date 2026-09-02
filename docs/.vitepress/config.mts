@@ -3,6 +3,34 @@ import { defineConfig } from 'vitepress'
 const SITE_URL = 'https://npmg.yamauz.workers.dev'
 const SITE_TITLE = 'Node.js Package Manager Guide'
 
+// コードブロックをターミナル枠に入れるときの判定 (markdown.config の fence で使う)。
+// シェル扱い ($ 始まりの行を 1 行コピー対象にする) は SHELL_LANGS のみ。
+const SHELL_LANGS = new Set(['sh', 'bash', 'zsh', 'shell', 'console'])
+const langOf = (t?: { info: string }) => (t?.info ?? '').trim().split(/[:{\s]/)[0]
+
+type Fence = { type: string; info: string; map?: [number, number] | null }
+
+/**
+ * b が a の「実行結果」として同じターミナルに収まるか。
+ *
+ * 言語指定なし (``` のみ) が典型だが、`cat package.json` の出力が ```json の
+ * ように言語つきの出力もある。シェル自身と mermaid は出力ではない。
+ *
+ * ソース上で連続していること (間に散文がないこと) を token.map で確かめる。
+ * これを見ないと、説明文をはさんで置かれた無関係な JSON まで吸い込む。
+ */
+const isOutputOf = (a?: Fence, b?: Fence) => {
+  if (a?.type !== 'fence' || b?.type !== 'fence') return false
+  if (!SHELL_LANGS.has(langOf(a))) return false
+  const lang = langOf(b)
+  if (SHELL_LANGS.has(lang) || lang === 'mermaid' || lang === 'mmd') return false
+  // a の終わり (map[1]) と b の始まり (map[0]) の間は空行 1 行まで
+  const end = a.map?.[1]
+  const start = b.map?.[0]
+  if (end == null || start == null) return false
+  return start - end <= 1
+}
+
 export default defineConfig({
   lang: 'ja-JP',
   title: 'Node.js Package Manager Guide',
@@ -177,6 +205,11 @@ export default defineConfig({
     )
   },
   markdown: {
+    // コードブロックはライト/ダークどちらでも墨地のターミナル枠に入る
+    // (theme/TermFrame.vue) ので、ハイライトもダーク側に固定する。
+    // 既定の dual theme のままだと、ライトテーマのとき墨地に github-light の
+    // トークン (濃い色) が乗ってコントラストが取れない。
+    theme: 'github-dark',
     config(md) {
       // ```mermaid フェンスを <Mermaid> に差し替える。
       // vitepress-plugin-mermaid が同じことをするが、あのプラグインは
@@ -191,12 +224,34 @@ export default defineConfig({
       md.renderer.rules.fence = (tokens, idx, options, env, self) => {
         const token = tokens[idx]
         const lang = token.info.trim()
-        if (lang !== 'mermaid' && lang !== 'mmd') {
-          return defaultFence(tokens, idx, options, env, self)
+        if (lang === 'mermaid' || lang === 'mmd') {
+          const graph = encodeURIComponent(token.content)
+          // Suspense で包むのは MermaidView が非同期コンポーネントのため
+          return `<Suspense><template #default><Mermaid id="mermaid-${idx}" class="mermaid-figure" graph="${graph}"></Mermaid></template><template #fallback></template></Suspense>`
         }
-        const graph = encodeURIComponent(token.content)
-        // Suspense で包むのは MermaidView が非同期コンポーネントのため
-        return `<Suspense><template #default><Mermaid id="mermaid-${idx}" class="mermaid-figure" graph="${graph}"></Mermaid></template><template #fallback></template></Suspense>`
+
+        // 「コマンドのブロック + その実行結果のブロック」は 1 つのターミナルに
+        // 収める。別々の枠にすると、同じ 1 回の実行が 2 台のターミナルに割れて
+        // 見える。出力は ``` のことも ```json のこともある (cat の結果など)。
+        //
+        // 直前がコマンドのフェンスなら、この出力はそちらに吸収済み
+        if (isOutputOf(tokens[idx - 1], token)) {
+          return ''
+        }
+
+        const label = langOf(token) || 'out'
+        const shell = SHELL_LANGS.has(label)
+
+        let html = defaultFence(tokens, idx, options, env, self)
+        // 直後に続く実行結果を、同じ枠の中に連結する
+        if (isOutputOf(token, tokens[idx + 1])) {
+          html += defaultFence(tokens, idx + 1, options, env, self)
+        }
+
+        // 本文中のコードブロックはすべてターミナルの枠に入れる。
+        // 静的ブロックと TermDemo が同じ内容を二重に見せていた状態を解消した
+        // 際に、見た目を「ターミナル」に一本化した (theme/TermFrame.vue)。
+        return `<TermFrame lang="${label}"${shell ? ' shell' : ''}>${html}</TermFrame>`
       }
 
       // H1 の直後に「Markdown をコピー」ボタンを差し込む。

@@ -117,14 +117,7 @@ npm error Invalid: lock file's express@5.2.1 does not satisfy express@^4.0.0
 $ npm pkg set dependencies.express=^5.2.1
 ```
 
-手元で再現する場合はこちらです。
-
-```sh
-$ npm ci
-$ npm pkg set dependencies.express=^4.0.0   # わざと矛盾させる
-$ npm ci                                    # → エラーで停止する
-$ npm pkg set dependencies.express=^5.2.1   # 元に戻す
-```
+手元で再現する場合は、上のコマンド行を 1 行ずつコピーして実行してください。
 
 1 回目の `npm ci` は、既存の node_modules を黙って丸ごと削除してから作り直しています(メッセージには出ませんが、node_modules を観察していると消えて再生成されるのがわかります)。そして 2 回目のエラーの核心は `Invalid: lock file's express@5.2.1 does not satisfy express@^4.0.0` の 1 行です。伝票(lockfile)は 5.2.1 と言っているのに、品書き(package.json)は 4 系を求めている。`npm ci` はどちらが正しいかを自分で判断せず、人間に差し戻します。
 

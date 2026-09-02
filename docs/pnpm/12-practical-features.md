@@ -282,7 +282,7 @@ $ pnpm create vite my-app
 
 実際にパッチを当ててみます。題材として lodash に「バージョン文字列を書き換える」だけの無害な変更を加えます。まず、4 ステップの流れを通しで見てみましょう。
 
-<TermDemo
+<TermBlocks
   title="zsh — pnpm patch の 4 ステップ"
   :lines="[
     { cmd: 'pnpm patch lodash@4.17.21' },

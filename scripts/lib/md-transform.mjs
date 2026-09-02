@@ -3,7 +3,7 @@
 //
 // 変換の順序には依存関係がある:
 //   1. HTML コメント削除(図版の生成プロンプトを先に落とす)
-//   2. TermDemo 展開
+//   2. TermBlocks 展開
 //   3. figure / プレースホルダーを畳む
 //   4. ::: コンテナを開く
 //   5. リンクを絶対化
@@ -12,17 +12,21 @@
 export const SITE_URL = 'https://npmg.yamauz.workers.dev'
 
 /**
- * TermDemo コンポーネントを素の ```sh コードブロックに開く。
+ * ターミナル表示コンポーネント <TermBlocks> を素の ```sh コードブロックに開く。
  *
- * <TermDemo title="zsh — ..." :lines="[{ cmd: 'a' }, { out: 'b' }, { pause: 400 }]" />
+ * <TermBlocks title="zsh — ..." :lines="[{ cmd: 'a' }, { out: 'b' }, { pause: 400 }]" />
  *   → ```sh
  *      $ a
  *      b
  *      ```
  * pause は演出用なので落とす。cmd には $ を付けて出力と区別する。
+ *
+ * ターミナル系のコンポーネントを増やしたら必ずここに追加する。足し忘れると
+ * 本文が raw md から丸ごと消える (未知のコンポーネントタグは後段で行ごと
+ * 落とされるため)。ビルドは通りエラーも出ないので気づけない。
  */
-export function expandTermDemo(text) {
-  return text.replace(/<TermDemo\b[\s\S]*?\/>/g, (block) => {
+export function expandTermBlocks(text) {
+  return text.replace(/<TermBlocks\b[\s\S]*?\/>/g, (block) => {
     const lines = []
     // { cmd: '...' } / { out: '...' } を順に拾う。値はシングルクォート固定(CLAUDE.md の規約)。
     const entryRe = /\{\s*(cmd|out|pause)\s*:\s*(?:'((?:\\.|[^'\\])*)'|(\d+))\s*\}/g
@@ -109,7 +113,7 @@ export function toPlainMarkdown(raw) {
   // 図版の生成プロンプトなど、ページに出していないコメントを丸ごと落とす
   text = text.replace(/<!--[\s\S]*?-->/g, '')
 
-  text = expandTermDemo(text)
+  text = expandTermBlocks(text)
   text = collapseFigures(text)
   text = collapsePlaceholders(text)
   text = expandContainers(text)

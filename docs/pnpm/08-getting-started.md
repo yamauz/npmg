@@ -141,7 +141,7 @@ $ pnpm create vite      # プロジェクトの雛形を生成
 
 では `pnpm add` を 1 回だけ実行して、pnpm が何を報告してくるかを見てみましょう。空のプロジェクトに express を追加します。
 
-<TermDemo
+<TermBlocks
   title="zsh — pnpm add express(初回)"
   :lines="[
     { cmd: 'mkdir add-lab && cd add-lab && pnpm init' },
@@ -154,12 +154,7 @@ $ pnpm create vite      # プロジェクトの雛形を生成
   ]"
 />
 
-コピペ用のコマンドと出力の全体は次のとおりです。
-
-```sh
-$ mkdir add-lab && cd add-lab && pnpm init
-$ pnpm add express
-```
+出力の全体は次のとおりです。
 
 ```
 Packages: +66
@@ -231,7 +226,7 @@ connectors anywhere in the diagram.
 
 それでは実際に、Vite のプロジェクトを 1 つ作ってみます。まず、これから行う作成〜インストールの流れを通しで見てみましょう。
 
-<TermDemo
+<TermBlocks
   title="zsh — pnpm create vite"
   :lines="[
     { cmd: 'pnpm create vite my-app' },
@@ -250,11 +245,7 @@ connectors anywhere in the diagram.
   ]"
 />
 
-同じことを手元で再現していきます。実験用ディレクトリ(例: `~/pm-sandbox`)で次を実行してください。
-
-```sh
-$ pnpm create vite my-app
-```
+同じことを手元で再現していきます。実験用ディレクトリ(例: `~/pm-sandbox`)で上のコマンドを順に実行すると、次のように進みます。
 
 ```
 ✔ Select a framework: › Vanilla
@@ -271,11 +262,6 @@ Done. Now run:
 
 案内どおりに依存をインストールし、開発サーバーを起動します。
 
-```sh
-$ cd my-app
-$ pnpm install
-```
-
 ```
 Packages: +11
 +++++++++++
@@ -286,10 +272,6 @@ devDependencies:
 + vite 7.1.3
 
 Done in 3.4s using pnpm v11.24.0
-```
-
-```sh
-$ pnpm dev
 ```
 
 ```

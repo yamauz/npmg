@@ -428,7 +428,7 @@ console.log(typeof bp)
 
 まず npm 側(3 章の flat-lab)。body-parser は未宣言なのに──
 
-<TermDemo
+<TermBlocks
   title="zsh — npm 側(3 章の flat-lab)"
   :lines="[
     { cmd: 'cd ~/pm-sandbox/flat-lab' },
@@ -440,7 +440,7 @@ console.log(typeof bp)
 
 次に pnpm 側。**同じコード、同じ express@5.2.1 依存**です。
 
-<TermDemo
+<TermBlocks
   title="zsh — pnpm 側(pnpm-demo)"
   :lines="[
     { cmd: 'cd ~/pm-sandbox/pnpm-demo' },
@@ -449,15 +449,6 @@ console.log(typeof bp)
     { out: 'Error: Cannot find module \'body-parser\'' },
   ]"
 />
-
-コピペ用に静的な形でも載せておきます。
-
-```sh
-$ cd ~/pm-sandbox/flat-lab && node phantom.js
-function
-$ cd ~/pm-sandbox/pnpm-demo && node phantom.js
-Error: Cannot find module 'body-parser'
-```
 
 ここが本書のハイライトです。npm では「たまたまルートに hoist されていたから」動いてしまった未宣言の require が、pnpm では**インストール直後から確実に失敗**します。body-parser の実体は `.pnpm` の中に確かにあるのに、ルートに symlink がないため、アプリコードからの探索は届かない。エラーが出るのは意地悪ではなく、「package.json に書いてから使ってください」という契約の強制です。事故は本番デプロイの日ではなく、コードを書いたその場で見つかります。
 
@@ -478,19 +469,6 @@ $ du -sh node_modules
 ```
 
 npm の 3.8M とほぼ同じに見えます(pnpm 側のファイル実体数は 589)。しかし先ほどの「つまずきポイント」のとおり、これは論理サイズです。物理ブロックはストアと共有されており、その効果は 2 つ目のプロジェクトを作った瞬間に表れます。
-
-<TermDemo
-  title="zsh — 2 つ目のプロジェクトで再利用"
-  :lines="[
-    { cmd: 'mkdir ~/pm-sandbox/pnpm-demo2 && cd ~/pm-sandbox/pnpm-demo2' },
-    { cmd: 'pnpm init' },
-    { pause: 300 },
-    { cmd: 'pnpm add express' },
-    { out: 'Packages: +66' },
-    { out: 'Progress: resolved 66, reused 66, downloaded 0, added 66, done' },
-    { out: 'Done in 413ms' },
-  ]"
-/>
 
 ```sh
 $ mkdir ~/pm-sandbox/pnpm-demo2 && cd ~/pm-sandbox/pnpm-demo2
