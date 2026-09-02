@@ -1,4 +1,4 @@
-> 出典: Node.js Package Manager Guide(npmg) — https://npmg.yamauz.workers.dev/pnpm/12-practical-features.html
+> 出典: Node.js Package Manager Guide(npmg) — https://npmg.yamauz.workers.dev/pnpm/12-practical-features
 
 # 12. 実務で効く機能たち
 

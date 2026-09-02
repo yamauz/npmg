@@ -431,27 +431,220 @@ body {
   color: var(--color-ink-3);
 }
 
-/* Shiki (github-light/dark) のコメント色 #6A737D は、この本の
-   コードブロックの地では 4.3:1 (ライト) / 3.4:1 (ダーク) しかない。
-   コメントは本文の説明を兼ねているので、地に応じて締める。
-   色はインラインの CSS 変数で入るため、変数ごと上書きする。 */
-/* 変数はインライン style 側が勝つので、color を直接当てる。
-   ダーク側の地 (paper-3) では github-dark のままで AA を満たすため、
-   ライトで足りないトークンだけ締める。 */
+/* Shiki のコメント色 #6A737D は、ターミナル枠の地 (#14181f) では 3.6:1 しかない。
+   コメントは本文の説明を兼ねているので締める (#8b96a6 で 6.0:1)。
+
+   コードブロックはライト/ダークどちらでも同じ墨地の枠に入る
+   (markdown.theme を github-dark に固定してある) ため、ここは
+   html.dark で分岐しない。分岐させると、ライト時に地だけ墨・文字だけ
+   ライト用の濃い色という組み合わせになり AA を割る。
+   色は Shiki がインライン style で直接書き込む (markdown.theme を単一テーマに
+   固定すると CSS 変数ではなく実色が入る) ため、!important でないと勝てない。 */
 .vp-doc [class*='language-'] span[style*='#6A737D'] {
-  color: #5f6873;
+  color: #8b96a6 !important;
 }
 
-.dark .vp-doc [class*='language-'] span[style*='#6A737D'] {
-  color: #828d9d;
+/* --------------------------------------------------------------------------
+   ターミナル枠に入れたコードブロック (theme/TermFrame.vue)
+
+   本文中のコードブロックは markdown-it 側 (config.mts の fence 差し替え) で
+   <TermFrame> に包まれる。中身は VitePress が吐いた div.language-* をそのまま
+   スロットで受けるため、スコープ付き CSS からは触れない。ここで置く。
+
+   コピーの単位は TermBlocks.vue と揃えてある (コマンド 1 行 / ログの塊)。
+   寸法もあちらと同じ値を使う。
+   -------------------------------------------------------------------------- */
+.term-frame__screen {
+  /* 行の寸法。コピーボタンを 1 行ぶんの高さに揃えるのに使う */
+  --tf-font-size: 13px;
+  --tf-line-height: 1.85;
+  /* ホバーの地と文字の間の余白 (塊の上下に置く) */
+  --tf-group-pad: 5px;
 }
 
-/* キーワード (const/return など) 4.08:1 → 5.01:1 */
-html:not(.dark) .vp-doc [class*='language-'] span[style*='#D73A49'] {
-  color: #c82333;
+/* 枠が地色 (#14181f) を持つので、中の言語ラベル・コピーボタン・角丸・余白は
+   すべて枠側に寄せる。VitePress 既定の装飾は畳む。 */
+.vp-doc .term-frame div[class*='language-'] {
+  margin: 0;
+  border-radius: 0;
+  background: transparent;
 }
 
-/* 文字列・属性値 4.13:1 → 4.82:1 */
-html:not(.dark) .vp-doc [class*='language-'] span[style*='#22863A'] {
-  color: #1f7a34;
+.vp-doc .term-frame div[class*='language-'] > button.copy,
+.vp-doc .term-frame div[class*='language-'] > span.lang {
+  display: none;
+}
+
+/* 折り返さず横スクロールさせる。モバイルで長いコマンドやログが折り返されると
+   ターミナルの見た目としても読み筋としても壊れるため。
+
+   スクロールは枠 (.term-frame__screen) にまとめて 1 つだけ持たせる。
+   pre ごとにスクロールさせると、
+     - 連結された枠 (コマンド + 出力) で pre が 2 つになり、
+       長いコマンドの側だけに横スクロールバーが出て行が分断される
+     - 塊ごとに幅が変わり、ホバーの地とコピーボタンの右端がずれる
+   ため。 */
+.term-frame__screen {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* スクロールの中身を 1 つの幅にまとめる箱。連結された 2 ブロックが
+   どちらもこの幅に揃うので、塊の右端が食い違わない。 */
+.term-frame__screen > * {
+  min-width: max-content;
+}
+
+.vp-doc .term-frame div[class*='language-'] pre {
+  margin: 0;
+  padding: 11px 0 13px;
+  background: transparent;
+  overflow: visible;
+}
+
+/* コマンドと出力は 1 台のターミナルに収める (config.mts が連結する)。
+   枠の中で上下の余白が二重にならないよう、継ぎ目の padding を畳む。 */
+.vp-doc .term-frame div[class*='language-']:not(:last-child) pre {
+  padding-bottom: 0;
+}
+
+.vp-doc .term-frame div[class*='language-']:not(:first-child) pre {
+  padding-top: 0;
+}
+
+/* 地は常に墨 (#14181f) なので、文字色も墨地向けに固定する。
+   言語指定なしのフェンス (``` のみ = コマンドの実行結果) は Shiki の
+   トークンが付かず、既定のままだと本文用の --vp-c-text-2 (#4b5563) を継いで
+   墨地で 2.35:1 まで落ちる。ここでベタに置き直す。
+
+   Shiki は行と行の間に生の改行を挟む。.line を block にすると「行自身の改行
+   + その改行」で 1 行おきに空行が入る (行間が倍になる)。ここで改行を畳み、
+   行の中身は .line 側の pre で保つ。 */
+.vp-doc .term-frame div[class*='language-'] code {
+  /* 塊 (flex item) を縦に積む。code を flex コンテナにすると、
+     子は既定で stretch して「いちばん長い塊」の幅に揃う。
+     block のままだと塊ごとに自分の中身の幅になり、長いコマンドの塊だけが
+     横に伸びて、ホバーの地とコピーボタンの右端が塊ごとにずれる。 */
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+  min-width: 100%;
+  padding: 0;
+  background: transparent;
+  color: #c8cfdb;
+  font-family: var(--font-mono-tokens);
+  font-size: var(--tf-font-size);
+  line-height: var(--tf-line-height);
+  white-space: normal;
+}
+
+/* ホバーの単位。ログは複数行でも 1 つの塊として反転する。
+   上下の padding は、ホバーの地が文字にぴったり張り付いて窮屈に
+   見えないようにするためのもの。 */
+.vp-doc .term-frame code .term-frame__group {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: var(--tf-group-pad) 16px;
+  /* 幅は親 (code) の flex stretch に任せる。塊ごとに max-content を持たせると
+     長いコマンドの塊だけが伸び、ホバーの地とボタンの右端がずれる。 */
+  box-sizing: border-box;
+}
+
+.vp-doc .term-frame code .term-frame__lines {
+  min-width: 0;
+}
+
+.vp-doc .term-frame code .term-frame__group:hover,
+.vp-doc .term-frame code .term-frame__group.is-hovered {
+  background: #191e26;
+}
+
+/* 行の中身は折り返さない。折り返すとモバイルでターミナルの体裁が崩れる。
+   .line を block にして塊の中で縦に積む。 */
+.vp-doc .term-frame code .line {
+  display: block;
+  line-height: var(--tf-line-height);
+  white-space: pre;
+}
+
+/* 空行も 1 行ぶんの高さを保つ */
+.vp-doc .term-frame code .line:empty::after {
+  content: '\200b';
+}
+
+/* 行頭のプロンプト。Shiki はコマンド本体と同じトークンに入れてしまうので
+   TermFrame.vue 側で span に割り出している。 */
+.term-frame__prompt {
+  color: #5b8cff;
+  user-select: none;
+}
+
+/* 塊ホバーで出るコピーボタン。横スクロールしても右端に留まるよう sticky。
+   高さを 1 行ぶんにして中身を中央寄せすると、塊が何行あっても先頭行に対して
+   自動で中央になる。font-size は button では継承されないので明示する。 */
+.term-frame__copy-btn {
+  /* オーバーレイ層 (.term-frame__overlay) の中に絶対配置する。
+     塊の中に置くと横スクロールで一緒に流れて見切れるため。
+     top は TermFrame.vue が塊の offsetTop に合わせて入れる。 */
+  position: absolute;
+  right: 10px;
+  pointer-events: auto;
+  display: inline-flex;
+  /* 文字の上に重なるので、下に地を敷いて読みを妨げないようにする。
+     ボタンの左側にぼかしを伸ばし、流れてきた文字が途切れて見えるようにする。 */
+  box-shadow: -10px 0 10px 6px #14181f;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  font-size: var(--tf-font-size);
+  height: calc(var(--tf-font-size) * var(--tf-line-height));
+  width: calc(var(--tf-font-size) * var(--tf-line-height));
+  color: #8b93a2;
+  background: #191e26;
+  border: 1px solid #262b34;
+  border-radius: var(--radius-card);
+  padding: 0;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+
+.term-frame__copy-btn svg {
+  display: block;
+}
+
+/* ボタンは塊の外 (オーバーレイ) にあるので CSS の :hover では繋がらない。
+   TermFrame.vue が塊とボタンの pointerenter/leave で is-hovered を付け外しする。 */
+.term-frame__copy-btn.is-shown,
+.term-frame__copy-btn:focus-visible,
+.term-frame__copy-btn[data-copied='true'] {
+  opacity: 1;
+}
+
+/* ホバー中は塊の地色に合わせる(でないと影だけ地の色が違って見える) */
+.term-frame__copy-btn.is-shown {
+  box-shadow: -10px 0 10px 6px #191e26;
+}
+
+.term-frame__copy-btn:hover {
+  color: #e6e9ef;
+  border-color: #3a4150;
+}
+
+.term-frame__copy-btn[data-copied='true'] {
+  color: #5b8cff;
+}
+
+/* タッチ環境にはホバーがないので常時出す */
+@media (hover: none) {
+  .term-frame__copy-btn {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .term-frame__copy-btn {
+    transition: none;
+  }
 }

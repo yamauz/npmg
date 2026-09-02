@@ -1,4 +1,4 @@
-> 出典: Node.js Package Manager Guide(npmg) — https://npmg.yamauz.workers.dev/pnpm/08-getting-started.html
+> 出典: Node.js Package Manager Guide(npmg) — https://npmg.yamauz.workers.dev/pnpm/08-getting-started
 
 # 8. pnpm はじめの一歩
 
@@ -114,12 +114,7 @@ Packages are cloned from the content-addressable store to the virtual store.
 Done in 1.4s
 ```
 
-コピペ用のコマンドと出力の全体は次のとおりです。
-
-```sh
-$ mkdir add-lab && cd add-lab && pnpm init
-$ pnpm add express
-```
+出力の全体は次のとおりです。
 
 ```
 Packages: +66
@@ -169,11 +164,7 @@ VITE v7.1.3  ready in 320 ms
 Local:   http://localhost:5173/
 ```
 
-同じことを手元で再現していきます。実験用ディレクトリ(例: `~/pm-sandbox`)で次を実行してください。
-
-```sh
-$ pnpm create vite my-app
-```
+同じことを手元で再現していきます。実験用ディレクトリ(例: `~/pm-sandbox`)で上のコマンドを順に実行すると、次のように進みます。
 
 ```
 ✔ Select a framework: › Vanilla
@@ -190,11 +181,6 @@ Done. Now run:
 
 案内どおりに依存をインストールし、開発サーバーを起動します。
 
-```sh
-$ cd my-app
-$ pnpm install
-```
-
 ```
 Packages: +11
 +++++++++++
@@ -205,10 +191,6 @@ devDependencies:
 + vite 7.1.3
 
 Done in 3.4s using pnpm v11.24.0
-```
-
-```sh
-$ pnpm dev
 ```
 
 ```

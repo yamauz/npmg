@@ -1,4 +1,4 @@
-> 出典: Node.js Package Manager Guide(npmg) — https://npmg.yamauz.workers.dev/basics/01-what-is-a-package-manager.html
+> 出典: Node.js Package Manager Guide(npmg) — https://npmg.yamauz.workers.dev/basics/01-what-is-a-package-manager
 
 # 1. パッケージマネージャーとは何か
 
@@ -103,12 +103,7 @@ $ curl -s https://registry.npmjs.org/left-pad/latest | jq -r .dist.tarball
 https://registry.npmjs.org/left-pad/-/left-pad-1.3.0.tgz
 ```
 
-手元で試す場合はこちらをどうぞ(JSON 整形ツールの jq がなければ、パイプより前だけ実行して生の JSON を眺めても構いません)。
-
-```sh
-$ curl -s https://registry.npmjs.org/left-pad/latest | jq -r .version
-$ curl -s https://registry.npmjs.org/left-pad/latest | jq -r .dist.tarball
-```
+手元で試す場合は、上のコマンド行にカーソルを合わせるとコピーできます(JSON 整形ツールの jq がなければ、パイプより前だけ実行して生の JSON を眺めても構いません)。
 
 `https://registry.npmjs.org/<パッケージ名>/latest` という URL に GET リクエストを送るとメタデータの JSON が返り、その中の `dist.tarball` に書かれた URL からコード本体の圧縮ファイルをダウンロードできます。どちらもブラウザのアドレスバーに貼っても開ける、ごく普通の HTTP です。`npm install` の「解決」と「取得」は、本質的にはこの 2 種類のリクエストの自動化であって、魔法ではありません。
 

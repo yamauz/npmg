@@ -146,7 +146,7 @@ ARROWS: none. No other lines or connectors anywhere in the diagram.
 
 この判定は手元で確かめられます。semver の判定ロジックそのものが `semver` というパッケージとして公開されており(npm 自身も内部でこれを使っています)、CLI として実行できます。渡したバージョンのうち、範囲を満たすものだけが表示されます。
 
-<TermDemo
+<TermBlocks
   title="zsh — semver 範囲の判定を確かめる"
   :lines="[
     { cmd: 'npx semver -r \'^1.2.3\' 1.2.4 1.3.0 1.9.9 2.0.0' },
@@ -161,12 +161,6 @@ ARROWS: none. No other lines or connectors anywhere in the diagram.
     { out: '0.2.4' },
   ]"
 />
-
-```sh
-$ npx semver -r '^1.2.3' 1.2.4 1.3.0 1.9.9 2.0.0
-$ npx semver -r '~1.2.3' 1.2.4 1.3.0 1.9.9 2.0.0
-$ npx semver -r '^0.2.3' 0.2.4 0.3.0
-```
 
 (初回は `npx` がパッケージ取得の確認を求めることがあります。y で進めてください)
 
@@ -262,21 +256,13 @@ flowchart LR
 
 **普通の依存では困る場面がある**からです。具体例で考えます。`react-dom` は React でブラウザに描画するためのパッケージで、当然 React 本体を必要とします。ではなぜ `react-dom` は react を dependencies に書かないのでしょうか。実際に見てみましょう。
 
-<TermDemo
+<TermBlocks
   title="zsh — react-dom が react をどう要求しているか"
   :lines="[
     { cmd: 'npm view react-dom peerDependencies' },
     { out: '{ react: \'^19.2.8\' }' },
   ]"
 />
-
-```sh
-$ npm view react-dom peerDependencies
-```
-
-```
-{ react: '^19.2.8' }
-```
 
 dependencies ではなく **peerDependencies** に入っています。もしこれが dependencies だったら何が起きるか。3 章で詳しく見ますが、npm は依存が競合したとき「それぞれの中に別々のコピーを入れる」ことで解決します。つまり、あなたのアプリの react と、react-dom が抱え込んだ react の**2 つの React が同時に存在する**状態になりえます。
 
@@ -329,24 +315,6 @@ peerDependencies はこれを防ぎます。「**私は react を使うが、実
 
 npm でインストールすると、**インストール自体が失敗**します。
 
-<TermDemo
-  title="zsh — npm は peer 不一致をエラーにする"
-  :lines="[
-    { cmd: 'npm install' },
-    { pause: 500 },
-    { out: 'npm error code ERESOLVE' },
-    { out: 'npm error ERESOLVE unable to resolve dependency tree' },
-    { out: 'npm error' },
-    { out: 'npm error While resolving: peer-demo@1.0.0' },
-    { out: 'npm error Found: react@18.3.1' },
-    { out: 'npm error node_modules/react' },
-    { out: 'npm error   react@^18.3.1 from the root project' },
-    { out: 'npm error' },
-    { out: 'npm error Could not resolve dependency:' },
-    { out: 'npm error peer react@^19.2.8 from react-dom@19.2.8' },
-  ]"
-/>
-
 ```sh
 $ npm install
 ```
@@ -374,7 +342,7 @@ npm error to accept an incorrect (and potentially broken) dependency resolution.
 
 同じ package.json を pnpm でインストールすると、結果が変わります。
 
-<TermDemo
+<TermBlocks
   title="zsh — pnpm は警告して先に進む"
   :lines="[
     { cmd: 'pnpm install' },

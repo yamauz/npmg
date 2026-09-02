@@ -15,18 +15,6 @@
 
 「ほぼゼロ」を実測で確かめてみましょう。[8章](/pnpm/08-getting-started)で express を追加したときの出力(`reused 51, downloaded 15`、1.4 秒)を覚えているでしょうか。同じマシンに **2 つ目のプロジェクト**を作り、もう一度 `pnpm add express` を実行するとこうなります。
 
-<TermDemo
-  title="zsh — 2 つ目のプロジェクトで pnpm add express"
-  :lines="[
-    { cmd: 'mkdir pnpm-demo2 && cd pnpm-demo2 && pnpm init' },
-    { pause: 400 },
-    { cmd: 'pnpm add express' },
-    { out: 'Packages: +66' },
-    { out: 'Progress: resolved 66, reused 66, downloaded 0, added 66, done' },
-    { out: 'Done in 413ms' },
-  ]"
-/>
-
 ```sh
 $ mkdir pnpm-demo2 && cd pnpm-demo2 && pnpm init
 $ pnpm add express

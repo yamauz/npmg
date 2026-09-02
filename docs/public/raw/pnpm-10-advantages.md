@@ -1,4 +1,4 @@
-> 出典: Node.js Package Manager Guide(npmg) — https://npmg.yamauz.workers.dev/pnpm/10-advantages.html
+> 出典: Node.js Package Manager Guide(npmg) — https://npmg.yamauz.workers.dev/pnpm/10-advantages
 
 # 10. pnpm のアドバンテージ総覧
 
@@ -16,14 +16,6 @@
 同じ express を使うプロジェクトが 2 つあったら、ディスク上の express も 2 つ必要なのでしょうか。9章で見たとおり、pnpm の答えは「いいえ」です。パッケージのファイル実体はマシン全体で 1 つのストアにしか存在せず、各プロジェクトへはハードリンク(macOS/APFS ではコピーオンライトのクローン)で配られます。現場ごとに同じ工具を買い直すのではなく、共用の工具庫から持ち出すイメージです。npm ではプロジェクトごとに node_modules へファイルが展開されるため、同じ依存を使う 10 個のプロジェクトがあれば実体も 10 セット分のディスクを占めますが、pnpm では 2 つ目以降の**追加コストはごくわずか**です(リンクやディレクトリ自体のコストはあるので、厳密にゼロではありません)。マイクロサービスやリポジトリを何個も抱える開発マシン・CI 環境ほど、この効果は効いてきます。実際にどれだけ減るかは依存の重複度合いによるので、気になる場合は手元で `pnpm store path` の消費量と各プロジェクトの実消費を測ってみてください。バージョン更新時も差分ファイルしかストアに増えないため、「少しずつ違うバージョンが大量にある」現実的な状況にも強い設計です。
 
 「ほぼゼロ」を実測で確かめてみましょう。[8章](https://npmg.yamauz.workers.dev/pnpm/08-getting-started)で express を追加したときの出力(`reused 51, downloaded 15`、1.4 秒)を覚えているでしょうか。同じマシンに **2 つ目のプロジェクト**を作り、もう一度 `pnpm add express` を実行するとこうなります。
-
-```sh
-$ mkdir pnpm-demo2 && cd pnpm-demo2 && pnpm init
-$ pnpm add express
-Packages: +66
-Progress: resolved 66, reused 66, downloaded 0, added 66, done
-Done in 413ms
-```
 
 ```sh
 $ mkdir pnpm-demo2 && cd pnpm-demo2 && pnpm init

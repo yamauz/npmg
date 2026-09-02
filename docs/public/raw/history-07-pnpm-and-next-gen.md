@@ -1,4 +1,4 @@
-> 出典: Node.js Package Manager Guide(npmg) — https://npmg.yamauz.workers.dev/history/07-pnpm-and-next-gen.html
+> 出典: Node.js Package Manager Guide(npmg) — https://npmg.yamauz.workers.dev/history/07-pnpm-and-next-gen
 
 # 7. pnpm と新世代ツール
 

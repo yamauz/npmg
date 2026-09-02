@@ -30,7 +30,7 @@ for (const doc of DOCS) {
     expect(body.length, 'raw md が空').toBeGreaterThan(0)
 
     // 変換漏れの検出。この 3 つが残っていると貼り付け先で壊れる
-    expect(body, 'TermDemo タグが変換されず残っている').not.toContain('<TermDemo')
+    expect(body, 'TermBlocks タグが変換されず残っている').not.toContain('<TermBlocks')
     expect(body, 'figure タグが畳まれず残っている').not.toContain('<figure')
     expect(body, '図版の生成プロンプトが削除されていない').not.toMatch(/^<!--[\s\S]*?prompt/im)
   })

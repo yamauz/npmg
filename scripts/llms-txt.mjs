@@ -2,7 +2,7 @@
 // 各章の md を「LLM に貼り付けられるプレーンな Markdown」に変換して
 // docs/public/raw/<slug>.md に出力し、あわせて索引 docs/public/llms.txt を作る。
 //
-// 本書の md には TermDemo / Mermaid / ::: コンテナ / 図版プレースホルダーの
+// 本書の md には TermBlocks / Mermaid / ::: コンテナ / 図版プレースホルダーの
 // HTML コメント(1 図あたり 30〜60 行の英語プロンプト)が混ざっている。
 // これらをそのまま配ると貼り付け先でノイズになるため、ここで落とす・開く。
 //
@@ -38,7 +38,7 @@ async function collectMarkdown(dir) {
 }
 
 const slugFor = (rel) => rel.replace(/\.md$/, '').replace(/\//g, '-')
-const urlFor = (rel) => `${SITE_URL}/${rel.replace(/\.md$/, '.html')}`
+const urlFor = (rel) => `${SITE_URL}/${rel.replace(/\.md$/, '')}`
 
 async function main() {
   const files = await collectMarkdown(DOCS)
@@ -53,6 +53,18 @@ async function main() {
     const raw = await readFile(join(DOCS, rel), 'utf8')
     const title = raw.match(/^#\s+(.+)$/m)?.[1]?.trim() ?? slugFor(rel)
     const body = toPlainMarkdown(raw)
+
+    // 未知のコンポーネントタグは toPlainMarkdown の最後で黙って落とされる。
+    // ターミナル系のタグが変換されずここまで来ると本文が丸ごと消えるので、
+    // 「消えた」ことに気づけるよう生成を止める(ビルドは通ってしまうため)。
+    const unconverted = raw.match(/<Term[A-Za-z]*\b/g) ?? []
+    const known = unconverted.filter((tag) => tag !== '<TermBlocks')
+    if (known.length > 0) {
+      throw new Error(
+        `${rel}: 未対応のターミナルコンポーネント ${[...new Set(known)].join(', ')} があります。` +
+          'scripts/lib/md-transform.mjs の expandTermBlocks に追加してください',
+      )
+    }
 
     // 貼り付け先で出典がわかるようにヘッダーを足す
     const header = `> 出典: ${SITE_TITLE}(npmg) — ${urlFor(rel)}\n\n`

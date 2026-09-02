@@ -1,4 +1,4 @@
-> 出典: Node.js Package Manager Guide(npmg) — https://npmg.yamauz.workers.dev/basics/03-node-modules.html
+> 出典: Node.js Package Manager Guide(npmg) — https://npmg.yamauz.workers.dev/basics/03-node-modules
 
 # 3. node_modules の構造
 
@@ -240,14 +240,6 @@ console.log(typeof bp)
 
 ```sh
 $ node phantom.js
-function
-```
-
-```sh
-$ node phantom.js
-```
-
-```
 function
 ```
 

@@ -1,4 +1,4 @@
-> 出典: Node.js Package Manager Guide(npmg) — https://npmg.yamauz.workers.dev/introduction.html
+> 出典: Node.js Package Manager Guide(npmg) — https://npmg.yamauz.workers.dev/introduction
 
 # この本について
 

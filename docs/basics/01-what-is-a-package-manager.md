@@ -191,7 +191,7 @@ and "send"; from "debug" to "ms".
 
 「ただの Web サーバー」であることは、パッケージマネージャーを介さずに curl で直接話しかけてみると実感できます。
 
-<TermDemo
+<TermBlocks
   title="zsh — レジストリと HTTP で直接話す"
   :lines="[
     { cmd: 'curl -s https://registry.npmjs.org/left-pad/latest | jq -r .version' },
@@ -202,12 +202,7 @@ and "send"; from "debug" to "ms".
   ]"
 />
 
-手元で試す場合はこちらをどうぞ(JSON 整形ツールの jq がなければ、パイプより前だけ実行して生の JSON を眺めても構いません)。
-
-```sh
-$ curl -s https://registry.npmjs.org/left-pad/latest | jq -r .version
-$ curl -s https://registry.npmjs.org/left-pad/latest | jq -r .dist.tarball
-```
+手元で試す場合は、上のコマンド行にカーソルを合わせるとコピーできます(JSON 整形ツールの jq がなければ、パイプより前だけ実行して生の JSON を眺めても構いません)。
 
 `https://registry.npmjs.org/<パッケージ名>/latest` という URL に GET リクエストを送るとメタデータの JSON が返り、その中の `dist.tarball` に書かれた URL からコード本体の圧縮ファイルをダウンロードできます。どちらもブラウザのアドレスバーに貼っても開ける、ごく普通の HTTP です。`npm install` の「解決」と「取得」は、本質的にはこの 2 種類のリクエストの自動化であって、魔法ではありません。
 
@@ -221,7 +216,7 @@ npm の世界でのパッケージとは、正確には「package.json を持つ
 
 言葉の説明はここまでにして、実際に `npm install` の前後を観察してみます。まず、これから行う実験の流れを通しで見てみましょう。
 
-<TermDemo
+<TermBlocks
   title="zsh — npm install left-pad"
   :lines="[
     { cmd: 'npm init -y' },

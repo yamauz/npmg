@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import {
-  expandTermDemo,
+  expandTermBlocks,
   expandContainers,
   collapseFigures,
   collapsePlaceholders,
@@ -8,36 +8,48 @@ import {
   toPlainMarkdown,
 } from './md-transform.mjs'
 
-describe('expandTermDemo', () => {
+describe('expandTermBlocks', () => {
   it('cmd に $ を付け、out はそのまま出す', () => {
-    const input = `<TermDemo
+    const input = `<TermBlocks
   title="zsh"
   :lines="[
     { cmd: 'pnpm install' },
     { out: 'Done in 2.9s' },
   ]"
 />`
-    expect(expandTermDemo(input)).toBe('```sh\n$ pnpm install\nDone in 2.9s\n```')
+    expect(expandTermBlocks(input)).toBe('```sh\n$ pnpm install\nDone in 2.9s\n```')
   })
 
   it('pause は演出用なので落とす', () => {
-    const input = `<TermDemo :lines="[{ cmd: 'ls' }, { pause: 400 }, { out: 'a b' }]" />`
-    expect(expandTermDemo(input)).toBe('```sh\n$ ls\na b\n```')
+    const input = `<TermBlocks :lines="[{ cmd: 'ls' }, { pause: 400 }, { out: 'a b' }]" />`
+    expect(expandTermBlocks(input)).toBe('```sh\n$ ls\na b\n```')
+  })
+
+  it('title 属性があっても中身だけを開く', () => {
+    // 対応を忘れると、未知のタグとして後段で落とされ本文が raw md から消える
+    const input = `<TermBlocks
+  title="zsh"
+  :lines="[
+    { cmd: 'pnpm install' },
+    { out: 'Packages: +5' },
+  ]"
+/>`
+    expect(expandTermBlocks(input)).toBe('```sh\n$ pnpm install\nPackages: +5\n```')
   })
 
   it('エスケープされたシングルクォートを元に戻す', () => {
     // 実データ(9章)にある形。\' をそのまま出すと貼り付け先で壊れる
-    const input = String.raw`<TermDemo :lines="[{ out: 'Error: Cannot find module \'body-parser\'' }]" />`
-    expect(expandTermDemo(input)).toBe("```sh\nError: Cannot find module 'body-parser'\n```")
+    const input = String.raw`<TermBlocks :lines="[{ out: 'Error: Cannot find module \'body-parser\'' }]" />`
+    expect(expandTermBlocks(input)).toBe("```sh\nError: Cannot find module 'body-parser'\n```")
   })
 
-  it('同一ファイル内の複数の TermDemo をそれぞれ展開する', () => {
-    const input = `<TermDemo :lines="[{ cmd: 'a' }]" />
+  it('同一ファイル内の複数の TermBlocks をそれぞれ展開する', () => {
+    const input = `<TermBlocks :lines="[{ cmd: 'a' }]" />
 
 間の本文。
 
-<TermDemo :lines="[{ cmd: 'b' }]" />`
-    const out = expandTermDemo(input)
+<TermBlocks :lines="[{ cmd: 'b' }]" />`
+    const out = expandTermBlocks(input)
     expect(out).toContain('$ a')
     expect(out).toContain('$ b')
     expect(out).toContain('間の本文。')
@@ -46,7 +58,7 @@ describe('expandTermDemo', () => {
   })
 
   it('lines が空なら丸ごと消す', () => {
-    expect(expandTermDemo('<TermDemo :lines="[]" />')).toBe('')
+    expect(expandTermBlocks('<TermBlocks :lines="[]" />')).toBe('')
   })
 })
 
@@ -209,7 +221,7 @@ title: 9章
 - store の話
 :::
 
-<TermDemo :lines="[{ cmd: 'pnpm i' }, { pause: 300 }, { out: 'Done' }]" />
+<TermBlocks :lines="[{ cmd: 'pnpm i' }, { pause: 300 }, { out: 'Done' }]" />
 
 <figure>
   <img src="/images/fig-09-1.png" alt="図">
@@ -225,7 +237,7 @@ STYLE PRESET: flat vector, white background
 
     expect(out).not.toContain('---\ntitle')
     expect(out).not.toContain('STYLE PRESET')
-    expect(out).not.toContain('TermDemo')
+    expect(out).not.toContain('TermBlocks')
     expect(out).not.toContain('<figure')
     expect(out).not.toMatch(/^:::/m)
 
